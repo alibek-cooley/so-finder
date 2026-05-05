@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SO Finder — Discovery Flow</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Arial Nova"', 'Arial', 'sans-serif'],
+            serif: ['"GT Sectra"', 'Georgia', 'serif'],
+          },
+        }
+      }
+    }
+  </script>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: "Arial Nova", Arial, sans-serif; background: #f5f5f1; }
+    .font-serif { font-family: "GT Sectra", Georgia, serif; }
+
+    /* ── Icon mask system ── */
+    .icon { display:inline-block; background-color:currentColor; -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat; -webkit-mask-position:center; mask-position:center; flex-shrink:0; }
+    .icon-24 { width:24px; height:24px; -webkit-mask-size:24px; mask-size:24px; }
+    .icon-16 { width:16px; height:16px; -webkit-mask-size:16px; mask-size:16px; }
+
+    .icon-home        { -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z'/%3E%3Cpolyline points='9 22 9 12 15 12 15 22'/%3E%3C/svg%3E"); mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z'/%3E%3Cpolyline points='9 22 9 12 15 12 15 22'/%3E%3C/svg%3E"); }
+    .icon-entity      { -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='8' r='4'/%3E%3Cpath d='M4 20c0-4 3.6-7 8-7s8 3 8 7'/%3E%3C/svg%3E"); mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='8' r='4'/%3E%3Cpath d='M4 20c0-4 3.6-7 8-7s8 3 8 7'/%3E%3C/svg%3E"); }
+    .icon-experience  { -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='2' y='7' width='20' height='14' rx='2'/%3E%3Cpath d='M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2'/%3E%3C/svg%3E"); mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='2' y='7' width='20' height='14' rx='2'/%3E%3Cpath d='M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2'/%3E%3C/svg%3E"); }
+    .icon-fund        { -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='12' y1='1' x2='12' y2='23'/%3E%3Cpath d='M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6'/%3E%3C/svg%3E"); mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='12' y1='1' x2='12' y2='23'/%3E%3Cpath d='M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6'/%3E%3C/svg%3E"); }
+    .icon-person      { -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2'/%3E%3Ccircle cx='9' cy='7' r='4'/%3E%3Cpath d='M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75'/%3E%3C/svg%3E"); mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2'/%3E%3Ccircle cx='9' cy='7' r='4'/%3E%3Cpath d='M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75'/%3E%3C/svg%3E"); }
+    .icon-event       { -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'/%3E%3Cline x1='16' y1='2' x2='16' y2='6'/%3E%3Cline x1='8' y1='2' x2='8' y2='6'/%3E%3Cline x1='3' y1='10' x2='21' y2='10'/%3E%3C/svg%3E"); mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'/%3E%3Cline x1='16' y1='2' x2='16' y2='6'/%3E%3Cline x1='8' y1='2' x2='8' y2='6'/%3E%3Cline x1='3' y1='10' x2='21' y2='10'/%3E%3C/svg%3E"); }
+    .icon-user-single { -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'/%3E%3Ccircle cx='12' cy='7' r='4'/%3E%3C/svg%3E"); mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'/%3E%3Ccircle cx='12' cy='7' r='4'/%3E%3C/svg%3E"); }
+    .icon-minimize    { -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='3' width='18' height='18' rx='2'/%3E%3Cpath d='M9 3v18M14 9l-2 3 2 3'/%3E%3C/svg%3E"); mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='3' width='18' height='18' rx='2'/%3E%3Cpath d='M9 3v18M14 9l-2 3 2 3'/%3E%3C/svg%3E"); }
+    .icon-help        { -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3'/%3E%3Cline x1='12' y1='17' x2='12.01' y2='17'/%3E%3C/svg%3E"); mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3'/%3E%3Cline x1='12' y1='17' x2='12.01' y2='17'/%3E%3C/svg%3E"); }
+    .icon-grid        { -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='3' width='7' height='7'/%3E%3Crect x='14' y='3' width='7' height='7'/%3E%3Crect x='14' y='14' width='7' height='7'/%3E%3Crect x='3' y='14' width='7' height='7'/%3E%3C/svg%3E"); mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='3' width='7' height='7'/%3E%3Crect x='14' y='3' width='7' height='7'/%3E%3Crect x='14' y='14' width='7' height='7'/%3E%3Crect x='3' y='14' width='7' height='7'/%3E%3C/svg%3E"); }
+    .icon-search      { -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E"); mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E"); }
+    .icon-chevron     { -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); }
+    .icon-info        { -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cline x1='12' y1='16' x2='12' y2='12'/%3E%3Cline x1='12' y1='8' x2='12.01' y2='8'/%3E%3C/svg%3E"); mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cline x1='12' y1='16' x2='12' y2='12'/%3E%3Cline x1='12' y1='8' x2='12.01' y2='8'/%3E%3C/svg%3E"); }
+
+    /* card icons (white inside dark circle) */
+    .ci { display:inline-block; background-color:#fff; -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat; -webkit-mask-position:center; mask-position:center; width:16px; height:16px; -webkit-mask-size:16px; mask-size:16px; }
+    .ci-entity  { -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'/%3E%3Cpolyline points='9 22 9 12 15 12 15 22'/%3E%3C/svg%3E"); mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'/%3E%3Cpolyline points='9 22 9 12 15 12 15 22'/%3E%3C/svg%3E"); }
+    .ci-work    { -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='2' y='7' width='20' height='14' rx='2'/%3E%3Cpath d='M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2'/%3E%3C/svg%3E"); mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='2' y='7' width='20' height='14' rx='2'/%3E%3Cpath d='M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2'/%3E%3C/svg%3E"); }
+    .ci-person  { -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'/%3E%3Ccircle cx='12' cy='7' r='4'/%3E%3C/svg%3E"); mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'/%3E%3Ccircle cx='12' cy='7' r='4'/%3E%3C/svg%3E"); }
+    .ci-event   { -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolygon points='13 2 3 14 12 14 11 22 21 10 12 10 13 2'/%3E%3C/svg%3E"); mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolygon points='13 2 3 14 12 14 11 22 21 10 12 10 13 2'/%3E%3C/svg%3E"); }
+
+    /* ── Navigation ── */
+    .nav-item { cursor:pointer; transition:background 0.1s; border-radius:8px; }
+    .nav-item:hover:not(.nav-disabled) { background:#e9e7e1; }
+    .nav-item.active { background:#e9e7e1; }
+    .nav-item.nav-disabled { cursor:default; }
+
+    /* ── Dashboard option cards ── */
+    .option-card { cursor:pointer; transition:box-shadow 0.15s, border-color 0.15s; }
+    .option-card:hover { box-shadow:0 2px 8px rgba(47,46,42,0.12); border-color:#b0ada6; }
+    .option-card.selected { border-color:#262421 !important; }
+
+    /* ── Pages ── */
+    .page { display:none; }
+    .page.active { display:flex; }
+
+    /* ── Search dropdown ── */
+    #search-dropdown {
+      position:absolute;
+      top:100%;
+      left:0;
+      right:0;
+      background:#fff;
+      border:1px solid #d8d5cf;
+      border-radius:8px;
+      box-shadow:0 4px 16px rgba(47,46,42,0.12);
+      z-index:50;
+      overflow:hidden;
+      margin-top:4px;
+    }
+    .dropdown-item {
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:10px 16px;
+      cursor:pointer;
+      transition:background 0.1s;
+    }
+    .dropdown-item:hover { background:#f5f5f1; }
+    .dropdown-item .di-avatar {
+      width:32px; height:32px; border-radius:50%;
+      background:#262421;
+      display:flex; align-items:center; justify-content:center;
+      flex-shrink:0;
+      font-size:12px; font-weight:700; color:#fff;
+    }
+    .dropdown-item .di-info { flex:1; min-width:0; }
+    .dropdown-item .di-name { font-size:14px; color:#262421; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .dropdown-item .di-meta { font-size:12px; color:#8a8a8a; }
+    .dropdown-item .di-type { font-size:12px; color:#54534f; }
+    #search-wrapper { position:relative; flex:1; min-width:0; }
+
+    /* ── Metric cards ── */
+    .metric-card { border:1px solid rgba(23,24,21,0.15); border-radius:12px; padding:16px; display:flex; flex-direction:column; gap:4px; flex:1; min-width:0; }
+    .metric-card.dark { background:#2f2e2a; border-color:transparent; box-shadow:0 8px 12px rgba(0,0,0,0.15); }
+    .metric-label { font-size:14px; line-height:1.4; }
+    .metric-value { font-family:"GT Sectra", Georgia, serif; font-size:24px; line-height:32px; text-transform:capitalize; }
+
+    /* ── Service offering cards ── */
+    .so-card { background:#fff; border:1px solid #d8d5cf; border-radius:8px; padding:24px; display:flex; flex-direction:column; gap:16px; box-shadow:0 1px 3px rgba(47,46,42,0.05), 0 2px 6px rgba(47,46,42,0.04); }
+    .badge-existing { background:#bdedde; color:#00472e; font-size:14px; padding:4px 12px; border-radius:6px; display:inline-block; }
+    .badge-prospect { background:#fff0c1; color:#9b5d00; font-size:14px; padding:4px 12px; border-radius:6px; display:inline-block; }
+    .badge-rich     { background:#bdedde; color:#00472e; font-size:13px; padding:3px 10px; border-radius:6px; display:inline-block; white-space:nowrap; }
+    .badge-partial  { background:#fff0c1; color:#9b5d00; font-size:13px; padding:3px 10px; border-radius:6px; display:inline-block; white-space:nowrap; }
+    .badge-poor     { background:#ffd6d6; color:#7a0c0c; font-size:13px; padding:3px 10px; border-radius:6px; display:inline-block; white-space:nowrap; }
+
+    /* ── Service offering card click ── */
+    .so-card { cursor:pointer; transition:box-shadow 0.15s, border-color 0.15s, transform 0.1s; }
+    .so-card:hover { box-shadow:0 4px 12px rgba(47,46,42,0.10); border-color:#b9b7b2; }
+
+    /* ── Drawer ── */
+    .drawer-backdrop {
+      position:fixed; inset:0;
+      background:rgba(47,46,42,0.18);
+      opacity:0;
+      transition:opacity 0.22s ease;
+      pointer-events:none;
+      z-index:90;
+    }
+    .drawer-backdrop.open { opacity:1; pointer-events:auto; }
+    .drawer {
+      position:fixed;
+      top:0; right:0; bottom:0;
+      width:720px;
+      max-width:92vw;
+      background:#fff;
+      box-shadow:-8px 0 32px rgba(47,46,42,0.15);
+      transform:translateX(100%);
+      transition:transform 0.28s ease;
+      z-index:100;
+      display:flex;
+      flex-direction:column;
+      overflow:hidden;
+    }
+    .drawer.open { transform:translateX(0); }
+    .drawer-scroll { overflow-y:auto; flex:1; }
+
+    /* ── Modal ── */
+    .modal-backdrop {
+      position:fixed; inset:0;
+      background:rgba(47,46,42,0.45);
+      backdrop-filter:blur(2px);
+      -webkit-backdrop-filter:blur(2px);
+      opacity:0;
+      transition:opacity 0.18s ease;
+      pointer-events:none;
+      z-index:200;
+      display:flex; align-items:center; justify-content:center;
+      padding:24px;
+    }
+    .modal-backdrop.open { opacity:1; pointer-events:auto; }
+    .modal {
+      background:#fff;
+      border-radius:12px;
+      width:520px; max-width:100%;
+      max-height:calc(100vh - 48px);
+      overflow:hidden;
+      box-shadow:0 24px 48px rgba(47,46,42,0.25);
+      transform:scale(0.96);
+      transition:transform 0.18s ease;
+      display:flex; flex-direction:column;
+    }
+    .modal-backdrop.open .modal { transform:scale(1); }
+    .feedback-chip {
+      display:inline-flex; align-items:center; gap:6px;
+      padding:8px 14px;
+      border:1px solid #d8d5cf;
+      border-radius:999px;
+      font-size:14px; color:#262421;
+      cursor:pointer;
+      transition:all 0.1s;
+      background:#fff;
+    }
+    .feedback-chip:hover { background:#f5f5f1; border-color:#b9b7b2; }
+    .feedback-chip.selected { background:#262421; color:#fff; border-color:#262421; }
+  </style>
+</head>
+<body class="bg-[#f5f5f1] h-screen overflow-hidden">
+
+<div class="flex h-screen">
+
+  <!-- ═══════════ SIDEBAR ═══════════ -->
+  <aside class="w-[280px] min-w-[280px] bg-[#f5f5f1] flex flex-col gap-4 px-4 h-full shrink-0">
+    <div class="h-16 flex items-center justify-between shrink-0">
+      <div class="pl-3 flex items-center gap-2">
+        <img src="assets/logo.png" alt="Powerloom" class="h-10 w-10 rounded-full object-cover shrink-0" onerror="this.style.display='none'" />
+        <span class="font-serif text-[#2f2e2a] text-[17px] tracking-wide">Powerloom</span>
+      </div>
+      <button class="p-2 rounded-lg hover:bg-[#e9e7e1] transition-colors">
+        <span class="icon icon-24 icon-minimize" style="background-color:#878482;"></span>
+      </button>
+    </div>
+    <nav class="flex flex-col gap-0.5 flex-1 min-h-0" id="sidebar-nav">
+      <div class="nav-item flex items-center gap-2 px-3 py-[10px]" data-nav="home" onclick="navigate('home')">
+        <span class="icon icon-24 icon-home" style="background-color:#262421;"></span>
+        <span class="text-[16px] text-[#262421] leading-6">Home</span>
+      </div>
+      <div class="nav-item flex items-center gap-2 px-3 py-[10px]" data-nav="entity" onclick="navigate('entity')">
+        <span class="icon icon-24 icon-entity" style="background-color:#262421;"></span>
+        <span class="text-[16px] text-[#262421] leading-6">By Company</span>
+      </div>
+      <div class="nav-item flex items-center gap-2 px-3 py-[10px]">
+        <span class="icon icon-24 icon-experience" style="background-color:#262421;"></span>
+        <span class="text-[16px] text-[#262421] leading-6">Experience</span>
+      </div>
+      <div class="nav-item nav-disabled flex items-center gap-2 px-3 py-[10px]">
+        <span class="icon icon-24 icon-fund" style="background-color:#a0a2a6;"></span>
+        <span class="text-[16px] text-[#a0a2a6] leading-6">By Fund</span>
+      </div>
+      <div class="nav-item nav-disabled flex items-center gap-2 px-3 py-[10px]">
+        <span class="icon icon-24 icon-person" style="background-color:#a0a2a6;"></span>
+        <span class="text-[16px] text-[#a0a2a6] leading-6">By Person</span>
+      </div>
+      <div class="nav-item nav-disabled flex items-center gap-2 px-3 py-[10px]">
+        <span class="icon icon-24 icon-event" style="background-color:#a0a2a6;"></span>
+        <span class="text-[16px] text-[#a0a2a6] leading-6">By Event</span>
+      </div>
+    </nav>
+    <div class="shrink-0 pb-4">
+      <button class="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-[#e9e7e1] transition-colors text-left">
+        <span class="icon icon-24 icon-user-single" style="background-color:#262421;"></span>
+        <span class="text-[16px] text-[#54534f] leading-6 flex-1">Susan Reyes</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ═══════════ MAIN ═══════════ -->
+  <main class="flex-1 min-w-0 flex flex-col pb-4 pr-4">
+
+    <!-- Top Nav -->
+    <header class="h-16 shrink-0 flex items-center gap-6 px-4">
+      <h1 class="font-serif text-[#2f2e2a] text-[18px] leading-normal flex-1">Service Offering</h1>
+      <div class="flex items-center gap-4">
+        <button class="hover:opacity-70 transition-opacity"><span class="icon icon-24 icon-help" style="background-color:#2f2e2a;"></span></button>
+        <button class="w-8 h-8 flex items-center justify-center hover:opacity-70 transition-opacity"><span class="icon icon-24 icon-grid" style="background-color:#2f2e2a;"></span></button>
+        <button class="flex items-center gap-2 hover:opacity-80 transition-opacity">
+          <div class="w-8 h-8 rounded-full bg-[#2f2e2a] flex items-center justify-center shrink-0">
+            <span class="text-white text-[13px] font-bold leading-none">AR</span>
+          </div>
+          <span class="text-[#2f2e2a] text-[14px] leading-5 whitespace-nowrap">Armando Reyes</span>
+          <span class="icon icon-16 icon-chevron" style="background-color:#2f2e2a;"></span>
+        </button>
+      </div>
+    </header>
+
+    <!-- ═══════════════════════════════════════
+         PAGE: HOME
+    ════════════════════════════════════════ -->
+    <div id="page-home" class="page active flex-1 min-h-0">
+      <div class="w-full h-full bg-white rounded-lg overflow-y-auto">
+        <div class="px-8 py-14">
+          <div class="max-w-[1140px] mx-auto flex flex-col gap-8">
+            <div class="flex flex-col gap-4">
+              <div class="flex flex-col gap-3 pb-2">
+                <h2 class="font-serif text-[#2f2e2a] text-[32px] leading-[40px] tracking-[-0.64px]">What do you know about what you're looking for?</h2>
+                <p class="text-[#8a8a8a] text-[16px] leading-6">Pick the entry point that matches your situation. You can always switch tabs later.</p>
+              </div>
+              <div class="flex items-center gap-1 bg-[#f4f4f4] rounded-lg px-4 h-12 w-[352px]">
+                <span class="icon icon-16 icon-search" style="background-color:#8a8a8a;"></span>
+                <input type="text" placeholder="e.g. Aldernash" class="flex-1 bg-transparent text-[16px] text-[#8a8a8a] leading-6 outline-none border-none placeholder-[#8a8a8a] ml-1" />
+              </div>
+            </div>
+            <div class="grid grid-cols-4 gap-4">
+              <div class="option-card selected bg-white border border-[#262421] rounded-lg p-6 flex flex-col gap-4 shadow-[0px_1px_1.5px_rgba(47,46,42,0.05),0px_2px_3px_rgba(47,46,42,0.04)]" onclick="navigate('entity')">
+                <div class="w-8 h-8 rounded-full bg-[#262421] flex items-center justify-center shrink-0"><span class="ci ci-entity"></span></div>
+                <div class="flex flex-col gap-1">
+                  <p class="text-[#262421] text-[16px] font-bold leading-6">I know the entity I want to research</p>
+                  <p class="text-[#878482] text-[14px] leading-5">Look up an existing client or prospect by name, see the firm's relationship and recommended Service Offerings.</p>
+                </div>
+              </div>
+              <div class="option-card bg-white border border-[#d8d5cf] rounded-lg p-6 flex flex-col gap-4 shadow-[0px_1px_1.5px_rgba(47,46,42,0.05),0px_2px_3px_rgba(47,46,42,0.04)]">
+                <div class="w-8 h-8 rounded-full bg-[#262421] flex items-center justify-center shrink-0"><span class="ci ci-work"></span></div>
+                <div class="flex flex-col gap-1">
+                  <p class="text-[#262421] text-[16px] font-bold leading-6">I know what area of work we are starting</p>
+                  <p class="text-[#878482] text-[14px] leading-5">Describe a fact pattern in plain language and find the closest matching matters and experience across the firm.</p>
+                </div>
+              </div>
+              <div class="option-card bg-white border border-[#d8d5cf] rounded-lg p-6 flex flex-col gap-4 shadow-[0px_1px_1.5px_rgba(47,46,42,0.05),0px_2px_3px_rgba(47,46,42,0.04)]">
+                <div class="w-8 h-8 rounded-full bg-[#262421] flex items-center justify-center shrink-0"><span class="ci ci-person"></span></div>
+                <div class="flex flex-col gap-1">
+                  <p class="text-[#262421] text-[16px] font-bold leading-6">I know a person I want to research</p>
+                  <p class="text-[#878482] text-[14px] leading-5">Track a key contact across company moves, map firm relationships, and identify warm introduction paths.</p>
+                </div>
+              </div>
+              <div class="option-card bg-white border border-[#d8d5cf] rounded-lg p-6 flex flex-col gap-4 shadow-[0px_1px_1.5px_rgba(47,46,42,0.05),0px_2px_3px_rgba(47,46,42,0.04)]">
+                <div class="w-8 h-8 rounded-full bg-[#262421] flex items-center justify-center shrink-0"><span class="ci ci-event"></span></div>
+                <div class="flex flex-col gap-1">
+                  <p class="text-[#262421] text-[16px] font-bold leading-6">I have an opportunity based on some event</p>
+                  <p class="text-[#878482] text-[14px] leading-5">Detect entity-specific or market-wide events and map them to affected clients and Service Offerings.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════
+         PAGE: ENTITY (By Company)
+    ════════════════════════════════════════ -->
+    <div id="page-entity" class="page flex-1 min-h-0">
+      <div class="w-full h-full bg-white rounded-lg overflow-y-auto">
+        <div class="px-8 py-14">
+          <div class="max-w-[1140px] mx-auto flex flex-col gap-8">
+
+            <!-- Top panels -->
+            <div class="flex gap-2 items-stretch">
+
+              <!-- Entity search panel -->
+              <div class="flex-1 min-w-0 border border-[#b9b7b2] rounded-xl p-4 flex flex-col justify-between" style="min-height:202px;">
+                <div class="flex flex-col gap-2 pb-2">
+                  <h3 class="font-serif text-[#2f2e2a] text-[20px] leading-8 capitalize">Entity</h3>
+                  <p class="text-[#8a8a8a] text-[16px] leading-6">Search for a client or prospect by name. Multiple matches will be disambiguate below.</p>
+                </div>
+                <div class="flex gap-4 items-center">
+                  <div id="search-wrapper">
+                    <div class="flex items-center gap-1 bg-[#f4f4f4] rounded-lg px-4 h-12 overflow-hidden">
+                      <span class="icon icon-16 icon-search" style="background-color:#8a8a8a;"></span>
+                      <input id="entity-search" type="text" placeholder="e.g. Aldernash" autocomplete="off"
+                        class="flex-1 bg-transparent text-[16px] text-[#262421] leading-6 outline-none border-none placeholder-[#8a8a8a] ml-1"
+                        oninput="onSearchInput(this.value)"
+                        onkeydown="if(event.key==='Enter') runSearch(this.value)"
+                        onfocus="onSearchInput(this.value)" />
+                    </div>
+                    <!-- Dropdown suggestions -->
+                    <div id="search-dropdown" style="display:none;"></div>
+                  </div>
+                  <button onclick="runSearch(document.getElementById('entity-search').value)"
+                    class="h-12 px-6 bg-[#3c3a37] text-white text-[16px] leading-6 rounded-lg whitespace-nowrap hover:bg-[#2f2e2a] transition-colors shrink-0">
+                    Search
+                  </button>
+                </div>
+              </div>
+
+              <!-- Describe the work panel -->
+              <div class="flex-1 min-w-0 bg-[#efefef] rounded-xl p-4 flex flex-col justify-between" style="min-height:202px;">
+                <div class="flex flex-col gap-2">
+                  <h3 class="font-serif text-[#2f2e2a] text-[20px] leading-8 capitalize">Describe the work</h3>
+                  <p class="text-[#8a8a8a] text-[16px] leading-6">Search for a client or prospect by name. Multiple matches will be disambiguate below.</p>
+                </div>
+                <div class="flex gap-2 items-center">
+                  <input type="text" placeholder="Describe your work"
+                    class="flex-1 h-12 bg-white border border-[#b9b7b2] rounded-lg px-4 text-[16px] text-[#b9b7b2] placeholder-[#b9b7b2] outline-none focus:border-[#878482] transition-colors" />
+                  <button class="h-12 px-6 bg-[#3c3a37] text-white text-[16px] leading-6 rounded-lg whitespace-nowrap hover:bg-[#2f2e2a] transition-colors shrink-0">Apply</button>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Result header -->
+            <div class="flex items-center justify-between">
+              <h2 class="font-serif text-[#2f2e2a] text-[24px] leading-8">Result</h2>
+              <span id="result-count" class="text-[#8a8a8a] text-[16px] leading-6">Result: 0</span>
+            </div>
+
+            <!-- ── EMPTY STATE ── -->
+            <div id="empty-state" class="flex flex-col items-center justify-center gap-4 py-16">
+              <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+                <rect x="4" y="4" width="72" height="72" rx="4" stroke="#b9b7b2" stroke-width="1.5"/>
+                <line x1="4" y1="4" x2="76" y2="76" stroke="#b9b7b2" stroke-width="1.5"/>
+                <line x1="76" y1="4" x2="4" y2="76" stroke="#b9b7b2" stroke-width="1.5"/>
+                <rect x="18" y="18" width="44" height="44" rx="2" stroke="#b9b7b2" stroke-width="1.5"/>
+              </svg>
+              <div class="flex flex-col items-center gap-2">
+                <p class="font-serif text-[#2f2e2a] text-[20px] leading-8 capitalize">Entity</p>
+                <p class="text-[#8a8a8a] text-[16px] leading-6 text-center max-w-[357px]">Search for a client or prospect by name. Multiple matches will be disambiguate below.</p>
+              </div>
+            </div>
+
+            <!-- ── NO-RESULTS STATE (with close matches) ── -->
+            <div id="no-results-state" style="display:none;" class="flex flex-col gap-8 w-full">
+
+              <!-- Centered no-match header -->
+              <div class="flex flex-col items-center gap-4 py-4">
+                <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+                  <rect x="4" y="4" width="72" height="72" rx="4" stroke="#b9b7b2" stroke-width="1.5"/>
+                  <line x1="4" y1="4" x2="76" y2="76" stroke="#b9b7b2" stroke-width="1.5"/>
+                  <line x1="76" y1="4" x2="4" y2="76" stroke="#b9b7b2" stroke-width="1.5"/>
+                  <rect x="18" y="18" width="44" height="44" rx="2" stroke="#b9b7b2" stroke-width="1.5"/>
+                </svg>
+                <div class="flex flex-col items-center gap-2 text-center">
+                  <p id="nr-title" class="font-serif text-[#2f2e2a] text-[20px] leading-8 capitalize">No company matches "Quantum Biotech Holdings"</p>
+                  <p class="text-[#8a8a8a] text-[16px] leading-6 max-w-[600px] text-center">
+                    We searched Salesforce, Databricks, and CapIQ. The company isn't in our systems yet — likely because we haven't engaged with them, or they're listed under a different name.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Close matches heading -->
+              <h3 id="nr-matches-heading" class="font-serif text-[#2f2e2a] text-[20px] leading-8 capitalize">3 close matches in Salesforce</h3>
+
+              <!-- Close match cards -->
+              <div id="nr-matches" class="flex flex-col gap-4 w-full"></div>
+
+              <!-- Action buttons -->
+              <div class="flex gap-2 items-center w-[509px] max-w-full mx-auto pt-4">
+                <button onclick="requestAddCompany()" class="flex-1 h-12 border border-[#d8d5cf] rounded-lg px-4 text-[#262421] text-[16px] hover:bg-[#f5f5f1] transition-colors whitespace-nowrap">
+                  Request to add this company
+                </button>
+                <button onclick="searchExperiences()" class="flex-1 h-12 bg-[#3c3a37] rounded-lg px-4 text-white text-[16px] hover:bg-[#2f2e2a] transition-colors whitespace-nowrap">
+                  Search Experiences Instead
+                </button>
+              </div>
+
+            </div>
+
+            <!-- ── RESULTS STATE ── -->
+            <div id="results-state" style="display:none;" class="flex flex-col gap-8">
+
+              <!-- Match badge + heading + description -->
+              <div class="flex flex-col gap-4">
+                <span id="res-badge" class="badge-existing self-start">94% match</span>
+                <h2 id="res-title" class="font-serif text-[#2f2e2a] text-[32px] leading-[44px] tracking-[-0.24px]">IPO &amp; Capital Markets</h2>
+                <p id="res-desc" class="text-[#878482] text-[16px] leading-6 max-w-[560px]">
+                  Transaction support for divestitures and carve-out acquisitions in healthcare and life sciences, including TSAs, regulatory transitions, and Day 1 readiness.
+                </p>
+              </div>
+
+              <!-- Metric cards row 1 -->
+              <div class="flex gap-4">
+                <div class="metric-card dark">
+                  <div class="metric-label text-white opacity-80">Industry / Sector</div>
+                  <div class="metric-value text-white" id="m-industry">Biotechnology</div>
+                  <span class="icon icon-16 icon-info self-end mt-1" style="background-color:rgba(255,255,255,0.5);"></span>
+                </div>
+                <div class="metric-card">
+                  <div class="metric-label text-[#545454]">Size</div>
+                  <div class="metric-value text-[#2f2e2a]" id="m-size">Mid-market</div>
+                  <span class="icon icon-16 icon-info self-end mt-1" style="background-color:#8a8a8a;"></span>
+                </div>
+                <div class="metric-card">
+                  <div class="metric-label text-[#545454]">Entity type</div>
+                  <div class="metric-value text-[#2f2e2a]" id="m-type">Public (NASDAQ)</div>
+                  <span class="icon icon-16 icon-info self-end mt-1" style="background-color:#8a8a8a;"></span>
+                </div>
+                <div class="metric-card">
+                  <div class="metric-label text-[#545454]">HQ / Geography</div>
+                  <div class="metric-value text-[#2f2e2a]" id="m-hq">Cambridge, MA</div>
+                  <span class="icon icon-16 icon-info self-end mt-1" style="background-color:#8a8a8a;"></span>
+                </div>
+                <div class="metric-card">
+                  <div class="metric-label text-[#545454]">Founded</div>
+                  <div class="metric-value text-[#2f2e2a]" id="m-founded">2008</div>
+                  <span class="icon icon-16 icon-info self-end mt-1" style="background-color:#8a8a8a;"></span>
+                </div>
+              </div>
+
+              <!-- Metric cards row 2 -->
+              <div class="flex gap-4">
+                <div class="metric-card" style="flex:2;">
+                  <div class="metric-label text-[#545454]">Jurisdiction</div>
+                  <div class="metric-value text-[#2f2e2a]" id="m-jurisdiction">Delaware</div>
+                  <span class="icon icon-16 icon-info self-end mt-1" style="background-color:#8a8a8a;"></span>
+                </div>
+                <div class="metric-card" style="flex:3;">
+                  <div class="metric-label text-[#545454]">Status</div>
+                  <div class="metric-value text-[#2f2e2a]" id="m-status">Active client since 2014</div>
+                  <span class="icon icon-16 icon-info self-end mt-1" style="background-color:#8a8a8a;"></span>
+                </div>
+              </div>
+
+              <!-- Service Offerings header -->
+              <div class="flex items-center justify-between">
+                <h3 class="font-serif text-[#2f2e2a] text-[24px] leading-8">Service Offerings</h3>
+                <button onclick="openFeedbackModal()" aria-label="Share feedback" title="Share feedback" class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-[#f5f5f1] transition-colors">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8.25 9C8.25 8.80109 8.32902 8.61032 8.46967 8.46967C8.61032 8.32902 8.80109 8.25 9 8.25H15C15.1989 8.25 15.3897 8.32902 15.5303 8.46967C15.671 8.61032 15.75 8.80109 15.75 9C15.75 9.19891 15.671 9.38968 15.5303 9.53033C15.3897 9.67098 15.1989 9.75 15 9.75H9C8.80109 9.75 8.61032 9.67098 8.46967 9.53033C8.32902 9.38968 8.25 9.19891 8.25 9ZM9 12.75H15C15.1989 12.75 15.3897 12.671 15.5303 12.5303C15.671 12.3897 15.75 12.1989 15.75 12C15.75 11.8011 15.671 11.6103 15.5303 11.4697C15.3897 11.329 15.1989 11.25 15 11.25H9C8.80109 11.25 8.61032 11.329 8.46967 11.4697C8.32902 11.6103 8.25 11.8011 8.25 12C8.25 12.1989 8.32902 12.3897 8.46967 12.5303C8.61032 12.671 8.80109 12.75 9 12.75ZM12 14.25H9C8.80109 14.25 8.61032 14.329 8.46967 14.4697C8.32902 14.6103 8.25 14.8011 8.25 15C8.25 15.1989 8.32902 15.3897 8.46967 15.5303C8.61032 15.671 8.80109 15.75 9 15.75H12C12.1989 15.75 12.3897 15.671 12.5303 15.5303C12.671 15.3897 12.75 15.1989 12.75 15C12.75 14.8011 12.671 14.6103 12.5303 14.4697C12.3897 14.329 12.1989 14.25 12 14.25ZM21 4.5V14.6897C21.0006 14.8867 20.9621 15.082 20.8866 15.264C20.8111 15.446 20.7002 15.6112 20.5603 15.75L15.75 20.5603C15.6112 20.7002 15.446 20.8111 15.264 20.8866C15.082 20.9621 14.8867 21.0006 14.6897 21H4.5C4.10218 21 3.72064 20.842 3.43934 20.5607C3.15804 20.2794 3 19.8978 3 19.5V4.5C3 4.10218 3.15804 3.72064 3.43934 3.43934C3.72064 3.15804 4.10218 3 4.5 3H19.5C19.8978 3 20.2794 3.15804 20.5607 3.43934C20.842 3.72064 21 4.10218 21 4.5ZM4.5 19.5H14.25V15C14.25 14.8011 14.329 14.6103 14.4697 14.4697C14.6103 14.329 14.8011 14.25 15 14.25H19.5V4.5H4.5V19.5ZM15.75 15.75V18.4406L18.4397 15.75H15.75Z" fill="#2F2E2A"/>
+                  </svg>
+                </button>
+              </div>
+
+              <!-- Service Offerings grid (2 cols) -->
+              <div id="so-grid" class="grid grid-cols-2 gap-4 pb-8"></div>
+
+            </div><!-- /results-state -->
+
+          </div>
+        </div>
+      </div>
+    </div><!-- /page-entity -->
+
+  </main>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     FEEDBACK MODAL — opens from Service Offerings icon
+══════════════════════════════════════════ -->
+<div id="feedback-modal" class="modal-backdrop" onclick="if(event.target === this) closeFeedbackModal()" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="modal" role="document">
+
+    <!-- ─── FORM VIEW ─── -->
+    <div id="feedback-form-view" class="flex flex-col">
+
+      <!-- Header -->
+      <div class="px-6 pt-6 pb-2 flex items-start justify-between gap-4">
+        <div class="flex flex-col gap-1">
+          <h2 class="font-serif text-[#2f2e2a] text-[24px] leading-8">Share feedback</h2>
+          <p class="text-[#878482] text-[14px] leading-5">Help us improve recommended Service Offerings.</p>
+        </div>
+        <button onclick="closeFeedbackModal()" aria-label="Close" class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-[#f5f5f1] transition-colors shrink-0">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#262421" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Body -->
+      <div class="px-6 py-4 flex flex-col gap-5 overflow-y-auto">
+
+        <!-- Sentiment chips -->
+        <div class="flex flex-col gap-2">
+          <label class="text-[14px] text-[#262421] font-bold">How relevant were the recommendations?</label>
+          <div class="flex flex-wrap gap-2">
+            <button class="feedback-chip" data-sentiment="great" onclick="selectSentiment(this)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
+              Great
+            </button>
+            <button class="feedback-chip" data-sentiment="okay" onclick="selectSentiment(this)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Okay
+            </button>
+            <button class="feedback-chip" data-sentiment="off" onclick="selectSentiment(this)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"/></svg>
+              Off
+            </button>
+          </div>
+        </div>
+
+        <!-- Category chips -->
+        <div class="flex flex-col gap-2">
+          <label class="text-[14px] text-[#262421] font-bold">What's the issue? <span class="text-[#878482] font-normal">(optional)</span></label>
+          <div class="flex flex-wrap gap-2">
+            <button class="feedback-chip" onclick="this.classList.toggle('selected')">Wrong industry</button>
+            <button class="feedback-chip" onclick="this.classList.toggle('selected')">Outdated</button>
+            <button class="feedback-chip" onclick="this.classList.toggle('selected')">Missing offering</button>
+            <button class="feedback-chip" onclick="this.classList.toggle('selected')">Wrong partners</button>
+            <button class="feedback-chip" onclick="this.classList.toggle('selected')">Other</button>
+          </div>
+        </div>
+
+        <!-- Comment -->
+        <div class="flex flex-col gap-2">
+          <label for="feedback-text" class="text-[14px] text-[#262421] font-bold">Tell us more <span class="text-[#878482] font-normal">(optional)</span></label>
+          <textarea id="feedback-text" placeholder="What would have made these results more useful?"
+            class="w-full border border-[#d8d5cf] rounded-lg px-3 py-2 text-[14px] text-[#262421] placeholder-[#878482] outline-none focus:border-[#262421] transition-colors resize-none"
+            rows="4"></textarea>
+        </div>
+
+      </div>
+
+      <!-- Footer -->
+      <div class="px-6 py-4 border-t border-[#f0eee9] flex items-center justify-end gap-2">
+        <button onclick="closeFeedbackModal()" class="h-10 px-4 border border-[#d8d5cf] rounded-lg text-[14px] text-[#262421] hover:bg-[#f5f5f1] transition-colors">Cancel</button>
+        <button onclick="submitFeedback()" class="h-10 px-5 bg-[#3c3a37] text-white text-[14px] rounded-lg hover:bg-[#2f2e2a] transition-colors">Send feedback</button>
+      </div>
+
+    </div><!-- /feedback-form-view -->
+
+    <!-- ─── THANKS VIEW ─── -->
+    <div id="feedback-thanks-view" class="flex-col" style="display:none;">
+
+      <!-- Top close -->
+      <div class="px-6 pt-6 pb-0 flex justify-end">
+        <button onclick="closeFeedbackModal()" aria-label="Close" class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-[#f5f5f1] transition-colors">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#262421" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Body -->
+      <div class="px-8 pt-2 pb-10 flex flex-col items-center text-center gap-4">
+        <!-- Success icon: dark circle + check -->
+        <div class="w-16 h-16 rounded-full bg-[#bdedde] flex items-center justify-center">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#00472e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        </div>
+        <h2 class="font-serif text-[#2f2e2a] text-[28px] leading-9">Thanks for the feedback</h2>
+        <p class="text-[#878482] text-[15px] leading-6 max-w-[380px]">
+          Your input helps us improve the relevance of recommended Service Offerings. We'll review it with the data team.
+        </p>
+        <button onclick="closeFeedbackModal()" class="mt-4 h-10 px-6 bg-[#3c3a37] text-white text-[14px] rounded-lg hover:bg-[#2f2e2a] transition-colors">Close</button>
+      </div>
+
+    </div><!-- /feedback-thanks-view -->
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     DRAWER — opens when clicking a service offering
+══════════════════════════════════════════ -->
+<div id="drawer-backdrop" class="drawer-backdrop" onclick="closeDrawer()"></div>
+<aside id="drawer" class="drawer" role="dialog" aria-hidden="true">
+  <div class="drawer-scroll" id="drawer-scroll">
+
+    <!-- ════════════════════════════════════════
+         DRAWER VIEW 1: SO MATTER LIST
+    ════════════════════════════════════════ -->
+    <div id="drawer-list-view">
+
+      <!-- Header -->
+      <div class="px-8 pt-8 pb-4 flex flex-col gap-3 relative">
+        <button onclick="closeDrawer()" aria-label="Close" class="absolute top-6 right-6 w-8 h-8 flex items-center justify-center hover:bg-[#f5f5f1] rounded transition-colors">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#262421" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+        <span id="drawer-badge" class="badge-existing self-start">Existing</span>
+        <h2 id="drawer-title" class="font-serif text-[#2f2e2a] text-[32px] leading-10 pr-12">IPO — Company Representation</h2>
+        <p id="drawer-meta" class="text-[#8a8a8a] text-[14px] leading-5">3 matters · Q2 2024</p>
+      </div>
+
+      <!-- Toolbar -->
+      <div class="px-8 py-4 flex items-center gap-3">
+        <div class="flex items-center gap-2 bg-[#f4f4f4] rounded-lg px-3 h-10 flex-1 max-w-[280px]">
+          <span class="icon icon-16 icon-search" style="background-color:#8a8a8a;"></span>
+          <input type="text" placeholder="Search SOs" class="flex-1 bg-transparent outline-none text-[14px] text-[#262421] placeholder-[#8a8a8a]" />
+        </div>
+        <button class="h-10 px-3 border border-[#d8d5cf] rounded-lg flex items-center gap-2 text-[14px] text-[#262421] hover:bg-[#f5f5f1] transition-colors whitespace-nowrap">
+          Filter <span class="icon icon-16 icon-chevron" style="background-color:#262421;"></span>
+        </button>
+        <button class="h-10 px-3 border border-[#d8d5cf] rounded-lg flex items-center gap-2 text-[14px] text-[#262421] hover:bg-[#f5f5f1] transition-colors whitespace-nowrap">
+          Sort: Recent <span class="icon icon-16 icon-chevron" style="background-color:#262421;"></span>
+        </button>
+      </div>
+
+      <!-- Section title -->
+      <div class="px-8 pt-4 pb-2 flex items-center justify-between">
+        <h3 class="font-serif text-[#2f2e2a] text-[20px] leading-8">Matter phase profile</h3>
+        <button class="w-6 h-6 flex items-center justify-center hover:opacity-70 transition-opacity">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#262421" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Matter cards -->
+      <div id="drawer-matters" class="px-8 pb-12 flex flex-col gap-4"></div>
+
+    </div><!-- /drawer-list-view -->
+
+    <!-- ════════════════════════════════════════
+         DRAWER VIEW 2: MATTER DETAIL
+    ════════════════════════════════════════ -->
+    <div id="drawer-detail-view" style="display:none;" class="flex flex-col gap-8 px-8 pt-6 pb-12">
+
+      <!-- Top: Close button -->
+      <div class="flex justify-end">
+        <button onclick="closeDrawer()" aria-label="Close" class="border border-[#d8d5cf] rounded-lg p-2 hover:bg-[#f5f5f1] transition-colors">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#262421" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Back row -->
+      <button onclick="backToList()" class="flex items-center gap-2 text-left hover:opacity-70 transition-opacity self-start">
+        <span class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-[#f5f5f1]">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#262421" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+          </svg>
+        </span>
+        <span class="text-[16px] text-[#262421] leading-6">Back</span>
+      </button>
+
+      <!-- Title block -->
+      <div class="flex flex-col gap-4">
+        <span id="md-quality" class="badge-rich self-start" style="font-size:14px; padding:4px 12px;">Rich</span>
+        <h2 id="md-title" class="font-serif text-[#2f2e2a] text-[32px] leading-[44px] tracking-[-0.24px]">
+          Acquisition of a European biotechnology company by Aldernash Therapeutics
+        </h2>
+        <p id="md-meta" class="text-[#545454] text-[16px] leading-6">M-2024-08431 · Rich narrative</p>
+      </div>
+
+      <!-- Metric grid 2x2 -->
+      <div class="grid grid-cols-2 gap-x-8 gap-y-6">
+        <div class="flex flex-col gap-1">
+          <p class="text-[#545454] text-[14px]">Status</p>
+          <p id="md-status" class="font-serif text-[#2f2e2a] text-[24px] leading-8 capitalize">Closed Q3 2024</p>
+        </div>
+        <div class="flex flex-col gap-1">
+          <p class="text-[#545454] text-[14px]">Geography</p>
+          <p id="md-geography" class="font-serif text-[#2f2e2a] text-[24px] leading-8 capitalize">Cross-border (US / Germany)</p>
+        </div>
+        <div class="flex flex-col gap-1">
+          <p class="text-[#545454] text-[14px]">Outcome</p>
+          <p id="md-outcome" class="font-serif text-[#2f2e2a] text-[24px] leading-8 capitalize">Closed successfully</p>
+        </div>
+        <div class="flex flex-col gap-1">
+          <p class="text-[#545454] text-[14px]">Complexity</p>
+          <p id="md-complexity" class="font-serif text-[#2f2e2a] text-[24px] leading-8 capitalize">Cross-border · IP carve-out · Regulatory clearance</p>
+        </div>
+      </div>
+
+      <!-- Matter phase profile -->
+      <div class="flex flex-col gap-6 mt-2">
+        <div class="flex items-center justify-between">
+          <h3 class="font-serif text-[#2f2e2a] text-[24px] leading-8">Matter phase profile</h3>
+          <button class="w-6 h-6 hover:opacity-70 transition-opacity">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M8.25 9C8.25 8.80109 8.32902 8.61032 8.46967 8.46967C8.61032 8.32902 8.80109 8.25 9 8.25H15C15.1989 8.25 15.3897 8.32902 15.5303 8.46967C15.671 8.61032 15.75 8.80109 15.75 9C15.75 9.19891 15.671 9.38968 15.5303 9.53033C15.3897 9.67098 15.1989 9.75 15 9.75H9C8.80109 9.75 8.61032 9.67098 8.46967 9.53033C8.32902 9.38968 8.25 9.19891 8.25 9ZM21 4.5V14.6897C21.0006 14.8867 20.9621 15.082 20.8866 15.264C20.8111 15.446 20.7002 15.6112 20.5603 15.75L15.75 20.5603C15.6112 20.7002 15.446 20.8111 15.264 20.8866C15.082 20.9621 14.8867 21.0006 14.6897 21H4.5C4.10218 21 3.72064 20.842 3.43934 20.5607C3.15804 20.2794 3 19.8978 3 19.5V4.5C3 4.10218 3.15804 3.72064 3.43934 3.43934C3.72064 3.15804 4.10218 3 4.5 3H19.5C19.8978 3 20.2794 3.15804 20.5607 3.43934C20.842 3.72064 21 4.10218 21 4.5ZM4.5 19.5H14.25V15C14.25 14.8011 14.329 14.6103 14.4697 14.4697C14.6103 14.329 14.8011 14.25 15 14.25H19.5V4.5H4.5V19.5ZM15.75 15.75V18.4406L18.4397 15.75H15.75Z" fill="#2F2E2A"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Phase pipeline -->
+        <div id="md-pipeline" class="flex items-start gap-2 w-full"></div>
+
+        <!-- Bottom cards -->
+        <div class="flex gap-4 items-stretch">
+          <!-- Team & role signals -->
+          <div class="bg-white border border-[#d8d5cf] rounded-lg px-6 py-6 flex flex-col gap-4 w-[283px] shrink-0 shadow-[0px_1px_1.5px_rgba(47,46,42,0.05),0px_2px_3px_rgba(47,46,42,0.04)]">
+            <div class="w-8 h-8 rounded-full bg-[#262421] flex items-center justify-center">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+              </svg>
+            </div>
+            <div class="flex flex-col gap-1">
+              <p class="text-[#262421] text-[16px] font-bold leading-6">Team &amp; role signals</p>
+              <p id="md-lead" class="text-[#878482] text-[14px] leading-5">Lead: Marguerite Velasquez</p>
+              <p id="md-team" class="text-[#878482] text-[14px] leading-5">Team: 4 partners, 7 associates</p>
+            </div>
+          </div>
+
+          <!-- Narrative quality signal -->
+          <div class="bg-white border border-[#d8d5cf] rounded-lg p-6 flex flex-col gap-4 flex-1 min-w-0 shadow-[0px_1px_3px_rgba(47,46,42,0.05),0px_2px_6px_rgba(47,46,42,0.04)]">
+            <div class="flex items-start justify-between gap-4">
+              <p class="text-[#2f2e2a] text-[18px] font-bold leading-6">Narrative quality signal</p>
+              <span id="md-narrative-badge" class="badge-rich shrink-0">Rich</span>
+            </div>
+            <div class="bg-[#f4f4f4] rounded-lg px-4 py-2 flex-1 flex items-center">
+              <p id="md-narrative-desc" class="text-[#2f2e2a] text-[14px] leading-5">
+                Rich narrative. Full phase profile, team role signals, complexity indicators, and outcome all extracted. This matter contributes fully to experience retrieval and pitch preparation.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /drawer-detail-view -->
+
+  </div>
+</aside>
+
+<!-- ═══════ Click-outside to close dropdown ═══════ -->
+<script>
+document.addEventListener('click', e => {
+  if (!document.getElementById('search-wrapper').contains(e.target)) {
+    document.getElementById('search-dropdown').style.display = 'none';
+  }
+});
+
+// Close drawer on Esc
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeDrawer();
+});
+</script>
+
+<script>
+// ═══════════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════════
+const ENTITIES = [
+  {
+    id: 1,
+    name: 'Aldernash Capital',
+    industry: 'Biotechnology',
+    size: 'Mid-market',
+    entityType: 'Public (NASDAQ)',
+    hq: 'Cambridge, MA',
+    founded: '2008',
+    jurisdiction: 'Delaware',
+    status: 'Active client since 2014',
+    match: 94,
+    soTitle: 'IPO &amp; Capital Markets',
+    soDesc: 'Transaction support for divestitures and carve-out acquisitions in healthcare and life sciences, including TSAs, regulatory transitions, and Day 1 readiness.',
+    offerings: [
+      { badge:'Existing', title:'IPO — Company Representation', matters:'3 matters', quarter:'Q2 2024', partners:83, expertise:['IPO — Company Representation'] },
+      { badge:'Prospect', title:'IPO — Company Representation', matters:'3 matters', quarter:'Q2 2024', partners:83, expertise:['IPO — Company Representation'] },
+      { badge:'Existing', title:'Pharma Collaboration &amp; License', matters:'5 matters', quarter:'Q4 2025', partners:83, expertise:['Pharma Collaboration &amp; License Agreements','Option / Option-to-Acquire Agreements'] },
+      { badge:'Prospect', title:'IPO — Company Representation', matters:'3 matters', quarter:'Q2 2024', partners:83, expertise:['IPO — Company Representation'] },
+      { badge:'Existing', title:'Pharma Collaboration &amp; License', matters:'5 matters', quarter:'Q4 2025', partners:83, expertise:['Pharma Collaboration &amp; License Agreements','Option / Option-to-Acquire Agreements'] },
+      { badge:'Prospect', title:'Venture Financing — Series B', matters:'2 matters', quarter:'Q1 2025', partners:41, expertise:['Preferred Stock Financing','Board Governance'] },
+    ]
+  },
+  {
+    id: 2,
+    name: 'Aldernash Ventures',
+    industry: 'Venture Capital',
+    size: 'Small',
+    entityType: 'Private',
+    hq: 'San Francisco, CA',
+    founded: '2015',
+    jurisdiction: 'Cayman Islands',
+    status: 'Prospect since 2023',
+    match: 81,
+    soTitle: 'Fund Formation',
+    soDesc: 'Early-stage venture fund formation and portfolio company support, with a focus on life sciences and deep technology sectors.',
+    offerings: [
+      { badge:'Prospect', title:'Fund Formation — LP Counsel', matters:'1 matter', quarter:'Q3 2023', partners:22, expertise:['Fund Formation','LP Agreements'] },
+      { badge:'Prospect', title:'Convertible Note Financing', matters:'2 matters', quarter:'Q4 2023', partners:15, expertise:['SAFE Notes','Convertible Instruments'] },
+    ]
+  },
+  {
+    id: 3,
+    name: 'Aldernash Partners LP',
+    industry: 'Private Equity',
+    size: 'Large',
+    entityType: 'Limited Partnership',
+    hq: 'New York, NY',
+    founded: '2001',
+    jurisdiction: 'Delaware',
+    status: 'Active client since 2009',
+    match: 77,
+    soTitle: 'M&amp;A — Acquisition',
+    soDesc: 'Buy-side and sell-side M&A advisory with deep experience in healthcare, industrials, and consumer sectors.',
+    offerings: [
+      { badge:'Existing', title:'M&amp;A — Buy-side Representation', matters:'8 matters', quarter:'Q1 2024', partners:54, expertise:['Acquisition Financing','Due Diligence'] },
+      { badge:'Existing', title:'Leveraged Buyout Financing', matters:'5 matters', quarter:'Q2 2024', partners:31, expertise:['Senior Credit Facilities','Mezzanine Debt'] },
+      { badge:'Prospect', title:'Portfolio Company Exit', matters:'1 matter', quarter:'Q3 2025', partners:18, expertise:['Secondary Sales','IPO Readiness'] },
+    ]
+  },
+  {
+    id: 4,
+    name: 'Aldernash Group',
+    industry: 'Real Estate',
+    size: 'Mid-market',
+    entityType: 'Private',
+    hq: 'Singapore',
+    founded: '2010',
+    jurisdiction: 'Singapore',
+    status: 'Active client since 2018',
+    match: 68,
+    soTitle: 'Real Estate Finance',
+    soDesc: 'Cross-border real estate investment and development financing, with expertise in APAC markets and sustainability-linked structures.',
+    offerings: [
+      { badge:'Existing', title:'Real Estate Finance — Development', matters:'4 matters', quarter:'Q2 2023', partners:27, expertise:['Development Finance','Construction Loans'] },
+      { badge:'Prospect', title:'REIT Formation', matters:'0 matters', quarter:'—', partners:12, expertise:['REIT Structuring','Tax Optimization'] },
+    ]
+  },
+];
+
+// ═══════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════
+function navigate(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  document.querySelectorAll('[data-nav]').forEach(item => {
+    item.classList.toggle('active', item.dataset.nav === page);
+  });
+}
+
+// ═══════════════════════════════════════════════════
+// SEARCH AUTOCOMPLETE DROPDOWN
+// ═══════════════════════════════════════════════════
+function onSearchInput(val) {
+  const dd = document.getElementById('search-dropdown');
+  const q = val.trim().toLowerCase();
+  if (!q) { dd.style.display = 'none'; return; }
+
+  const matches = ENTITIES.filter(e => e.name.toLowerCase().includes(q));
+
+  if (!matches.length) {
+    // Nothing found hint — user can still click Search to see close matches
+    dd.innerHTML = `
+      <div class="flex items-center gap-3 px-4 py-3 border-l-4 border-[#b9b7b2]" style="background:#fafaf7;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#878482" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
+          <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+        <div class="flex flex-col">
+          <span class="text-[14px] text-[#262421] font-semibold">Nothing found</span>
+          <span class="text-[12px] text-[#878482]">Click <strong>Search</strong> to see close matches in Salesforce.</span>
+        </div>
+      </div>
+    `;
+    dd.style.display = 'block';
+    return;
+  }
+
+  dd.innerHTML = matches.map(e => `
+    <div class="dropdown-item" onclick="selectSuggestion('${e.name}', ${e.id})">
+      <div class="di-avatar">${e.name.charAt(0)}</div>
+      <div class="di-info">
+        <div class="di-name">${highlightMatch(e.name, q)}</div>
+        <div class="di-meta">${e.industry} · ${e.hq}</div>
+      </div>
+      <div class="di-type">${e.status.startsWith('Active') ? 'Client' : 'Prospect'}</div>
+    </div>
+  `).join('');
+  dd.style.display = 'block';
+}
+
+function highlightMatch(name, q) {
+  const idx = name.toLowerCase().indexOf(q);
+  if (idx === -1) return name;
+  return name.slice(0, idx) +
+    `<strong style="color:#262421">${name.slice(idx, idx + q.length)}</strong>` +
+    name.slice(idx + q.length);
+}
+
+function selectSuggestion(name, id) {
+  document.getElementById('entity-search').value = name;
+  document.getElementById('search-dropdown').style.display = 'none';
+  renderResults(ENTITIES.filter(e => e.id === id));
+}
+
+// ═══════════════════════════════════════════════════
+// RUN SEARCH (on button click / Enter)
+// ═══════════════════════════════════════════════════
+function runSearch(val) {
+  document.getElementById('search-dropdown').style.display = 'none';
+  const q = val.trim();
+  if (!q) return;
+  const matches = ENTITIES.filter(e => e.name.toLowerCase().includes(q.toLowerCase()));
+  if (!matches.length) {
+    renderNoResults(q);
+  } else {
+    renderResults(matches);
+  }
+}
+
+// Static "Salesforce" close-matches list shown when no exact match is found
+const SALESFORCE_CLOSE_MATCHES = [
+  { name: 'Quantum Therapeutics, Inc.', meta: 'Biotech · San Francisco · Existing client since 2019' },
+  { name: 'Quanta Biosciences',          meta: 'Biotech · San Francisco · Existing client since 2019' },
+  { name: 'Quantum Biotech LLC',         meta: 'Biotech · San Francisco · Existing client since 2019' },
+];
+
+function renderNoResults(query) {
+  document.getElementById('empty-state').style.display = 'none';
+  document.getElementById('results-state').style.display = 'none';
+  document.getElementById('no-results-state').style.display = 'flex';
+  document.getElementById('result-count').textContent = 'Result: 0';
+  document.getElementById('nr-title').textContent = `No company matches "${query}"`;
+
+  const list = SALESFORCE_CLOSE_MATCHES;
+  document.getElementById('nr-matches-heading').textContent = `${list.length} close matches in Salesforce`;
+  document.getElementById('nr-matches').innerHTML = list.map(m => `
+    <div class="bg-white border border-[#d8d5cf] rounded-lg p-6 flex items-center justify-between gap-4 shadow-[0px_1px_3px_rgba(47,46,42,0.05),0px_2px_6px_rgba(47,46,42,0.04)]">
+      <div class="flex flex-col gap-2 min-w-0 flex-1">
+        <p class="text-[#2f2e2a] text-[18px] font-bold leading-6">${m.name}</p>
+        <p class="text-[#545454] text-[14px] leading-5">${m.meta}</p>
+      </div>
+      <button onclick="viewCloseMatch('${m.name.replace(/'/g, "\\'")}')" class="h-12 px-6 border border-[#d8d5cf] rounded-lg text-[#262421] text-[16px] hover:bg-[#f5f5f1] transition-colors shrink-0 whitespace-nowrap">
+        View Details
+      </button>
+    </div>
+  `).join('');
+
+  document.getElementById('no-results-state').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function viewCloseMatch(name) {
+  document.getElementById('entity-search').value = name;
+  // Visually flash the search bar so the user sees the substitution
+  const input = document.getElementById('entity-search');
+  input.focus();
+  runSearch(name); // will likely show no-results again unless they happen to be in ENTITIES
+}
+
+function requestAddCompany() {
+  alert('Request submitted. The data team will review and add the company within 1–2 business days.');
+}
+
+function searchExperiences() {
+  alert('Switching to the "Describe the work" tab — search by fact pattern across firm experience.');
+}
+
+// ═══════════════════════════════════════════════════
+// RENDER RESULTS
+// ═══════════════════════════════════════════════════
+function renderResults(matches) {
+  const empty = document.getElementById('empty-state');
+  const results = document.getElementById('results-state');
+  const noResults = document.getElementById('no-results-state');
+  const count = document.getElementById('result-count');
+
+  count.textContent = 'Result: ' + matches.length;
+
+  if (!matches.length) {
+    empty.style.display = 'flex';
+    results.style.display = 'none';
+    noResults.style.display = 'none';
+    return;
+  }
+
+  // Show the top match as the detailed profile
+  const top = matches[0];
+  empty.style.display = 'none';
+  noResults.style.display = 'none';
+  results.style.display = 'flex';
+  results.style.flexDirection = 'column';
+
+  // Match badge
+  const badgeEl = document.getElementById('res-badge');
+  badgeEl.textContent = top.match + '% match';
+  badgeEl.className = top.match >= 90 ? 'badge-existing self-start' : 'badge-prospect self-start';
+
+  document.getElementById('res-title').innerHTML = top.soTitle;
+  document.getElementById('res-desc').textContent = top.soDesc;
+  document.getElementById('m-industry').textContent = top.industry;
+  document.getElementById('m-size').textContent = top.size;
+  document.getElementById('m-type').textContent = top.entityType;
+  document.getElementById('m-hq').textContent = top.hq;
+  document.getElementById('m-founded').textContent = top.founded;
+  document.getElementById('m-jurisdiction').textContent = top.jurisdiction;
+  document.getElementById('m-status').textContent = top.status;
+
+  // Track current entity so the drawer can look up offerings
+  currentEntity = top;
+
+  // Service offering cards (clickable → drawer)
+  document.getElementById('so-grid').innerHTML = top.offerings.map((o, idx) => `
+    <div class="so-card" onclick="openDrawer(${idx})">
+      <span class="${o.badge === 'Existing' ? 'badge-existing' : 'badge-prospect'}">${o.badge}</span>
+      <div class="flex flex-col gap-4">
+        <div class="flex items-start justify-between gap-4">
+          <div class="flex flex-col gap-2 flex-1">
+            <p class="text-[#2f2e2a] text-[18px] font-bold leading-6">${o.title}</p>
+            <p class="text-[#545454] text-[14px] leading-5">${o.matters} · ${o.quarter}</p>
+          </div>
+          <span class="text-[#878482] text-[14px] leading-5 whitespace-nowrap shrink-0">${o.partners} partners</span>
+        </div>
+        <div class="bg-[#f4f4f4] rounded-lg px-4 py-2 flex flex-col gap-1">
+          <p class="text-[#2f2e2a] text-[14px] leading-6">Partners with expertise</p>
+          <ul class="list-disc pl-5 flex flex-col gap-0.5">
+            ${o.expertise.map(e => `<li class="text-[#2f2e2a] text-[14px] leading-6">${e}</li>`).join('')}
+          </ul>
+        </div>
+      </div>
+    </div>
+  `).join('');
+
+  // Smooth scroll to results
+  document.getElementById('results-state').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ═══════════════════════════════════════════════════
+// DRAWER
+// ═══════════════════════════════════════════════════
+let currentEntity = null;
+
+function mattersFor(offering) {
+  // Generate sample matters with varying data quality
+  const baseTitle = `Acquisition of a European biotechnology company by Aldernash Therapeutics`;
+  const baseMeta  = `Closed Q3 2024 · Cross-border (US / Germany) · Mid-market · Strategic acquisition`;
+  const baseLead  = `Lead: Marguerite Velasquez · Team: 4 partners, 7 associates · Phase: Diligence → Sign → Close`;
+
+  const phasesAll = [
+    { name: 'Diligence',   done: true  },
+    { name: 'Negotiation', done: true  },
+    { name: 'Sign',        done: true  },
+    { name: 'Regulatory',  done: false },
+    { name: 'Close',       done: false },
+  ];
+
+  const richNarr =
+    'Rich narrative. Full phase profile, team role signals, complexity indicators, and outcome all extracted. This matter contributes fully to experience retrieval and pitch preparation.';
+  const partialNarr =
+    'Partial narrative. Phase and team signals extracted, but complexity and outcome details are sparse. Useful for retrieval but limited for pitch preparation.';
+  const poorNarr =
+    'Poor narrative. Only basic phase information available. Most signals missing — this matter contributes minimally to retrieval and may need manual review before use.';
+
+  return [
+    { id:'M-2024-08431', title: baseTitle, meta: baseMeta, detail: baseLead, quality: 'Rich',
+      status:'Closed Q3 2024', geography:'Cross-border (US / Germany)', outcome:'Closed successfully',
+      complexity:'Cross-border · IP carve-out · Regulatory clearance',
+      lead:'Marguerite Velasquez', partners:4, associates:7,
+      phases: phasesAll.map((p,i)=>({...p, done:true})),
+      narrative: richNarr },
+    { id:'M-2024-08432', title: baseTitle, meta: baseMeta, detail: baseLead, quality: 'Partial',
+      status:'Closed Q1 2024', geography:'Cross-border (US / UK)', outcome:'Closed with concessions',
+      complexity:'Cross-border · IP carve-out',
+      lead:'Marguerite Velasquez', partners:4, associates:7,
+      phases: [{name:'Diligence',done:true},{name:'Negotiation',done:true},{name:'Sign',done:true},{name:'Regulatory',done:false},{name:'Close',done:false}],
+      narrative: partialNarr },
+    { id:'M-2024-08433', title: baseTitle, meta: baseMeta, detail: baseLead, quality: 'Poor',
+      status:'Q4 2023', geography:'US domestic', outcome:'Withdrawn',
+      complexity:'Standard',
+      lead:'Marguerite Velasquez', partners:4, associates:7,
+      phases: [{name:'Diligence',done:true},{name:'Negotiation',done:true},{name:'Sign',done:false},{name:'Regulatory',done:false},{name:'Close',done:false}],
+      narrative: poorNarr },
+  ];
+}
+
+let currentMatters = [];
+
+function openDrawer(offeringIdx) {
+  if (!currentEntity) return;
+  const o = currentEntity.offerings[offeringIdx];
+  if (!o) return;
+
+  // Header
+  const badgeEl = document.getElementById('drawer-badge');
+  badgeEl.textContent = o.badge;
+  badgeEl.className = (o.badge === 'Existing' ? 'badge-existing' : 'badge-prospect') + ' self-start';
+
+  document.getElementById('drawer-title').innerHTML = o.title;
+  document.getElementById('drawer-meta').textContent = `${o.matters} · ${o.quarter}`;
+
+  // Matters
+  const matters = mattersFor(o);
+  currentMatters = matters;
+  document.getElementById('drawer-matters').innerHTML = matters.map((m, i) => `
+    <div class="bg-white border border-[#d8d5cf] rounded-lg p-4 flex flex-col gap-3 shadow-[0px_1px_3px_rgba(47,46,42,0.05),0px_2px_6px_rgba(47,46,42,0.04)] cursor-pointer hover:border-[#b9b7b2] hover:shadow-[0px_4px_12px_rgba(47,46,42,0.08)] transition-all"
+         onclick="openMatterDetail(${i})">
+      <div class="flex items-start justify-between gap-4">
+        <div class="flex-1 min-w-0">
+          <p class="text-[#2f2e2a] text-[15px] font-bold leading-6">${m.title}</p>
+          <p class="text-[#545454] text-[13px] leading-5 mt-1">${m.meta}</p>
+        </div>
+        <span class="badge-${m.quality.toLowerCase()} shrink-0">${m.quality}</span>
+      </div>
+      <div class="bg-[#f4f4f4] rounded-lg px-3 py-2">
+        <p class="text-[#2f2e2a] text-[13px] leading-5">• ${m.detail}</p>
+      </div>
+      <div class="flex justify-end">
+        <button onclick="event.stopPropagation(); openMatterDetail(${i})"
+          class="h-9 px-4 border border-[#d8d5cf] rounded-lg text-[14px] text-[#262421] hover:bg-[#f5f5f1] transition-colors">View Details</button>
+      </div>
+    </div>
+  `).join('');
+
+  // Make sure list view is the active one when (re)opening the drawer
+  document.getElementById('drawer-list-view').style.display = '';
+  document.getElementById('drawer-detail-view').style.display = 'none';
+  document.getElementById('drawer-scroll').scrollTop = 0;
+
+  // Open
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('drawer-backdrop').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  document.getElementById('drawer').setAttribute('aria-hidden', 'false');
+}
+
+// ─── Matter detail view ───
+function openMatterDetail(idx) {
+  const m = currentMatters[idx];
+  if (!m) return;
+
+  // Title block
+  const qBadge = document.getElementById('md-quality');
+  qBadge.textContent = m.quality;
+  qBadge.className = 'badge-' + m.quality.toLowerCase() + ' self-start';
+
+  document.getElementById('md-title').textContent = m.title;
+  document.getElementById('md-meta').textContent = `${m.id} · ${m.quality} narrative`;
+
+  // Metric grid
+  document.getElementById('md-status').textContent     = m.status;
+  document.getElementById('md-geography').textContent  = m.geography;
+  document.getElementById('md-outcome').textContent    = m.outcome;
+  document.getElementById('md-complexity').textContent = m.complexity;
+
+  // Phase pipeline
+  document.getElementById('md-pipeline').innerHTML = m.phases.map((p, i) => {
+    const circle = `
+      <div class="flex flex-col gap-2 items-center justify-center" style="width:88px; flex-shrink:0;">
+        <div class="rounded-full flex items-center justify-center" style="width:48px; height:48px; background:${p.done ? '#262421' : '#e9e7e1'};">
+          ${p.done
+            ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'
+            : '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#878482" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/></svg>'}
+        </div>
+        <p class="text-[#262421] text-[14px] font-bold leading-6 text-center">${p.name}</p>
+      </div>`;
+    const connector = i < m.phases.length - 1
+      ? `<div style="flex:1; height:2px; background:${m.phases[i+1].done && p.done ? '#262421' : '#e9e7e1'}; margin-top:23px;"></div>`
+      : '';
+    return circle + connector;
+  }).join('');
+
+  // Bottom cards
+  document.getElementById('md-lead').textContent = `Lead: ${m.lead}`;
+  document.getElementById('md-team').textContent = `Team: ${m.partners} partners, ${m.associates} associates`;
+  const nBadge = document.getElementById('md-narrative-badge');
+  nBadge.textContent = m.quality;
+  nBadge.className = 'badge-' + m.quality.toLowerCase() + ' shrink-0';
+  document.getElementById('md-narrative-desc').textContent = m.narrative;
+
+  // Switch views
+  document.getElementById('drawer-list-view').style.display = 'none';
+  document.getElementById('drawer-detail-view').style.display = 'flex';
+  document.getElementById('drawer-scroll').scrollTop = 0;
+}
+
+function backToList() {
+  document.getElementById('drawer-detail-view').style.display = 'none';
+  document.getElementById('drawer-list-view').style.display = '';
+  document.getElementById('drawer-scroll').scrollTop = 0;
+}
+
+function closeDrawer() {
+  document.getElementById('drawer').classList.remove('open');
+  document.getElementById('drawer-backdrop').classList.remove('open');
+  document.body.style.overflow = '';
+  document.getElementById('drawer').setAttribute('aria-hidden', 'true');
+}
+
+// ═══════════════════════════════════════════════════
+// FEEDBACK MODAL
+// ═══════════════════════════════════════════════════
+function openFeedbackModal() {
+  // Always start on the form view
+  document.getElementById('feedback-form-view').style.display = 'flex';
+  document.getElementById('feedback-thanks-view').style.display = 'none';
+
+  const m = document.getElementById('feedback-modal');
+  m.classList.add('open');
+  m.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeFeedbackModal() {
+  const m = document.getElementById('feedback-modal');
+  m.classList.remove('open');
+  m.setAttribute('aria-hidden', 'true');
+  // Only release scroll lock if drawer also isn't open
+  if (!document.getElementById('drawer').classList.contains('open')) {
+    document.body.style.overflow = '';
+  }
+  // Reset form so re-opening is fresh
+  setTimeout(() => {
+    document.querySelectorAll('.feedback-chip').forEach(c => c.classList.remove('selected'));
+    document.getElementById('feedback-text').value = '';
+    document.getElementById('feedback-form-view').style.display = 'flex';
+    document.getElementById('feedback-thanks-view').style.display = 'none';
+  }, 200);
+}
+
+function selectSentiment(btn) {
+  // Sentiment is single-select
+  document.querySelectorAll('.feedback-chip[data-sentiment]').forEach(c => c.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+
+function submitFeedback() {
+  // (collected for analytics; intentionally not echoed back to the user)
+  const sentiment = document.querySelector('.feedback-chip[data-sentiment].selected')?.dataset.sentiment || null;
+  const tags = Array.from(document.querySelectorAll('.feedback-chip:not([data-sentiment]).selected')).map(c => c.textContent.trim());
+  const text = document.getElementById('feedback-text').value.trim();
+
+  // Swap to thanks view (modal stays open)
+  document.getElementById('feedback-form-view').style.display = 'none';
+  document.getElementById('feedback-thanks-view').style.display = 'flex';
+}
+
+// Esc closes the modal too
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && document.getElementById('feedback-modal').classList.contains('open')) {
+    closeFeedbackModal();
+  }
+});
+
+// Init
+navigate('home');
+</script>
+</body>
+</html>

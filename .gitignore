@@ -1,0 +1,15 @@
+# Local dev server / tunnel — don't commit
+cloudflared.exe
+*.log
+.tunnel.log
+.figma-screenshot.png
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Logs and temp
+*.tmp
+*.bak
