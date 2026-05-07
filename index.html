@@ -63,10 +63,56 @@
     .page { display:none; }
     .page.active { display:flex; }
 
-    /* ── Home page: no sidebar, no default topnav, no main padding ── */
-    body.home-active #sidebar,
-    body.home-active #topnav-default { display:none !important; }
-    body.home-active main { padding:0 !important; }
+    /* ── New design has no sidebar / shared topnav anywhere ── */
+    #sidebar, #topnav-default { display:none !important; }
+    main { padding:0 !important; }
+
+    /* ── Entity tabs ── */
+    .ent-tabs { display:flex; gap:8px; border-bottom:1px solid #e8e6e1; }
+    .ent-tab {
+      padding:12px 16px;
+      font-size:16px;
+      color:#878482;
+      cursor:pointer;
+      border-bottom:2px solid transparent;
+      margin-bottom:-1px;
+      transition:color 0.1s, border-color 0.1s;
+      background:transparent;
+      border-top:0; border-left:0; border-right:0;
+      font-family:inherit;
+    }
+    .ent-tab:hover { color:#262421; }
+    .ent-tab.active { color:#262421; border-bottom-color:#262421; }
+
+    /* ── Offering cards (new design) ── */
+    .off-card {
+      background:#fff;
+      border:1px solid #e8e6e1;
+      border-radius:12px;
+      padding:20px;
+      cursor:pointer;
+      transition:box-shadow 0.15s, border-color 0.15s;
+    }
+    .off-card:hover { box-shadow:0 4px 12px rgba(47,46,42,0.08); border-color:#b9b7b2; }
+    .off-card-row { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:16px; }
+    .off-view-details {
+      height:36px; padding:0 16px;
+      border:1px solid #d8d5cf; border-radius:8px;
+      font-size:14px; color:#262421; background:#fff;
+      cursor:pointer; transition:background 0.1s;
+    }
+    .off-view-details:hover { background:#f5f5f1; }
+    .off-matters { font-size:14px; color:#8a8a8a; line-height:20px; margin-bottom:4px; }
+    .off-title { font-size:18px; font-weight:700; color:#262421; line-height:24px; margin-bottom:4px; }
+    .off-meta { font-size:14px; color:#878482; line-height:20px; }
+    .off-why {
+      margin-top:12px;
+      background:#f4f4f4;
+      border-radius:8px;
+      padding:12px 16px;
+    }
+    .off-why-q { font-size:14px; font-weight:700; color:#262421; line-height:20px; margin-bottom:4px; }
+    .off-why-a { font-size:14px; color:#262421; line-height:20px; }
 
     /* ── Home autocomplete dropdown ── */
     .home-dropdown {
@@ -404,79 +450,127 @@
     </div>
 
     <!-- ═══════════════════════════════════════
-         PAGE: ENTITY (By Company)
+         PAGE: ENTITY (selected entity profile)
     ════════════════════════════════════════ -->
-    <div id="page-entity" class="page flex-1 min-h-0">
-      <div class="w-full h-full bg-white rounded-lg overflow-y-auto">
-        <div class="px-8 py-14">
-          <div class="max-w-[1140px] mx-auto flex flex-col gap-8">
+    <div id="page-entity" class="page flex-col flex-1 min-h-0" style="background:#f5f5f1;">
 
-            <!-- Top panels -->
-            <div class="flex gap-2 items-stretch">
-
-              <!-- Entity search panel -->
-              <div class="flex-1 min-w-0 border border-[#b9b7b2] rounded-xl p-4 flex flex-col justify-between" style="min-height:202px;">
-                <div class="flex flex-col gap-2 pb-2">
-                  <h3 class="font-serif text-[#2f2e2a] text-[20px] leading-8 capitalize">Entity</h3>
-                  <p class="text-[#8a8a8a] text-[16px] leading-6">Search for a client or prospect by name. Multiple matches will be disambiguate below.</p>
-                </div>
-                <div class="flex gap-4 items-center">
-                  <div id="search-wrapper">
-                    <div class="flex items-center gap-1 bg-[#f4f4f4] rounded-lg px-4 h-12 overflow-hidden">
-                      <span class="icon icon-16 icon-search" style="background-color:#8a8a8a;"></span>
-                      <input id="entity-search" type="text" placeholder="e.g. Aldernash" autocomplete="off"
-                        class="flex-1 bg-transparent text-[16px] text-[#262421] leading-6 outline-none border-none placeholder-[#8a8a8a] ml-1"
-                        oninput="onSearchInput(this.value)"
-                        onkeydown="if(event.key==='Enter') runSearch(this.value)"
-                        onfocus="onSearchInput(this.value)" />
-                    </div>
-                    <!-- Dropdown suggestions -->
-                    <div id="search-dropdown" style="display:none;"></div>
-                  </div>
-                  <button onclick="runSearch(document.getElementById('entity-search').value)"
-                    class="h-12 px-6 bg-[#3c3a37] text-white text-[16px] leading-6 rounded-lg whitespace-nowrap hover:bg-[#2f2e2a] transition-colors shrink-0">
-                    Search
-                  </button>
-                </div>
+      <!-- Top Nav (same as home) -->
+      <header class="h-16 shrink-0 flex items-center gap-4 px-4">
+        <div class="flex items-center gap-4">
+          <img src="assets/logo.png" alt="Powerloom" class="w-[38px] h-[38px] rounded-full object-cover shrink-0" />
+          <span class="font-serif text-[#2f2e2a] text-[20px] leading-8 capitalize">PowerLoom</span>
+        </div>
+        <div class="flex-1 flex items-center justify-end gap-6">
+          <button class="hover:opacity-70 transition-opacity" aria-label="Help">
+            <span class="icon icon-24 icon-help" style="background-color:#2f2e2a;"></span>
+          </button>
+          <button class="flex items-center gap-1 hover:opacity-80 transition-opacity">
+            <div class="flex items-center gap-2">
+              <div class="w-8 h-8 rounded-full bg-[#2f2e2a] flex items-center justify-center shrink-0">
+                <span class="text-white text-[13px] font-bold leading-none">AR</span>
               </div>
+              <span class="text-[#2f2e2a] text-[14px] leading-5 whitespace-nowrap">Armando Reyes</span>
+            </div>
+            <span class="icon icon-16 icon-chevron py-1" style="background-color:#2f2e2a;"></span>
+          </button>
+        </div>
+      </header>
 
-              <!-- Describe the work panel -->
-              <div class="flex-1 min-w-0 bg-[#efefef] rounded-xl p-4 flex flex-col justify-between" style="min-height:202px;">
-                <div class="flex flex-col gap-2">
-                  <h3 class="font-serif text-[#2f2e2a] text-[20px] leading-8 capitalize">Describe the work</h3>
-                  <p class="text-[#8a8a8a] text-[16px] leading-6">Search for a client or prospect by name. Multiple matches will be disambiguate below.</p>
-                </div>
-                <div class="flex gap-2 items-center">
-                  <input type="text" placeholder="Describe your work"
-                    class="flex-1 h-12 bg-white border border-[#b9b7b2] rounded-lg px-4 text-[16px] text-[#b9b7b2] placeholder-[#b9b7b2] outline-none focus:border-[#878482] transition-colors" />
-                  <button class="h-12 px-6 bg-[#3c3a37] text-white text-[16px] leading-6 rounded-lg whitespace-nowrap hover:bg-[#2f2e2a] transition-colors shrink-0">Apply</button>
-                </div>
-              </div>
+      <!-- White card content -->
+      <div class="flex-1 min-h-0 px-4 pb-4">
+        <div class="bg-white rounded-lg h-full overflow-y-auto">
+          <div class="px-12 py-8 max-w-[1240px] mx-auto">
 
+            <!-- Tabs -->
+            <div class="ent-tabs">
+              <button class="ent-tab active">Entity</button>
+              <button class="ent-tab" onclick="alert('Experience tab — coming soon.')">Experience</button>
             </div>
 
-            <!-- Result header -->
-            <div class="flex items-center justify-between">
-              <h2 class="font-serif text-[#2f2e2a] text-[24px] leading-8">Result</h2>
-              <span id="result-count" class="text-[#8a8a8a] text-[16px] leading-6">Result: 0</span>
-            </div>
-
-            <!-- ── EMPTY STATE ── -->
-            <div id="empty-state" class="flex flex-col items-center justify-center gap-4 py-16">
-              <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
-                <rect x="4" y="4" width="72" height="72" rx="4" stroke="#b9b7b2" stroke-width="1.5"/>
-                <line x1="4" y1="4" x2="76" y2="76" stroke="#b9b7b2" stroke-width="1.5"/>
-                <line x1="76" y1="4" x2="4" y2="76" stroke="#b9b7b2" stroke-width="1.5"/>
-                <rect x="18" y="18" width="44" height="44" rx="2" stroke="#b9b7b2" stroke-width="1.5"/>
+            <!-- Back link -->
+            <button onclick="navigate('home')" class="flex items-center gap-2 mt-6 text-[#262421] hover:opacity-70 transition-opacity">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6"/>
               </svg>
-              <div class="flex flex-col items-center gap-2">
-                <p class="font-serif text-[#2f2e2a] text-[20px] leading-8 capitalize">Entity</p>
-                <p class="text-[#8a8a8a] text-[16px] leading-6 text-center max-w-[357px]">Search for a client or prospect by name. Multiple matches will be disambiguate below.</p>
-              </div>
-            </div>
+              <span class="text-[16px]">Back</span>
+            </button>
 
-            <!-- ── NO-RESULTS STATE (with close matches) ── -->
-            <div id="no-results-state" style="display:none;" class="flex flex-col gap-8 w-full">
+            <!-- ── PROFILE STATE ── -->
+            <div id="entity-profile-state" class="mt-8 flex flex-col gap-8">
+
+              <!-- Title block -->
+              <div class="flex flex-col gap-2">
+                <h1 id="ep-title" class="font-serif text-[#2f2e2a] text-[40px] leading-[48px] tracking-[-0.5px]">Aldernash Therapeutics, Inc.</h1>
+                <p id="ep-subtitle" class="text-[#878482] text-[16px] leading-6">Late-stage biotech focused on oncology with Phase III pipeline.</p>
+              </div>
+
+              <!-- Metrics row 1 (4 cards) -->
+              <div class="grid grid-cols-4 gap-4">
+                <div class="metric-card dark">
+                  <div class="metric-label text-white opacity-80">Industry / Sector</div>
+                  <div class="metric-value text-white" id="ep-industry">Biotechnology</div>
+                  <span class="icon icon-16 icon-info self-end" style="background-color:rgba(255,255,255,0.5);"></span>
+                </div>
+                <div class="metric-card">
+                  <div class="metric-label text-[#545454]">Size</div>
+                  <div class="metric-value text-[#2f2e2a]" id="ep-size">Mid-Market - 850 Employees</div>
+                  <span class="icon icon-16 icon-info self-end" style="background-color:#8a8a8a;"></span>
+                </div>
+                <div class="metric-card">
+                  <div class="metric-label text-[#545454]">Entity type</div>
+                  <div class="metric-value text-[#2f2e2a]" id="ep-entity-type">Public (NASDAQ)</div>
+                  <span class="icon icon-16 icon-info self-end" style="background-color:#8a8a8a;"></span>
+                </div>
+                <div class="metric-card">
+                  <div class="metric-label text-[#545454]">HQ / Geography</div>
+                  <div class="metric-value text-[#2f2e2a]" id="ep-hq">Cambridge, MA</div>
+                  <span class="icon icon-16 icon-info self-end" style="background-color:#8a8a8a;"></span>
+                </div>
+              </div>
+
+              <!-- Metrics row 2 (3 cards) -->
+              <div class="grid grid-cols-3 gap-4">
+                <div class="metric-card">
+                  <div class="metric-label text-[#545454]">Founded</div>
+                  <div class="metric-value text-[#2f2e2a]" id="ep-founded">2008</div>
+                  <span class="icon icon-16 icon-info self-end" style="background-color:#8a8a8a;"></span>
+                </div>
+                <div class="metric-card">
+                  <div class="metric-label text-[#545454]">Jurisdiction</div>
+                  <div class="metric-value text-[#2f2e2a]" id="ep-jurisdiction">Delaware</div>
+                  <span class="icon icon-16 icon-info self-end" style="background-color:#8a8a8a;"></span>
+                </div>
+                <div class="metric-card">
+                  <div class="metric-label text-[#545454]">Status</div>
+                  <div class="metric-value text-[#2f2e2a]" id="ep-status">Active client since 2014</div>
+                  <span class="icon icon-16 icon-info self-end" style="background-color:#8a8a8a;"></span>
+                </div>
+              </div>
+
+              <!-- Two-column offerings -->
+              <div class="grid grid-cols-2 gap-12 mt-4 pb-8">
+                <!-- Existing column -->
+                <div class="flex flex-col gap-6">
+                  <div class="flex items-end justify-between">
+                    <h2 class="font-serif text-[#2f2e2a] text-[24px] leading-8">Existing offerings</h2>
+                    <span id="ep-existing-meta" class="text-[#8a8a8a] text-[14px]">4 offerings · 22 matters</span>
+                  </div>
+                  <div id="ep-existing-list" class="flex flex-col gap-4"></div>
+                </div>
+                <!-- Prospective column -->
+                <div class="flex flex-col gap-6">
+                  <div class="flex items-end justify-between">
+                    <h2 class="font-serif text-[#2f2e2a] text-[24px] leading-8">Prospective offerings</h2>
+                    <span id="ep-prospect-meta" class="text-[#8a8a8a] text-[14px]">3 cross-sell opportunities</span>
+                  </div>
+                  <div id="ep-prospect-list" class="flex flex-col gap-4"></div>
+                </div>
+              </div>
+
+            </div><!-- /entity-profile-state -->
+
+            <!-- ── NO-RESULTS STATE (kept for searches with no match) ── -->
+            <div id="no-results-state" style="display:none;" class="mt-8 flex flex-col gap-8 w-full">
 
               <!-- Centered no-match header -->
               <div class="flex flex-col items-center gap-4 py-4">
@@ -494,13 +588,9 @@
                 </div>
               </div>
 
-              <!-- Close matches heading -->
               <h3 id="nr-matches-heading" class="font-serif text-[#2f2e2a] text-[20px] leading-8 capitalize">3 close matches in Salesforce</h3>
-
-              <!-- Close match cards -->
               <div id="nr-matches" class="flex flex-col gap-4 w-full"></div>
 
-              <!-- Action buttons -->
               <div class="flex gap-2 items-center w-[509px] max-w-full mx-auto pt-4">
                 <button onclick="requestAddCompany()" class="flex-1 h-12 border border-[#d8d5cf] rounded-lg px-4 text-[#262421] text-[16px] hover:bg-[#f5f5f1] transition-colors whitespace-nowrap">
                   Request to add this company
@@ -512,79 +602,18 @@
 
             </div>
 
-            <!-- ── RESULTS STATE ── -->
-            <div id="results-state" style="display:none;" class="flex flex-col gap-8">
-
-              <!-- Match badge + heading + description -->
-              <div class="flex flex-col gap-4">
-                <span id="res-badge" class="badge-existing self-start">94% match</span>
-                <h2 id="res-title" class="font-serif text-[#2f2e2a] text-[32px] leading-[44px] tracking-[-0.24px]">IPO &amp; Capital Markets</h2>
-                <p id="res-desc" class="text-[#878482] text-[16px] leading-6 max-w-[560px]">
-                  Transaction support for divestitures and carve-out acquisitions in healthcare and life sciences, including TSAs, regulatory transitions, and Day 1 readiness.
-                </p>
-              </div>
-
-              <!-- Metric cards row 1 -->
-              <div class="flex gap-4">
-                <div class="metric-card dark">
-                  <div class="metric-label text-white opacity-80">Industry / Sector</div>
-                  <div class="metric-value text-white" id="m-industry">Biotechnology</div>
-                  <span class="icon icon-16 icon-info self-end mt-1" style="background-color:rgba(255,255,255,0.5);"></span>
-                </div>
-                <div class="metric-card">
-                  <div class="metric-label text-[#545454]">Size</div>
-                  <div class="metric-value text-[#2f2e2a]" id="m-size">Mid-market</div>
-                  <span class="icon icon-16 icon-info self-end mt-1" style="background-color:#8a8a8a;"></span>
-                </div>
-                <div class="metric-card">
-                  <div class="metric-label text-[#545454]">Entity type</div>
-                  <div class="metric-value text-[#2f2e2a]" id="m-type">Public (NASDAQ)</div>
-                  <span class="icon icon-16 icon-info self-end mt-1" style="background-color:#8a8a8a;"></span>
-                </div>
-                <div class="metric-card">
-                  <div class="metric-label text-[#545454]">HQ / Geography</div>
-                  <div class="metric-value text-[#2f2e2a]" id="m-hq">Cambridge, MA</div>
-                  <span class="icon icon-16 icon-info self-end mt-1" style="background-color:#8a8a8a;"></span>
-                </div>
-                <div class="metric-card">
-                  <div class="metric-label text-[#545454]">Founded</div>
-                  <div class="metric-value text-[#2f2e2a]" id="m-founded">2008</div>
-                  <span class="icon icon-16 icon-info self-end mt-1" style="background-color:#8a8a8a;"></span>
-                </div>
-              </div>
-
-              <!-- Metric cards row 2 -->
-              <div class="flex gap-4">
-                <div class="metric-card" style="flex:2;">
-                  <div class="metric-label text-[#545454]">Jurisdiction</div>
-                  <div class="metric-value text-[#2f2e2a]" id="m-jurisdiction">Delaware</div>
-                  <span class="icon icon-16 icon-info self-end mt-1" style="background-color:#8a8a8a;"></span>
-                </div>
-                <div class="metric-card" style="flex:3;">
-                  <div class="metric-label text-[#545454]">Status</div>
-                  <div class="metric-value text-[#2f2e2a]" id="m-status">Active client since 2014</div>
-                  <span class="icon icon-16 icon-info self-end mt-1" style="background-color:#8a8a8a;"></span>
-                </div>
-              </div>
-
-              <!-- Service Offerings header -->
-              <div class="flex items-center justify-between">
-                <h3 class="font-serif text-[#2f2e2a] text-[24px] leading-8">Service Offerings</h3>
-                <button onclick="openFeedbackModal()" aria-label="Share feedback" title="Share feedback" class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-[#f5f5f1] transition-colors">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M8.25 9C8.25 8.80109 8.32902 8.61032 8.46967 8.46967C8.61032 8.32902 8.80109 8.25 9 8.25H15C15.1989 8.25 15.3897 8.32902 15.5303 8.46967C15.671 8.61032 15.75 8.80109 15.75 9C15.75 9.19891 15.671 9.38968 15.5303 9.53033C15.3897 9.67098 15.1989 9.75 15 9.75H9C8.80109 9.75 8.61032 9.67098 8.46967 9.53033C8.32902 9.38968 8.25 9.19891 8.25 9ZM9 12.75H15C15.1989 12.75 15.3897 12.671 15.5303 12.5303C15.671 12.3897 15.75 12.1989 15.75 12C15.75 11.8011 15.671 11.6103 15.5303 11.4697C15.3897 11.329 15.1989 11.25 15 11.25H9C8.80109 11.25 8.61032 11.329 8.46967 11.4697C8.32902 11.6103 8.25 11.8011 8.25 12C8.25 12.1989 8.32902 12.3897 8.46967 12.5303C8.61032 12.671 8.80109 12.75 9 12.75ZM12 14.25H9C8.80109 14.25 8.61032 14.329 8.46967 14.4697C8.32902 14.6103 8.25 14.8011 8.25 15C8.25 15.1989 8.32902 15.3897 8.46967 15.5303C8.61032 15.671 8.80109 15.75 9 15.75H12C12.1989 15.75 12.3897 15.671 12.5303 15.5303C12.671 15.3897 12.75 15.1989 12.75 15C12.75 14.8011 12.671 14.6103 12.5303 14.4697C12.3897 14.329 12.1989 14.25 12 14.25ZM21 4.5V14.6897C21.0006 14.8867 20.9621 15.082 20.8866 15.264C20.8111 15.446 20.7002 15.6112 20.5603 15.75L15.75 20.5603C15.6112 20.7002 15.446 20.8111 15.264 20.8866C15.082 20.9621 14.8867 21.0006 14.6897 21H4.5C4.10218 21 3.72064 20.842 3.43934 20.5607C3.15804 20.2794 3 19.8978 3 19.5V4.5C3 4.10218 3.15804 3.72064 3.43934 3.43934C3.72064 3.15804 4.10218 3 4.5 3H19.5C19.8978 3 20.2794 3.15804 20.5607 3.43934C20.842 3.72064 21 4.10218 21 4.5ZM4.5 19.5H14.25V15C14.25 14.8011 14.329 14.6103 14.4697 14.4697C14.6103 14.329 14.8011 14.25 15 14.25H19.5V4.5H4.5V19.5ZM15.75 15.75V18.4406L18.4397 15.75H15.75Z" fill="#2F2E2A"/>
-                  </svg>
-                </button>
-              </div>
-
-              <!-- Service Offerings grid (2 cols) -->
-              <div id="so-grid" class="grid grid-cols-2 gap-4 pb-8"></div>
-
-            </div><!-- /results-state -->
+            <!-- Floating feedback button (bottom corner of entity page) -->
+            <button onclick="openFeedbackModal()" aria-label="Share feedback" title="Share feedback"
+              class="fixed bottom-6 right-6 w-12 h-12 flex items-center justify-center rounded-full bg-white border border-[#d8d5cf] shadow-[0_4px_12px_rgba(47,46,42,0.12)] hover:bg-[#f5f5f1] transition-colors z-40">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8.25 9C8.25 8.80109 8.32902 8.61032 8.46967 8.46967C8.61032 8.32902 8.80109 8.25 9 8.25H15C15.1989 8.25 15.3897 8.32902 15.5303 8.46967C15.671 8.61032 15.75 8.80109 15.75 9C15.75 9.19891 15.671 9.38968 15.5303 9.53033C15.3897 9.67098 15.1989 9.75 15 9.75H9C8.80109 9.75 8.61032 9.67098 8.46967 9.53033C8.32902 9.38968 8.25 9.19891 8.25 9ZM9 12.75H15C15.1989 12.75 15.3897 12.671 15.5303 12.5303C15.671 12.3897 15.75 12.1989 15.75 12C15.75 11.8011 15.671 11.6103 15.5303 11.4697C15.3897 11.329 15.1989 11.25 15 11.25H9C8.80109 11.25 8.61032 11.329 8.46967 11.4697C8.32902 11.6103 8.25 11.8011 8.25 12C8.25 12.1989 8.32902 12.3897 8.46967 12.5303C8.61032 12.671 8.80109 12.75 9 12.75ZM12 14.25H9C8.80109 14.25 8.61032 14.329 8.46967 14.4697C8.32902 14.6103 8.25 14.8011 8.25 15C8.25 15.1989 8.32902 15.3897 8.46967 15.5303C8.61032 15.671 8.80109 15.75 9 15.75H12C12.1989 15.75 12.3897 15.671 12.5303 15.5303C12.671 15.3897 12.75 15.1989 12.75 15C12.75 14.8011 12.671 14.6103 12.5303 14.4697C12.3897 14.329 12.1989 14.25 12 14.25ZM21 4.5V14.6897C21.0006 14.8867 20.9621 15.082 20.8866 15.264C20.8111 15.446 20.7002 15.6112 20.5603 15.75L15.75 20.5603C15.6112 20.7002 15.446 20.8111 15.264 20.8866C15.082 20.9621 14.8867 21.0006 14.6897 21H4.5C4.10218 21 3.72064 20.842 3.43934 20.5607C3.15804 20.2794 3 19.8978 3 19.5V4.5C3 4.10218 3.15804 3.72064 3.43934 3.43934C3.72064 3.15804 4.10218 3 4.5 3H19.5C19.8978 3 20.2794 3.15804 20.5607 3.43934C20.842 3.72064 21 4.10218 21 4.5ZM4.5 19.5H14.25V15C14.25 14.8011 14.329 14.6103 14.4697 14.4697C14.6103 14.329 14.8011 14.25 15 14.25H19.5V4.5H4.5V19.5ZM15.75 15.75V18.4406L18.4397 15.75H15.75Z" fill="#2F2E2A"/>
+              </svg>
+            </button>
 
           </div>
         </div>
       </div>
+
     </div><!-- /page-entity -->
 
   </main>
@@ -963,10 +992,6 @@
 <!-- ═══════ Click-outside to close dropdown ═══════ -->
 <script>
 document.addEventListener('click', e => {
-  const entityWrap = document.getElementById('search-wrapper');
-  if (entityWrap && !entityWrap.contains(e.target)) {
-    document.getElementById('search-dropdown').style.display = 'none';
-  }
   const homeWrap = document.getElementById('home-filters-row');
   if (homeWrap && !homeWrap.contains(e.target)) {
     const dd = document.getElementById('home-search-dropdown');
@@ -988,8 +1013,10 @@ const ENTITIES = [
   {
     id: 1,
     name: 'Aldernash Therapeutics, Inc.',
+    subtitle: 'Late-stage biotech focused on oncology with Phase III pipeline.',
     industry: 'Biotechnology',
     size: 'Mid-market',
+    sizeDetail: 'Mid-Market - 850 Employees',
     entityType: 'Public (NASDAQ)',
     hq: 'Cambridge, MA',
     founded: '2008',
@@ -997,22 +1024,31 @@ const ENTITIES = [
     status: 'Active client since 2014',
     inRecords: true,
     match: 94,
-    soTitle: 'IPO &amp; Capital Markets',
-    soDesc: 'Transaction support for divestitures and carve-out acquisitions in healthcare and life sciences, including TSAs, regulatory transitions, and Day 1 readiness.',
     offerings: [
-      { badge:'Existing', title:'IPO — Company Representation', matters:'3 matters', quarter:'Q2 2024', partners:83, expertise:['IPO — Company Representation'] },
-      { badge:'Prospect', title:'IPO — Company Representation', matters:'3 matters', quarter:'Q2 2024', partners:83, expertise:['IPO — Company Representation'] },
-      { badge:'Existing', title:'Pharma Collaboration &amp; License', matters:'5 matters', quarter:'Q4 2025', partners:83, expertise:['Pharma Collaboration &amp; License Agreements','Option / Option-to-Acquire Agreements'] },
-      { badge:'Prospect', title:'IPO — Company Representation', matters:'3 matters', quarter:'Q2 2024', partners:83, expertise:['IPO — Company Representation'] },
-      { badge:'Existing', title:'Pharma Collaboration &amp; License', matters:'5 matters', quarter:'Q4 2025', partners:83, expertise:['Pharma Collaboration &amp; License Agreements','Option / Option-to-Acquire Agreements'] },
-      { badge:'Prospect', title:'Venture Financing — Series B', matters:'2 matters', quarter:'Q1 2025', partners:41, expertise:['Preferred Stock Financing','Board Governance'] },
+      // Existing (4 offerings · 22 matters)
+      { badge:'Existing', title:'IPO — Company Representation',  matters:'5 matters', quarter:'Q2 2024', team:'Lead: M. Velasquez',     partners:83, expertise:['IPO Counsel','Securities Disclosure'] },
+      { badge:'Existing', title:'Pharma Collaboration &amp; License', matters:'3 matters', quarter:'Q4 2025', team:'3 partners involved',     partners:42, expertise:['License Agreements','Option / Option-to-Acquire Agreements'] },
+      { badge:'Existing', title:'Securities Litigation',          matters:'8 matters', quarter:'Q1 2024', team:'Lead: J. Park',           partners:31, expertise:['Securities Defense','Class Action'] },
+      { badge:'Existing', title:'Patent Portfolio Strategy',      matters:'6 matters', quarter:'Q3 2024', team:'5 partners involved',     partners:18, expertise:['Patent Counsel','IP Licensing'] },
+      // Prospective (3 cross-sell opportunities)
+      { badge:'Prospect', title:'Cross-border Acquisition',  matters:'5 matters', quarter:'Q3 2024', confidence:'High confidence',
+        why:"Salesforce signal — cross-border M&amp;A interest noted in Feb call. Comparable biotechs engaged us in 14 of 19 such cases.",
+        partners:54, expertise:['M&amp;A Counsel','Cross-Border Structuring'] },
+      { badge:'Prospect', title:'IP Carve-out Structuring',  matters:'5 matters', quarter:'—', confidence:'Medium confidence',
+        why:'Recent FDA approval cluster suggests upcoming licensing carve-outs in the pipeline.',
+        partners:22, expertise:['IP Strategy','Spin-out Counsel'] },
+      { badge:'Prospect', title:'Tax Restructuring',         matters:'3 matters', quarter:'—', confidence:'Medium confidence',
+        why:'Cross-border revenue mix indicates a tax-optimization opportunity around IP holding entities.',
+        partners:14, expertise:['Tax Counsel','Transfer Pricing'] },
     ]
   },
   {
     id: 2,
     name: 'Aldernash Ventures',
+    subtitle: 'Early-stage venture fund investing in life sciences and deep tech.',
     industry: 'Venture Capital',
     size: 'Small',
+    sizeDetail: 'Small - 12 Employees',
     entityType: 'Private',
     hq: 'San Francisco, CA',
     founded: '2015',
@@ -1020,18 +1056,22 @@ const ENTITIES = [
     status: 'Prospect since 2023',
     inRecords: true,
     match: 81,
-    soTitle: 'Fund Formation',
-    soDesc: 'Early-stage venture fund formation and portfolio company support, with a focus on life sciences and deep technology sectors.',
     offerings: [
-      { badge:'Prospect', title:'Fund Formation — LP Counsel', matters:'1 matter', quarter:'Q3 2023', partners:22, expertise:['Fund Formation','LP Agreements'] },
-      { badge:'Prospect', title:'Convertible Note Financing', matters:'2 matters', quarter:'Q4 2023', partners:15, expertise:['SAFE Notes','Convertible Instruments'] },
+      { badge:'Prospect', title:'Fund Formation — LP Counsel', matters:'1 matter',  quarter:'Q3 2023', confidence:'High confidence',
+        why:'Recent fund close announcement on PitchBook indicates fresh LP relationships needing counsel.',
+        partners:22, expertise:['Fund Formation','LP Agreements'] },
+      { badge:'Prospect', title:'Convertible Note Financing', matters:'2 matters', quarter:'Q4 2023', confidence:'Medium confidence',
+        why:'Portfolio activity suggests upcoming bridge rounds; SAFE/note expertise relevant.',
+        partners:15, expertise:['SAFE Notes','Convertible Instruments'] },
     ]
   },
   {
     id: 3,
     name: 'Aldernash Partners LP',
+    subtitle: 'Mid-market private equity firm focused on healthcare and industrials.',
     industry: 'Private Equity',
     size: 'Large',
+    sizeDetail: 'Large - 240 Employees',
     entityType: 'Limited Partnership',
     hq: 'New York, NY',
     founded: '2001',
@@ -1039,19 +1079,21 @@ const ENTITIES = [
     status: 'Active client since 2009',
     inRecords: true,
     match: 77,
-    soTitle: 'M&amp;A — Acquisition',
-    soDesc: 'Buy-side and sell-side M&A advisory with deep experience in healthcare, industrials, and consumer sectors.',
     offerings: [
-      { badge:'Existing', title:'M&amp;A — Buy-side Representation', matters:'8 matters', quarter:'Q1 2024', partners:54, expertise:['Acquisition Financing','Due Diligence'] },
-      { badge:'Existing', title:'Leveraged Buyout Financing', matters:'5 matters', quarter:'Q2 2024', partners:31, expertise:['Senior Credit Facilities','Mezzanine Debt'] },
-      { badge:'Prospect', title:'Portfolio Company Exit', matters:'1 matter', quarter:'Q3 2025', partners:18, expertise:['Secondary Sales','IPO Readiness'] },
+      { badge:'Existing', title:'M&amp;A — Buy-side Representation', matters:'8 matters', quarter:'Q1 2024', team:'Lead: D. Chen',         partners:54, expertise:['Acquisition Financing','Due Diligence'] },
+      { badge:'Existing', title:'Leveraged Buyout Financing',        matters:'5 matters', quarter:'Q2 2024', team:'4 partners involved', partners:31, expertise:['Senior Credit Facilities','Mezzanine Debt'] },
+      { badge:'Prospect', title:'Portfolio Company Exit',            matters:'1 matter',  quarter:'Q3 2025', confidence:'High confidence',
+        why:'Two portfolio holdings approaching typical exit timelines based on hold-period analysis.',
+        partners:18, expertise:['Secondary Sales','IPO Readiness'] },
     ]
   },
   {
     id: 4,
     name: 'Aldernash Group',
+    subtitle: 'APAC-focused real estate investor with sustainability mandate.',
     industry: 'Real Estate',
     size: 'Mid-market',
+    sizeDetail: 'Mid-Market - 320 Employees',
     entityType: 'Private',
     hq: 'Singapore',
     founded: '2010',
@@ -1059,18 +1101,20 @@ const ENTITIES = [
     status: 'Active client since 2018',
     inRecords: true,
     match: 68,
-    soTitle: 'Real Estate Finance',
-    soDesc: 'Cross-border real estate investment and development financing, with expertise in APAC markets and sustainability-linked structures.',
     offerings: [
-      { badge:'Existing', title:'Real Estate Finance — Development', matters:'4 matters', quarter:'Q2 2023', partners:27, expertise:['Development Finance','Construction Loans'] },
-      { badge:'Prospect', title:'REIT Formation', matters:'0 matters', quarter:'—', partners:12, expertise:['REIT Structuring','Tax Optimization'] },
+      { badge:'Existing', title:'Real Estate Finance — Development', matters:'4 matters', quarter:'Q2 2023', team:'Lead: K. Tan', partners:27, expertise:['Development Finance','Construction Loans'] },
+      { badge:'Prospect', title:'REIT Formation', matters:'0 matters', quarter:'—', confidence:'Medium confidence',
+        why:'APAC IPO market reopening and recent acquisitions suggest possible REIT strategy.',
+        partners:12, expertise:['REIT Structuring','Tax Optimization'] },
     ]
   },
   {
     id: 5,
     name: 'Alderwood Capital Partners',
+    subtitle: 'Mid-market buyout shop with growth-equity sleeve.',
     industry: 'Private Equity',
     size: 'Large',
+    sizeDetail: 'Large - 180 Employees',
     entityType: 'Limited Partnership',
     hq: 'New York, NY',
     founded: '2005',
@@ -1078,11 +1122,11 @@ const ENTITIES = [
     status: 'Active client since 2012',
     inRecords: true,
     match: 72,
-    soTitle: 'Fund Formation',
-    soDesc: 'Institutional fund formation and ongoing portfolio support across buyout and growth strategies.',
     offerings: [
-      { badge:'Existing', title:'Fund Formation — GP Counsel',  matters:'6 matters', quarter:'Q3 2024', partners:38, expertise:['LPA Drafting','Side Letters'] },
-      { badge:'Prospect', title:'Continuation Fund Transaction', matters:'1 matter',  quarter:'Q1 2025', partners:14, expertise:['GP-Led Secondaries'] },
+      { badge:'Existing', title:'Fund Formation — GP Counsel',   matters:'6 matters', quarter:'Q3 2024', team:'Lead: A. Costa', partners:38, expertise:['LPA Drafting','Side Letters'] },
+      { badge:'Prospect', title:'Continuation Fund Transaction', matters:'1 matter',  quarter:'Q1 2025', confidence:'High confidence',
+        why:'Fund vintage and unrealized portfolio value pattern matches typical continuation-fund triggers.',
+        partners:14, expertise:['GP-Led Secondaries'] },
     ]
   },
 ];
@@ -1103,8 +1147,8 @@ function navigate(page) {
   document.querySelectorAll('[data-nav]').forEach(item => {
     item.classList.toggle('active', item.dataset.nav === page);
   });
-  // Home page has its own layout (no sidebar / no shared topnav)
-  document.body.classList.toggle('home-active', page === 'home');
+  // Each page in the new design has its own top nav (shell is hidden globally)
+  window.scrollTo(0, 0);
 }
 
 // Find button on the homepage hands off to the entity page's search
@@ -1112,11 +1156,7 @@ function runHomeSearch(val) {
   const q = (val || '').trim();
   document.getElementById('home-search-dropdown').style.display = 'none';
   navigate('entity');
-  if (q) {
-    const input = document.getElementById('entity-search');
-    if (input) input.value = q;
-    runSearch(q);
-  }
+  if (q) runSearch(q);
 }
 
 // Homepage autocomplete dropdown
@@ -1222,7 +1262,8 @@ function selectSuggestion(name, id) {
 // RUN SEARCH (on button click / Enter)
 // ═══════════════════════════════════════════════════
 function runSearch(val) {
-  document.getElementById('search-dropdown').style.display = 'none';
+  const dd = document.getElementById('search-dropdown');
+  if (dd) dd.style.display = 'none';
   const q = val.trim();
   if (!q) return;
   const matches = ENTITIES.filter(e => e.name.toLowerCase().includes(q.toLowerCase()));
@@ -1337,69 +1378,83 @@ function searchExperiences() {
 // RENDER RESULTS
 // ═══════════════════════════════════════════════════
 function renderResults(matches) {
-  const empty = document.getElementById('empty-state');
-  const results = document.getElementById('results-state');
+  const profile = document.getElementById('entity-profile-state');
   const noResults = document.getElementById('no-results-state');
-  const count = document.getElementById('result-count');
-
-  count.textContent = 'Result: ' + matches.length;
 
   if (!matches.length) {
-    empty.style.display = 'flex';
-    results.style.display = 'none';
-    noResults.style.display = 'none';
+    profile.style.display = 'none';
+    noResults.style.display = 'flex';
     return;
   }
 
-  // Show the top match as the detailed profile
   const top = matches[0];
-  empty.style.display = 'none';
   noResults.style.display = 'none';
-  results.style.display = 'flex';
-  results.style.flexDirection = 'column';
+  profile.style.display = 'flex';
+  profile.style.flexDirection = 'column';
 
-  // Match badge
-  const badgeEl = document.getElementById('res-badge');
-  badgeEl.textContent = top.match + '% match';
-  badgeEl.className = top.match >= 90 ? 'badge-existing self-start' : 'badge-prospect self-start';
+  // Title block
+  document.getElementById('ep-title').textContent = top.name;
+  document.getElementById('ep-subtitle').textContent = top.subtitle || '';
 
-  document.getElementById('res-title').innerHTML = top.soTitle;
-  document.getElementById('res-desc').textContent = top.soDesc;
-  document.getElementById('m-industry').textContent = top.industry;
-  document.getElementById('m-size').textContent = top.size;
-  document.getElementById('m-type').textContent = top.entityType;
-  document.getElementById('m-hq').textContent = top.hq;
-  document.getElementById('m-founded').textContent = top.founded;
-  document.getElementById('m-jurisdiction').textContent = top.jurisdiction;
-  document.getElementById('m-status').textContent = top.status;
+  // Metrics
+  document.getElementById('ep-industry').textContent     = top.industry;
+  document.getElementById('ep-size').textContent          = top.sizeDetail || top.size;
+  document.getElementById('ep-entity-type').textContent   = top.entityType;
+  document.getElementById('ep-hq').textContent            = top.hq;
+  document.getElementById('ep-founded').textContent       = top.founded;
+  document.getElementById('ep-jurisdiction').textContent  = top.jurisdiction;
+  document.getElementById('ep-status').textContent        = top.status;
 
   // Track current entity so the drawer can look up offerings
   currentEntity = top;
 
-  // Service offering cards (clickable → drawer)
-  document.getElementById('so-grid').innerHTML = top.offerings.map((o, idx) => `
-    <div class="so-card" onclick="openDrawer(${idx})">
-      <span class="${o.badge === 'Existing' ? 'badge-existing' : 'badge-prospect'}">${o.badge}</span>
-      <div class="flex flex-col gap-4">
-        <div class="flex items-start justify-between gap-4">
-          <div class="flex flex-col gap-2 flex-1">
-            <p class="text-[#2f2e2a] text-[18px] font-bold leading-6">${o.title}</p>
-            <p class="text-[#545454] text-[14px] leading-5">${o.matters} · ${o.quarter}</p>
-          </div>
-          <span class="text-[#878482] text-[14px] leading-5 whitespace-nowrap shrink-0">${o.partners} partners</span>
-        </div>
-        <div class="bg-[#f4f4f4] rounded-lg px-4 py-2 flex flex-col gap-1">
-          <p class="text-[#2f2e2a] text-[14px] leading-6">Partners with expertise</p>
-          <ul class="list-disc pl-5 flex flex-col gap-0.5">
-            ${o.expertise.map(e => `<li class="text-[#2f2e2a] text-[14px] leading-6">${e}</li>`).join('')}
-          </ul>
-        </div>
-      </div>
-    </div>
-  `).join('');
+  // Split offerings into Existing vs Prospect
+  const existing = top.offerings.filter(o => o.badge === 'Existing');
+  const prospect = top.offerings.filter(o => o.badge === 'Prospect');
 
-  // Smooth scroll to results
-  document.getElementById('results-state').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  // Total matters in existing
+  const totalMatters = existing.reduce((sum, o) => sum + (parseInt(o.matters) || 0), 0);
+  document.getElementById('ep-existing-meta').textContent = `${existing.length} offering${existing.length === 1 ? '' : 's'} · ${totalMatters} matters`;
+  document.getElementById('ep-prospect-meta').textContent = `${prospect.length} cross-sell ${prospect.length === 1 ? 'opportunity' : 'opportunities'}`;
+
+  // Render lists — using original index so the drawer can look it up
+  document.getElementById('ep-existing-list').innerHTML = existing.map(o => renderExistingCard(o, top.offerings.indexOf(o))).join('');
+  document.getElementById('ep-prospect-list').innerHTML = prospect.map(o => renderProspectCard(o, top.offerings.indexOf(o))).join('');
+}
+
+function renderExistingCard(o, idx) {
+  const meta = `Most recent ${o.quarter || '—'}${o.team ? ' · ' + o.team : ''}`;
+  return `
+    <div class="off-card" onclick="openDrawer(${idx})">
+      <div class="off-card-row">
+        <span class="badge-existing">Existing</span>
+        <button class="off-view-details" onclick="event.stopPropagation(); openDrawer(${idx})">View Details</button>
+      </div>
+      <p class="off-matters">${o.matters}</p>
+      <p class="off-title">${o.title}</p>
+      <p class="off-meta">${meta}</p>
+    </div>
+  `;
+}
+
+function renderProspectCard(o, idx) {
+  return `
+    <div class="off-card" onclick="openDrawer(${idx})">
+      <div class="off-card-row">
+        <span class="badge-prospect">Prospect</span>
+        <button class="off-view-details" onclick="event.stopPropagation(); openDrawer(${idx})">View Details</button>
+      </div>
+      <p class="off-matters">${o.matters}</p>
+      <p class="off-title">${o.title}</p>
+      <p class="off-meta">${o.confidence || 'High confidence'}</p>
+      ${o.why ? `
+        <div class="off-why">
+          <p class="off-why-q">Why?</p>
+          <p class="off-why-a">${o.why}</p>
+        </div>
+      ` : ''}
+    </div>
+  `;
 }
 
 // ═══════════════════════════════════════════════════
