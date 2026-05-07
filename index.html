@@ -855,18 +855,24 @@
         <p id="drawer-meta" class="text-[#8a8a8a] text-[14px] leading-5">3 matters · Q2 2024</p>
       </div>
 
-      <!-- Toolbar -->
-      <div class="px-8 py-4 flex items-center gap-3">
-        <div class="flex items-center gap-2 bg-[#f4f4f4] rounded-lg px-3 h-10 flex-1 max-w-[280px]">
+      <!-- Toolbar: Search SOs + thumbs feedback -->
+      <div class="px-8 py-4 flex items-center justify-between gap-3">
+        <div class="flex items-center gap-2 bg-[#f4f4f4] rounded-lg px-3 h-10" style="width:280px; max-width:60%;">
           <span class="icon icon-16 icon-search" style="background-color:#8a8a8a;"></span>
           <input type="text" placeholder="Search SOs" class="flex-1 bg-transparent outline-none text-[14px] text-[#262421] placeholder-[#8a8a8a]" />
         </div>
-        <button class="h-10 px-3 border border-[#d8d5cf] rounded-lg flex items-center gap-2 text-[14px] text-[#262421] hover:bg-[#f5f5f1] transition-colors whitespace-nowrap">
-          Filter <span class="icon icon-16 icon-chevron" style="background-color:#262421;"></span>
-        </button>
-        <button class="h-10 px-3 border border-[#d8d5cf] rounded-lg flex items-center gap-2 text-[14px] text-[#262421] hover:bg-[#f5f5f1] transition-colors whitespace-nowrap">
-          Sort: Recent <span class="icon icon-16 icon-chevron" style="background-color:#262421;"></span>
-        </button>
+        <div class="flex items-center gap-2">
+          <button onclick="rateDrawer('up', this)" aria-label="Helpful" class="drawer-thumb w-9 h-9 flex items-center justify-center rounded-lg hover:bg-[#f5f5f1] transition-colors">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#262421" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/>
+            </svg>
+          </button>
+          <button onclick="rateDrawer('down', this)" aria-label="Not helpful" class="drawer-thumb w-9 h-9 flex items-center justify-center rounded-lg hover:bg-[#f5f5f1] transition-colors">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#262421" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"/>
+            </svg>
+          </button>
+        </div>
       </div>
 
       <!-- Section title -->
@@ -886,9 +892,9 @@
     </div><!-- /drawer-list-view -->
 
     <!-- ════════════════════════════════════════
-         DRAWER VIEW 2: MATTER DETAIL
+         DRAWER VIEW 2: MATTER DETAIL (Figma 109:4660)
     ════════════════════════════════════════ -->
-    <div id="drawer-detail-view" style="display:none;" class="flex flex-col gap-8 px-8 pt-6 pb-12">
+    <div id="drawer-detail-view" style="display:none;" class="flex flex-col gap-7 px-8 pt-6 pb-12">
 
       <!-- Top: Close button -->
       <div class="flex justify-end">
@@ -901,87 +907,69 @@
 
       <!-- Back row -->
       <button onclick="backToList()" class="flex items-center gap-2 text-left hover:opacity-70 transition-opacity self-start">
-        <span class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-[#f5f5f1]">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#262421" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
-          </svg>
-        </span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#262421" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
         <span class="text-[16px] text-[#262421] leading-6">Back</span>
       </button>
 
       <!-- Title block -->
       <div class="flex flex-col gap-4">
         <span id="md-quality" class="badge-rich self-start" style="font-size:14px; padding:4px 12px;">Rich</span>
-        <h2 id="md-title" class="font-serif text-[#2f2e2a] text-[32px] leading-[44px] tracking-[-0.24px]">
-          Acquisition of a European biotechnology company by Aldernash Therapeutics
+        <h2 id="md-title" class="font-serif text-[#2f2e2a] text-[32px] leading-[40px] tracking-[-0.24px]">
+          Aldernash Therapeutics IPO — Initial Public Offering On NASDAQ
         </h2>
-        <p id="md-meta" class="text-[#545454] text-[16px] leading-6">M-2024-08431 · Rich narrative</p>
+        <p id="md-subtitle" class="text-[#545454] text-[16px] leading-6">$340M offering · Underwriters: Goldman Sachs, Morgan Stanley, Cowen</p>
       </div>
 
-      <!-- Metric grid 2x2 -->
-      <div class="grid grid-cols-2 gap-x-8 gap-y-6">
+      <!-- Key facts grid (2x2 simple labels) -->
+      <div class="grid grid-cols-2 gap-x-12 gap-y-6">
         <div class="flex flex-col gap-1">
-          <p class="text-[#545454] text-[14px]">Status</p>
-          <p id="md-status" class="font-serif text-[#2f2e2a] text-[24px] leading-8 capitalize">Closed Q3 2024</p>
+          <p class="text-[#545454] text-[14px]">Service Offering</p>
+          <p id="md-service" class="font-serif text-[#2f2e2a] text-[24px] leading-8">IPO — Company Representation</p>
         </div>
         <div class="flex flex-col gap-1">
-          <p class="text-[#545454] text-[14px]">Geography</p>
-          <p id="md-geography" class="font-serif text-[#2f2e2a] text-[24px] leading-8 capitalize">Cross-border (US / Germany)</p>
+          <p class="text-[#545454] text-[14px]">Phase</p>
+          <p id="md-phase" class="font-serif text-[#2f2e2a] text-[24px] leading-8 capitalize">Closed</p>
         </div>
         <div class="flex flex-col gap-1">
-          <p class="text-[#545454] text-[14px]">Outcome</p>
-          <p id="md-outcome" class="font-serif text-[#2f2e2a] text-[24px] leading-8 capitalize">Closed successfully</p>
+          <p class="text-[#545454] text-[14px]">Deal value</p>
+          <p id="md-deal-value" class="font-serif text-[#2f2e2a] text-[24px] leading-8">$340M</p>
         </div>
         <div class="flex flex-col gap-1">
-          <p class="text-[#545454] text-[14px]">Complexity</p>
-          <p id="md-complexity" class="font-serif text-[#2f2e2a] text-[24px] leading-8 capitalize">Cross-border · IP carve-out · Regulatory clearance</p>
+          <p class="text-[#545454] text-[14px]">Listing exchange</p>
+          <p id="md-listing" class="font-serif text-[#2f2e2a] text-[24px] leading-8">NASDAQ: ALDR</p>
         </div>
       </div>
 
       <!-- Matter phase profile -->
       <div class="flex flex-col gap-6 mt-2">
         <div class="flex items-center justify-between">
-          <h3 class="font-serif text-[#2f2e2a] text-[24px] leading-8">Matter phase profile</h3>
+          <h3 class="font-serif text-[#2f2e2a] text-[20px] leading-8">Matter phase profile</h3>
           <button class="w-6 h-6 hover:opacity-70 transition-opacity">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M8.25 9C8.25 8.80109 8.32902 8.61032 8.46967 8.46967C8.61032 8.32902 8.80109 8.25 9 8.25H15C15.1989 8.25 15.3897 8.32902 15.5303 8.46967C15.671 8.61032 15.75 8.80109 15.75 9C15.75 9.19891 15.671 9.38968 15.5303 9.53033C15.3897 9.67098 15.1989 9.75 15 9.75H9C8.80109 9.75 8.61032 9.67098 8.46967 9.53033C8.32902 9.38968 8.25 9.19891 8.25 9ZM21 4.5V14.6897C21.0006 14.8867 20.9621 15.082 20.8866 15.264C20.8111 15.446 20.7002 15.6112 20.5603 15.75L15.75 20.5603C15.6112 20.7002 15.446 20.8111 15.264 20.8866C15.082 20.9621 14.8867 21.0006 14.6897 21H4.5C4.10218 21 3.72064 20.842 3.43934 20.5607C3.15804 20.2794 3 19.8978 3 19.5V4.5C3 4.10218 3.15804 3.72064 3.43934 3.43934C3.72064 3.15804 4.10218 3 4.5 3H19.5C19.8978 3 20.2794 3.15804 20.5607 3.43934C20.842 3.72064 21 4.10218 21 4.5ZM4.5 19.5H14.25V15C14.25 14.8011 14.329 14.6103 14.4697 14.4697C14.6103 14.329 14.8011 14.25 15 14.25H19.5V4.5H4.5V19.5ZM15.75 15.75V18.4406L18.4397 15.75H15.75Z" fill="#2F2E2A"/>
             </svg>
           </button>
         </div>
+        <div id="md-pipeline" class="flex items-center gap-1 w-full"></div>
+      </div>
 
-        <!-- Phase pipeline -->
-        <div id="md-pipeline" class="flex items-start gap-2 w-full"></div>
-
-        <!-- Bottom cards -->
-        <div class="flex gap-4 items-stretch">
-          <!-- Team & role signals -->
-          <div class="bg-white border border-[#d8d5cf] rounded-lg px-6 py-6 flex flex-col gap-4 w-[283px] shrink-0 shadow-[0px_1px_1.5px_rgba(47,46,42,0.05),0px_2px_3px_rgba(47,46,42,0.04)]">
-            <div class="w-8 h-8 rounded-full bg-[#262421] flex items-center justify-center">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
-                <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
-              </svg>
-            </div>
-            <div class="flex flex-col gap-1">
-              <p class="text-[#262421] text-[16px] font-bold leading-6">Team &amp; role signals</p>
-              <p id="md-lead" class="text-[#878482] text-[14px] leading-5">Lead: Marguerite Velasquez</p>
-              <p id="md-team" class="text-[#878482] text-[14px] leading-5">Team: 4 partners, 7 associates</p>
-            </div>
-          </div>
-
-          <!-- Narrative quality signal -->
-          <div class="bg-white border border-[#d8d5cf] rounded-lg p-6 flex flex-col gap-4 flex-1 min-w-0 shadow-[0px_1px_3px_rgba(47,46,42,0.05),0px_2px_6px_rgba(47,46,42,0.04)]">
-            <div class="flex items-start justify-between gap-4">
-              <p class="text-[#2f2e2a] text-[18px] font-bold leading-6">Narrative quality signal</p>
-              <span id="md-narrative-badge" class="badge-rich shrink-0">Rich</span>
-            </div>
-            <div class="bg-[#f4f4f4] rounded-lg px-4 py-2 flex-1 flex items-center">
-              <p id="md-narrative-desc" class="text-[#2f2e2a] text-[14px] leading-5">
-                Rich narrative. Full phase profile, team role signals, complexity indicators, and outcome all extracted. This matter contributes fully to experience retrieval and pitch preparation.
-              </p>
-            </div>
-          </div>
+      <!-- Narrative quality signal (full-width card with quote) -->
+      <div class="bg-white border border-[#d8d5cf] rounded-xl p-5 flex flex-col gap-3 shadow-[0px_1px_3px_rgba(47,46,42,0.05),0px_2px_6px_rgba(47,46,42,0.04)]">
+        <div class="flex items-center justify-between gap-4">
+          <h3 class="text-[#262421] text-[16px] font-bold leading-6">Narrative quality signal</h3>
+          <span id="md-narrative-badge" class="badge-rich shrink-0">Rich</span>
         </div>
+        <p id="md-narrative-quote" class="text-[#262421] text-[14px] leading-6">
+          "Represented Aldernash Therapeutics in its $340M initial public offering on NASDAQ. Coordinated S-1 drafting and SEC review process across multiple amendment cycles, managed roadshow logistics with three lead underwriters, and negotiated lockup arrangements with founders and Series C investors. Pricing finalized at $18 per share, opening 22% above range."
+        </p>
+      </div>
+
+      <!-- Team & roles -->
+      <div class="flex flex-col gap-4">
+        <h3 class="font-serif text-[#2f2e2a] text-[20px] leading-8">Team &amp; roles</h3>
+        <div id="md-team-list" class="grid grid-cols-2 gap-4"></div>
       </div>
 
     </div><!-- /drawer-detail-view -->
@@ -1025,8 +1013,59 @@ const ENTITIES = [
     inRecords: true,
     match: 94,
     offerings: [
-      // Existing (4 offerings · 22 matters)
-      { badge:'Existing', title:'IPO — Company Representation',  matters:'5 matters', quarter:'Q2 2024', team:'Lead: M. Velasquez',     partners:83, expertise:['IPO Counsel','Securities Disclosure'] },
+      // Existing (4 offerings · 20 matters)
+      { badge:'Existing', title:'IPO — Company Representation',  matters:'3 matters', quarter:'Q2 2024', team:'Lead: M. Velasquez',     partners:83, expertise:['IPO Counsel','Securities Disclosure'],
+        matterList: [
+          {
+            id:'M-2024-IPO-01',
+            title:'Aldernash Therapeutics IPO — Initial Public Offering on NASDAQ',
+            subtitle:'$340M offering · Underwriters: Goldman Sachs, Morgan Stanley, Cowen',
+            meta:'M. Velasquez · Lead · Closed Q2 2024 · $340M offering',
+            quality:'Rich',
+            detail:'Lead: Marguerite Velasquez · Team: 4 partners, 7 associates · Phase: Diligence → Sign → Close',
+            // Detail view: key facts
+            serviceOffering:'IPO — Company Representation',
+            phase:'Closed',
+            dealValue:'$340M',
+            listingExchange:'NASDAQ: ALDR',
+            phases:[{name:'Diligence',done:true},{name:'Negotiation',done:true},{name:'Sign',done:true},{name:'Regulatory',done:true},{name:'Close',done:true}],
+            narrativeQuote:'Represented Aldernash Therapeutics in its $340M initial public offering on NASDAQ. Coordinated S-1 drafting and SEC review process across multiple amendment cycles, managed roadshow logistics with three lead underwriters, and negotiated lockup arrangements with founders and Series C investors. Pricing finalized at $18 per share, opening 22% above range.',
+            teamMembers:[
+              { name:'Marguerite Velasquez', role:'Lead partner · Capital Markets · NYC' },
+              { name:'Reza Nakamura',        role:'Partner · Tax structuring · NYC' },
+            ],
+            // Backward-compat fields (used by older detail layout if needed)
+            status:'Closed Q2 2024', geography:'United States (NASDAQ listing)',
+            outcome:'Closed successfully — $340M raised', complexity:'Domestic IPO · SEC review · Lock-up structuring',
+            lead:'Marguerite Velasquez', partners:4, associates:7,
+            narrative:'Rich narrative. Full phase profile, team role signals, complexity indicators, and outcome all extracted. This matter contributes fully to experience retrieval and pitch preparation.'
+          },
+          {
+            id:'M-2024-IPO-02',
+            title:'Aldernash secondary offering and follow-on share issuance',
+            meta:'Closed Q3 2024 · Cross-border (US / Germany) · Mid-market · Strategic acquisition',
+            quality:'Partial',
+            detail:'Lead: Marguerite Velasquez · Team: 4 partners, 7 associates · Phase: Diligence → Sign → Close',
+            status:'Closed Q3 2024', geography:'Cross-border (US / Germany)',
+            outcome:'Closed with concessions', complexity:'Cross-border · Follow-on issuance',
+            lead:'Marguerite Velasquez', partners:4, associates:7,
+            phases:[{name:'Diligence',done:true},{name:'Negotiation',done:true},{name:'Sign',done:true},{name:'Regulatory',done:false},{name:'Close',done:false}],
+            narrative:'Partial narrative. Phase and team signals extracted, but complexity and outcome details are sparse. Useful for retrieval but limited for pitch preparation.'
+          },
+          {
+            id:'M-2024-IPO-03',
+            title:'Aldernash S-1 amendment and SEC clearance proceedings',
+            meta:'Closed Q3 2024 · Cross-border (US / Germany) · Mid-market · Strategic acquisition',
+            quality:'Partial',
+            detail:'Lead: Marguerite Velasquez · Team: 4 partners, 7 associates · Phase: Diligence → Sign → Close',
+            status:'Closed Q3 2024', geography:'United States (SEC)',
+            outcome:'Cleared with comments', complexity:'SEC comment letter response · Disclosure amendments',
+            lead:'Marguerite Velasquez', partners:4, associates:7,
+            phases:[{name:'Diligence',done:true},{name:'Negotiation',done:true},{name:'Sign',done:true},{name:'Regulatory',done:false},{name:'Close',done:false}],
+            narrative:'Partial narrative. Phase and team signals extracted, but complexity and outcome details are sparse.'
+          },
+        ]
+      },
       { badge:'Existing', title:'Pharma Collaboration &amp; License', matters:'3 matters', quarter:'Q4 2025', team:'3 partners involved',     partners:42, expertise:['License Agreements','Option / Option-to-Acquire Agreements'] },
       { badge:'Existing', title:'Securities Litigation',          matters:'8 matters', quarter:'Q1 2024', team:'Lead: J. Park',           partners:31, expertise:['Securities Defense','Class Action'] },
       { badge:'Existing', title:'Patent Portfolio Strategy',      matters:'6 matters', quarter:'Q3 2024', team:'5 partners involved',     partners:18, expertise:['Patent Counsel','IP Licensing'] },
@@ -1463,7 +1502,26 @@ function renderProspectCard(o, idx) {
 let currentEntity = null;
 
 function mattersFor(offering) {
-  // Generate sample matters with varying data quality
+  // Per-offering matter lists win when defined
+  if (offering.matterList && offering.matterList.length) {
+    return offering.matterList.map(m => ({
+      id: m.id || ('M-' + Math.random().toString(36).substr(2, 8)),
+      title: m.title,
+      meta: m.meta,
+      detail: m.detail || `Lead: Marguerite Velasquez · Team: 4 partners, 7 associates · Phase: Diligence → Sign → Close`,
+      quality: m.quality || 'Rich',
+      status: m.status || 'Closed Q3 2024',
+      geography: m.geography || 'Cross-border (US / Germany)',
+      outcome: m.outcome || 'Closed successfully',
+      complexity: m.complexity || 'Cross-border · IP carve-out · Regulatory clearance',
+      lead: m.lead || 'Marguerite Velasquez',
+      partners: m.partners ?? 4,
+      associates: m.associates ?? 7,
+      phases: m.phases || [{name:'Diligence',done:true},{name:'Negotiation',done:true},{name:'Sign',done:true},{name:'Regulatory',done:false},{name:'Close',done:false}],
+      narrative: m.narrative || 'Rich narrative. Full phase profile, team role signals, complexity indicators, and outcome all extracted.',
+    }));
+  }
+  // Fallback: generic samples (used by offerings without a curated matterList)
   const baseTitle = `Acquisition of a European biotechnology company by Aldernash Therapeutics`;
   const baseMeta  = `Closed Q3 2024 · Cross-border (US / Germany) · Mid-market · Strategic acquisition`;
   const baseLead  = `Lead: Marguerite Velasquez · Team: 4 partners, 7 associates · Phase: Diligence → Sign → Close`;
@@ -1518,7 +1576,7 @@ function openDrawer(offeringIdx) {
   badgeEl.className = (o.badge === 'Existing' ? 'badge-existing' : 'badge-prospect') + ' self-start';
 
   document.getElementById('drawer-title').innerHTML = o.title;
-  document.getElementById('drawer-meta').textContent = `${o.matters} · ${o.quarter}`;
+  document.getElementById('drawer-meta').textContent = `${o.matters} · Most recent ${o.quarter}`;
 
   // Matters
   const matters = mattersFor(o);
@@ -1564,45 +1622,78 @@ function openMatterDetail(idx) {
   const qBadge = document.getElementById('md-quality');
   qBadge.textContent = m.quality;
   qBadge.className = 'badge-' + m.quality.toLowerCase() + ' self-start';
+  qBadge.style.fontSize = '14px';
+  qBadge.style.padding = '4px 12px';
 
   document.getElementById('md-title').textContent = m.title;
-  document.getElementById('md-meta').textContent = `${m.id} · ${m.quality} narrative`;
+  document.getElementById('md-subtitle').textContent =
+    m.subtitle || `${m.id} · ${m.quality} narrative`;
 
-  // Metric grid
-  document.getElementById('md-status').textContent     = m.status;
-  document.getElementById('md-geography').textContent  = m.geography;
-  document.getElementById('md-outcome').textContent    = m.outcome;
-  document.getElementById('md-complexity').textContent = m.complexity;
+  // Key facts (with sensible fallbacks for matters that don't have these fields)
+  document.getElementById('md-service').textContent    = m.serviceOffering || (currentEntity?.offerings?.find(o => (o.matterList || []).some(mm => mm.id === m.id))?.title) || '—';
+  document.getElementById('md-phase').textContent      = m.phase || (m.phases?.every(p => p.done) ? 'Closed' : 'In progress');
+  document.getElementById('md-deal-value').textContent = m.dealValue || '—';
+  document.getElementById('md-listing').textContent    = m.listingExchange || m.geography || '—';
 
-  // Phase pipeline
-  document.getElementById('md-pipeline').innerHTML = m.phases.map((p, i) => {
-    const circle = `
-      <div class="flex flex-col gap-2 items-center justify-center" style="width:88px; flex-shrink:0;">
-        <div class="rounded-full flex items-center justify-center" style="width:48px; height:48px; background:${p.done ? '#262421' : '#e9e7e1'};">
-          ${p.done
-            ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'
-            : '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#878482" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/></svg>'}
-        </div>
-        <p class="text-[#262421] text-[14px] font-bold leading-6 text-center">${p.name}</p>
-      </div>`;
-    const connector = i < m.phases.length - 1
-      ? `<div style="flex:1; height:2px; background:${m.phases[i+1].done && p.done ? '#262421' : '#e9e7e1'}; margin-top:23px;"></div>`
-      : '';
-    return circle + connector;
-  }).join('');
+  // Phase pipeline (now with arrows)
+  document.getElementById('md-pipeline').innerHTML = renderPipeline(m.phases || []);
 
-  // Bottom cards
-  document.getElementById('md-lead').textContent = `Lead: ${m.lead}`;
-  document.getElementById('md-team').textContent = `Team: ${m.partners} partners, ${m.associates} associates`;
+  // Narrative quality signal
   const nBadge = document.getElementById('md-narrative-badge');
   nBadge.textContent = m.quality;
   nBadge.className = 'badge-' + m.quality.toLowerCase() + ' shrink-0';
-  document.getElementById('md-narrative-desc').textContent = m.narrative;
+  document.getElementById('md-narrative-quote').textContent =
+    m.narrativeQuote ? `"${m.narrativeQuote}"` : (m.narrative || '');
+
+  // Team & roles
+  const team = m.teamMembers && m.teamMembers.length
+    ? m.teamMembers
+    : [{ name: m.lead, role: `Lead partner · ${currentEntity?.industry || 'Generalist'}` }];
+  document.getElementById('md-team-list').innerHTML = team.map(t => `
+    <div class="bg-white border border-[#d8d5cf] rounded-xl p-4 flex items-center gap-4 shadow-[0px_1px_3px_rgba(47,46,42,0.05),0px_2px_6px_rgba(47,46,42,0.04)]">
+      <div class="w-10 h-10 rounded-full bg-[#262421] flex items-center justify-center shrink-0">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+        </svg>
+      </div>
+      <div class="flex flex-col gap-0.5 flex-1 min-w-0">
+        <p class="text-[#262421] text-[14px] font-bold leading-6 truncate">${t.name}</p>
+        <p class="text-[#878482] text-[13px] leading-5 truncate">${t.role}</p>
+      </div>
+      <button class="off-view-details shrink-0">View Details</button>
+    </div>
+  `).join('');
 
   // Switch views
   document.getElementById('drawer-list-view').style.display = 'none';
   document.getElementById('drawer-detail-view').style.display = 'flex';
   document.getElementById('drawer-scroll').scrollTop = 0;
+}
+
+// Render the phase pipeline with arrowheads between circles
+function renderPipeline(phases) {
+  if (!phases || !phases.length) return '';
+  return phases.map((p, i) => {
+    const circle = `
+      <div class="flex flex-col items-center gap-2" style="flex:0 0 auto; width:80px;">
+        <div class="rounded-full flex items-center justify-center" style="width:44px; height:44px; background:${p.done ? '#262421' : '#e9e7e1'};">
+          ${p.done
+            ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'
+            : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#878482" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/></svg>'}
+        </div>
+        <p class="text-[#262421] text-[13px] font-bold leading-5 text-center">${p.name}</p>
+      </div>`;
+    if (i === phases.length - 1) return circle;
+    const arrowColor = p.done && phases[i+1].done ? '#262421' : '#b9b7b2';
+    const arrow = `
+      <div style="flex:1; display:flex; align-items:center; height:44px; min-width:24px;">
+        <div style="flex:1; height:1.5px; background:${arrowColor};"></div>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="${arrowColor}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-left:-2px;">
+          <polyline points="9 6 15 12 9 18"/>
+        </svg>
+      </div>`;
+    return circle + arrow;
+  }).join('');
 }
 
 function backToList() {
@@ -1616,6 +1707,16 @@ function closeDrawer() {
   document.getElementById('drawer-backdrop').classList.remove('open');
   document.body.style.overflow = '';
   document.getElementById('drawer').setAttribute('aria-hidden', 'true');
+}
+
+// Thumbs-up / thumbs-down feedback in drawer toolbar
+function rateDrawer(direction, btn) {
+  document.querySelectorAll('.drawer-thumb').forEach(b => {
+    b.style.background = '';
+    b.querySelector('svg').setAttribute('stroke', '#262421');
+  });
+  btn.style.background = direction === 'up' ? '#bdedde' : '#ffd6d6';
+  btn.querySelector('svg').setAttribute('stroke', direction === 'up' ? '#00472e' : '#7a0c0c');
 }
 
 // ═══════════════════════════════════════════════════
