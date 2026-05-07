@@ -63,6 +63,11 @@
     .page { display:none; }
     .page.active { display:flex; }
 
+    /* ── Home page: no sidebar, no default topnav, no main padding ── */
+    body.home-active #sidebar,
+    body.home-active #topnav-default { display:none !important; }
+    body.home-active main { padding:0 !important; }
+
     /* ── Search dropdown ── */
     #search-dropdown {
       position:absolute;
@@ -189,7 +194,7 @@
 <div class="flex h-screen">
 
   <!-- ═══════════ SIDEBAR ═══════════ -->
-  <aside class="w-[280px] min-w-[280px] bg-[#f5f5f1] flex flex-col gap-4 px-4 h-full shrink-0">
+  <aside id="sidebar" class="w-[280px] min-w-[280px] bg-[#f5f5f1] flex flex-col gap-4 px-4 h-full shrink-0">
     <div class="h-16 flex items-center justify-between shrink-0">
       <div class="pl-3 flex items-center gap-2">
         <img src="assets/logo.png" alt="Powerloom" class="h-10 w-10 rounded-full object-cover shrink-0" onerror="this.style.display='none'" />
@@ -237,7 +242,7 @@
   <main class="flex-1 min-w-0 flex flex-col pb-4 pr-4">
 
     <!-- Top Nav -->
-    <header class="h-16 shrink-0 flex items-center gap-6 px-4">
+    <header id="topnav-default" class="h-16 shrink-0 flex items-center gap-6 px-4">
       <h1 class="font-serif text-[#2f2e2a] text-[18px] leading-normal flex-1">Service Offering</h1>
       <div class="flex items-center gap-4">
         <button class="hover:opacity-70 transition-opacity"><span class="icon icon-24 icon-help" style="background-color:#2f2e2a;"></span></button>
@@ -253,55 +258,96 @@
     </header>
 
     <!-- ═══════════════════════════════════════
-         PAGE: HOME
+         PAGE: HOME (entity entry point)
     ════════════════════════════════════════ -->
-    <div id="page-home" class="page active flex-1 min-h-0">
-      <div class="w-full h-full bg-white rounded-lg overflow-y-auto">
-        <div class="px-8 py-14">
-          <div class="max-w-[1140px] mx-auto flex flex-col gap-8">
-            <div class="flex flex-col gap-4">
-              <div class="flex flex-col gap-3 pb-2">
-                <h2 class="font-serif text-[#2f2e2a] text-[32px] leading-[40px] tracking-[-0.64px]">What do you know about what you're looking for?</h2>
-                <p class="text-[#8a8a8a] text-[16px] leading-6">Pick the entry point that matches your situation. You can always switch tabs later.</p>
+    <div id="page-home" class="page active flex-col flex-1 min-h-0" style="background:#f5f5f1;">
+
+      <!-- Top Nav (full width, on bg) -->
+      <header class="h-16 shrink-0 flex items-center gap-4 px-4">
+        <!-- Brand -->
+        <div class="flex items-center gap-4">
+          <img src="assets/logo.png" alt="Powerloom" class="w-[38px] h-[38px] rounded-full object-cover shrink-0" />
+          <span class="font-serif text-[#2f2e2a] text-[20px] leading-8 capitalize">PowerLoom</span>
+        </div>
+        <!-- Right cluster -->
+        <div class="flex-1 flex items-center justify-end gap-6">
+          <button class="hover:opacity-70 transition-opacity" aria-label="Help">
+            <span class="icon icon-24 icon-help" style="background-color:#2f2e2a;"></span>
+          </button>
+          <button class="flex items-center gap-1 hover:opacity-80 transition-opacity">
+            <div class="flex items-center gap-2">
+              <div class="w-8 h-8 rounded-full bg-[#2f2e2a] flex items-center justify-center shrink-0">
+                <span class="text-white text-[13px] font-bold leading-none">AR</span>
               </div>
-              <div class="flex items-center gap-1 bg-[#f4f4f4] rounded-lg px-4 h-12 w-[352px]">
-                <span class="icon icon-16 icon-search" style="background-color:#8a8a8a;"></span>
-                <input type="text" placeholder="e.g. Aldernash" class="flex-1 bg-transparent text-[16px] text-[#8a8a8a] leading-6 outline-none border-none placeholder-[#8a8a8a] ml-1" />
-              </div>
+              <span class="text-[#2f2e2a] text-[14px] leading-5 whitespace-nowrap">Armando Reyes</span>
             </div>
-            <div class="grid grid-cols-4 gap-4">
-              <div class="option-card selected bg-white border border-[#262421] rounded-lg p-6 flex flex-col gap-4 shadow-[0px_1px_1.5px_rgba(47,46,42,0.05),0px_2px_3px_rgba(47,46,42,0.04)]" onclick="navigate('entity')">
-                <div class="w-8 h-8 rounded-full bg-[#262421] flex items-center justify-center shrink-0"><span class="ci ci-entity"></span></div>
-                <div class="flex flex-col gap-1">
-                  <p class="text-[#262421] text-[16px] font-bold leading-6">I know the entity I want to research</p>
-                  <p class="text-[#878482] text-[14px] leading-5">Look up an existing client or prospect by name, see the firm's relationship and recommended Service Offerings.</p>
-                </div>
-              </div>
-              <div class="option-card bg-white border border-[#d8d5cf] rounded-lg p-6 flex flex-col gap-4 shadow-[0px_1px_1.5px_rgba(47,46,42,0.05),0px_2px_3px_rgba(47,46,42,0.04)]">
-                <div class="w-8 h-8 rounded-full bg-[#262421] flex items-center justify-center shrink-0"><span class="ci ci-work"></span></div>
-                <div class="flex flex-col gap-1">
-                  <p class="text-[#262421] text-[16px] font-bold leading-6">I know what area of work we are starting</p>
-                  <p class="text-[#878482] text-[14px] leading-5">Describe a fact pattern in plain language and find the closest matching matters and experience across the firm.</p>
-                </div>
-              </div>
-              <div class="option-card bg-white border border-[#d8d5cf] rounded-lg p-6 flex flex-col gap-4 shadow-[0px_1px_1.5px_rgba(47,46,42,0.05),0px_2px_3px_rgba(47,46,42,0.04)]">
-                <div class="w-8 h-8 rounded-full bg-[#262421] flex items-center justify-center shrink-0"><span class="ci ci-person"></span></div>
-                <div class="flex flex-col gap-1">
-                  <p class="text-[#262421] text-[16px] font-bold leading-6">I know a person I want to research</p>
-                  <p class="text-[#878482] text-[14px] leading-5">Track a key contact across company moves, map firm relationships, and identify warm introduction paths.</p>
-                </div>
-              </div>
-              <div class="option-card bg-white border border-[#d8d5cf] rounded-lg p-6 flex flex-col gap-4 shadow-[0px_1px_1.5px_rgba(47,46,42,0.05),0px_2px_3px_rgba(47,46,42,0.04)]">
-                <div class="w-8 h-8 rounded-full bg-[#262421] flex items-center justify-center shrink-0"><span class="ci ci-event"></span></div>
-                <div class="flex flex-col gap-1">
-                  <p class="text-[#262421] text-[16px] font-bold leading-6">I have an opportunity based on some event</p>
-                  <p class="text-[#878482] text-[14px] leading-5">Detect entity-specific or market-wide events and map them to affected clients and Service Offerings.</p>
-                </div>
-              </div>
+            <span class="icon icon-16 icon-chevron py-1" style="background-color:#2f2e2a;"></span>
+          </button>
+        </div>
+      </header>
+
+      <!-- White card content -->
+      <div class="flex-1 min-h-0 px-4 pb-4">
+        <div class="bg-white rounded-lg h-full flex items-center justify-center overflow-y-auto px-8 py-14">
+          <div class="flex flex-col items-center gap-8 max-w-full">
+
+            <!-- Hero -->
+            <div class="flex flex-col items-center gap-4">
+              <h2 class="font-serif text-[#2f2e2a] text-[32px] leading-[44px] tracking-[-0.24px] capitalize text-center">
+                Find offerings for a target entity
+              </h2>
+              <p class="text-[#8a8a8a] text-[16px] leading-6 text-center max-w-[609px]">
+                Type a company name to see existing offerings and prospective offerings we could cross-sell. Pulls from Salesforce, Databricks, and CapIQ.
+              </p>
             </div>
+
+            <!-- Entity card (720px) -->
+            <div class="w-[720px] max-w-full border border-[#b9b7b2] rounded-xl px-6 py-4 flex flex-col gap-6">
+
+              <!-- Building icon -->
+              <div class="w-[78px] h-[78px] shrink-0">
+                <img src="assets/entity-icon.svg" alt="" class="w-full h-full" />
+              </div>
+
+              <!-- Header -->
+              <div class="flex flex-col gap-2">
+                <h3 class="font-serif text-[#2f2e2a] text-[20px] leading-8 capitalize">Entity</h3>
+                <p class="text-[#8a8a8a] text-[16px] leading-6">
+                  See offerings we've worked on for this entity, plus prospective offerings we could cross-sell. Pulls from Salesforce, Databricks, and CapIQ.
+                </p>
+              </div>
+
+              <!-- Search + Find -->
+              <div class="flex gap-4 items-center">
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center gap-1 bg-[#f4f4f4] rounded-lg px-4 h-12 overflow-hidden">
+                    <span class="icon icon-16 icon-search" style="background-color:#8a8a8a;"></span>
+                    <input id="home-search" type="text" placeholder="e.g. Aldernash" autocomplete="off"
+                      class="flex-1 bg-transparent text-[16px] text-[#262421] leading-6 outline-none border-none placeholder-[#8a8a8a] ml-1"
+                      onkeydown="if(event.key==='Enter') runHomeSearch(this.value)" />
+                  </div>
+                </div>
+                <button onclick="runHomeSearch(document.getElementById('home-search').value)"
+                  class="h-12 px-6 bg-[#3c3a37] text-white text-[16px] leading-6 rounded-lg whitespace-nowrap hover:bg-[#2f2e2a] transition-colors shrink-0">
+                  Find
+                </button>
+              </div>
+
+            </div>
+
+            <!-- Bottom helper link -->
+            <div class="flex items-center gap-2 flex-wrap justify-center">
+              <p class="text-[#8a8a8a] text-[16px] leading-6">Don't have a target entity?</p>
+              <a href="#" onclick="event.preventDefault(); alert('Find experience by description — coming soon.');"
+                 class="text-[#5a46ff] text-[16px] leading-6 underline hover:no-underline">
+                Find experience by description →
+              </a>
+            </div>
+
           </div>
         </div>
       </div>
+
     </div>
 
     <!-- ═══════════════════════════════════════
@@ -862,6 +908,19 @@ function navigate(page) {
   document.querySelectorAll('[data-nav]').forEach(item => {
     item.classList.toggle('active', item.dataset.nav === page);
   });
+  // Home page has its own layout (no sidebar / no shared topnav)
+  document.body.classList.toggle('home-active', page === 'home');
+}
+
+// Find button on the homepage hands off to the entity page's search
+function runHomeSearch(val) {
+  const q = (val || '').trim();
+  navigate('entity');
+  if (q) {
+    const input = document.getElementById('entity-search');
+    if (input) input.value = q;
+    runSearch(q);
+  }
 }
 
 // ═══════════════════════════════════════════════════
