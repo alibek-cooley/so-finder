@@ -404,7 +404,88 @@
       <!-- White card content -->
       <div class="flex-1 min-h-0 px-4 pb-4">
         <div class="bg-white rounded-lg h-full flex items-center justify-center overflow-y-auto px-8 py-14">
-          <div class="flex flex-col items-center gap-8 max-w-full">
+
+          <!-- ─────────── DECISIONS VIEW (default home) ─────────── -->
+          <div id="home-decisions" class="flex flex-col items-center gap-10 w-full max-w-[1100px]">
+            <h2 class="font-serif text-[#2f2e2a] text-[32px] leading-[44px] tracking-[-0.24px] capitalize text-center">
+              Identify The Client Or Prospect
+            </h2>
+            <div class="grid grid-cols-4 gap-4 w-full">
+
+              <!-- Card 1: Entity -->
+              <div class="bg-white border border-[#d8d5cf] rounded-xl p-6 flex flex-col gap-4 shadow-[0px_1px_1.5px_rgba(47,46,42,0.05),0px_2px_3px_rgba(47,46,42,0.04)]">
+                <div class="w-10 h-10 rounded-full bg-[#262421] flex items-center justify-center shrink-0">
+                  <span class="ci ci-entity"></span>
+                </div>
+                <div class="flex flex-col gap-1 flex-1">
+                  <p class="text-[#262421] text-[15px] font-bold leading-6">I know the entity I want to research</p>
+                  <p class="text-[#878482] text-[13px] leading-5">Look up an existing client or prospect by name, see the firm's relationship and recommended Service Offerings.</p>
+                </div>
+                <button onclick="goToEntity()" class="self-start h-9 px-4 border border-[#d8d5cf] rounded-lg text-[#262421] text-[14px] hover:bg-[#f5f5f1] transition-colors flex items-center gap-2">
+                  Go to entity
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </button>
+              </div>
+
+              <!-- Card 2: Work area -->
+              <div class="bg-white border border-[#d8d5cf] rounded-xl p-6 flex flex-col gap-4 shadow-[0px_1px_1.5px_rgba(47,46,42,0.05),0px_2px_3px_rgba(47,46,42,0.04)]">
+                <div class="w-10 h-10 rounded-full bg-[#262421] flex items-center justify-center shrink-0">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
+                  </svg>
+                </div>
+                <div class="flex flex-col gap-1 flex-1">
+                  <p class="text-[#262421] text-[15px] font-bold leading-6">I know what area of work we are starting</p>
+                  <p class="text-[#878482] text-[13px] leading-5">Describe a fact pattern in plain language and find the closest matching matters and experience across the firm.</p>
+                </div>
+                <button onclick="goToExperience()" class="self-start h-9 px-4 border border-[#d8d5cf] rounded-lg text-[#262421] text-[14px] hover:bg-[#f5f5f1] transition-colors flex items-center gap-2">
+                  Go to experience
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </button>
+              </div>
+
+              <!-- Card 3: Person -->
+              <div class="bg-white border border-[#d8d5cf] rounded-xl p-6 flex flex-col gap-4 shadow-[0px_1px_1.5px_rgba(47,46,42,0.05),0px_2px_3px_rgba(47,46,42,0.04)]">
+                <div class="w-10 h-10 rounded-full bg-[#262421] flex items-center justify-center shrink-0">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 18h6"/><path d="M10 22h4"/>
+                    <path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/>
+                  </svg>
+                </div>
+                <div class="flex flex-col gap-1 flex-1">
+                  <p class="text-[#262421] text-[15px] font-bold leading-6">I know a person I want to research</p>
+                  <p class="text-[#878482] text-[13px] leading-5">Track a key contact across company moves, map firm relationships, and identify warm introduction paths.</p>
+                </div>
+                <button onclick="goToPerson()" class="self-start h-9 px-4 border border-[#d8d5cf] rounded-lg text-[#262421] text-[14px] hover:bg-[#f5f5f1] transition-colors flex items-center gap-2">
+                  Go to person
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </button>
+              </div>
+
+              <!-- Card 4: Event -->
+              <div class="bg-white border border-[#d8d5cf] rounded-xl p-6 flex flex-col gap-4 shadow-[0px_1px_1.5px_rgba(47,46,42,0.05),0px_2px_3px_rgba(47,46,42,0.04)]">
+                <div class="w-10 h-10 rounded-full bg-[#262421] flex items-center justify-center shrink-0">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                  </svg>
+                </div>
+                <div class="flex flex-col gap-1 flex-1">
+                  <p class="text-[#262421] text-[15px] font-bold leading-6">I have an opportunity based on some event</p>
+                  <p class="text-[#878482] text-[13px] leading-5">Detect entity-specific or market-wide events and map them to affected clients and Service Offerings.</p>
+                </div>
+                <button onclick="goToEvent()" class="self-start h-9 px-4 border border-[#d8d5cf] rounded-lg text-[#262421] text-[14px] hover:bg-[#f5f5f1] transition-colors flex items-center gap-2">
+                  Go to event
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </button>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- ─────────── FIND-ENTITY VIEW (when "Go to entity" clicked) ─────────── -->
+          <div id="home-find-entity" class="flex-col items-center gap-8 max-w-full" style="display:none;">
 
             <!-- Hero -->
             <div class="flex flex-col items-center">
@@ -415,8 +496,6 @@
 
             <!-- Entity card (720px) -->
             <div class="w-[720px] max-w-full border border-[#b9b7b2] rounded-xl px-6 py-4 flex flex-col gap-6">
-
-              <!-- Header -->
               <div class="flex flex-col gap-2">
                 <h3 class="font-serif text-[#2f2e2a] text-[20px] leading-8 capitalize">Entity</h3>
                 <p class="text-[#8a8a8a] text-[14px] leading-5">
@@ -424,7 +503,6 @@
                 </p>
               </div>
 
-              <!-- Search + Find -->
               <div id="home-filters-row" class="flex gap-4 items-center relative">
                 <div class="flex-1 min-w-0">
                   <div class="flex items-center gap-1 bg-[#f4f4f4] rounded-lg px-4 h-12 overflow-hidden">
@@ -440,11 +518,8 @@
                   class="h-12 px-6 bg-[#3c3a37] text-white text-[16px] leading-6 rounded-lg whitespace-nowrap hover:bg-[#2f2e2a] transition-colors shrink-0">
                   Find
                 </button>
-
-                <!-- Autocomplete dropdown -->
                 <div id="home-search-dropdown" class="home-dropdown" style="display:none;"></div>
               </div>
-
             </div>
 
             <!-- Bottom helper link -->
@@ -457,6 +532,7 @@
             </div>
 
           </div>
+
         </div>
       </div>
 
@@ -1397,8 +1473,25 @@ function navigate(page) {
   // Each page in the new design has its own top nav (shell is hidden globally)
   // When (re)entering the entity page, default to the Entity tab.
   if (page === 'entity' && typeof switchTab === 'function') switchTab('entity');
+  // When (re)entering home, default to the decisions view
+  if (page === 'home' && typeof showHomeView === 'function') showHomeView('decisions');
   window.scrollTo(0, 0);
 }
+
+// ─── Home view toggle (decisions ↔ find-entity) ───
+function showHomeView(view) {
+  const dec = document.getElementById('home-decisions');
+  const find = document.getElementById('home-find-entity');
+  if (!dec || !find) return;
+  dec.style.display  = view === 'decisions'   ? 'flex' : 'none';
+  find.style.display = view === 'find-entity' ? 'flex' : 'none';
+}
+
+// ─── Decision card actions ───
+function goToEntity()     { showHomeView('find-entity'); document.getElementById('home-search')?.focus(); }
+function goToExperience() { openExperienceBrowse(); }
+function goToPerson()     { alert('Person search — coming soon.'); }
+function goToEvent()      { alert('Event search — coming soon.'); }
 
 // Find button on the homepage hands off to the entity page's search
 function runHomeSearch(val) {
