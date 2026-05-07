@@ -1110,23 +1110,27 @@
         <p id="md-subtitle" class="text-[#545454] text-[16px] leading-6">$340M offering · Underwriters: Goldman Sachs, Morgan Stanley, Cowen</p>
       </div>
 
-      <!-- Key facts grid (2x2 simple labels) -->
-      <div class="grid grid-cols-2 gap-x-12 gap-y-6">
-        <div class="flex flex-col gap-1">
-          <p class="text-[#545454] text-[14px]">Service Offering</p>
-          <p id="md-service" class="font-serif text-[#2f2e2a] text-[24px] leading-8">IPO — Company Representation</p>
+      <!-- Key facts grid (2x2 bordered cards with info icons) -->
+      <div class="grid grid-cols-2 gap-3">
+        <div class="metric-card relative">
+          <div class="metric-label text-[#545454]">Service Offering</div>
+          <div class="metric-value text-[#2f2e2a]" id="md-service">IPO — Company Representation</div>
+          <span class="icon icon-16 icon-info absolute top-3 right-3" style="background-color:#8a8a8a;"></span>
         </div>
-        <div class="flex flex-col gap-1">
-          <p class="text-[#545454] text-[14px]">Phase</p>
-          <p id="md-phase" class="font-serif text-[#2f2e2a] text-[24px] leading-8 capitalize">Closed</p>
+        <div class="metric-card relative">
+          <div class="metric-label text-[#545454]">Phase</div>
+          <div class="metric-value text-[#2f2e2a] capitalize" id="md-phase">Closed</div>
+          <span class="icon icon-16 icon-info absolute top-3 right-3" style="background-color:#8a8a8a;"></span>
         </div>
-        <div class="flex flex-col gap-1">
-          <p class="text-[#545454] text-[14px]">Deal value</p>
-          <p id="md-deal-value" class="font-serif text-[#2f2e2a] text-[24px] leading-8">$340M</p>
+        <div class="metric-card relative">
+          <div class="metric-label text-[#545454]">Deal value</div>
+          <div class="metric-value text-[#2f2e2a]" id="md-deal-value">$340M</div>
+          <span class="icon icon-16 icon-info absolute top-3 right-3" style="background-color:#8a8a8a;"></span>
         </div>
-        <div class="flex flex-col gap-1">
-          <p class="text-[#545454] text-[14px]">Listing exchange</p>
-          <p id="md-listing" class="font-serif text-[#2f2e2a] text-[24px] leading-8">NASDAQ: ALDR</p>
+        <div class="metric-card relative">
+          <div class="metric-label text-[#545454]">Listing exchange</div>
+          <div class="metric-value text-[#2f2e2a]" id="md-listing">NASDAQ: ALDR</div>
+          <span class="icon icon-16 icon-info absolute top-3 right-3" style="background-color:#8a8a8a;"></span>
         </div>
       </div>
 
@@ -1136,34 +1140,44 @@
         <div id="md-match-list" class="border border-[#e8e6e1] rounded-xl p-5 flex flex-col gap-4"></div>
       </div>
 
-      <!-- Matter phase profile -->
-      <div class="flex flex-col gap-6 mt-2">
-        <div class="flex items-center justify-between">
-          <h3 class="font-serif text-[#2f2e2a] text-[20px] leading-8">Matter phase profile</h3>
-          <button class="w-6 h-6 hover:opacity-70 transition-opacity">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M8.25 9C8.25 8.80109 8.32902 8.61032 8.46967 8.46967C8.61032 8.32902 8.80109 8.25 9 8.25H15C15.1989 8.25 15.3897 8.32902 15.5303 8.46967C15.671 8.61032 15.75 8.80109 15.75 9C15.75 9.19891 15.671 9.38968 15.5303 9.53033C15.3897 9.67098 15.1989 9.75 15 9.75H9C8.80109 9.75 8.61032 9.67098 8.46967 9.53033C8.32902 9.38968 8.25 9.19891 8.25 9ZM21 4.5V14.6897C21.0006 14.8867 20.9621 15.082 20.8866 15.264C20.8111 15.446 20.7002 15.6112 20.5603 15.75L15.75 20.5603C15.6112 20.7002 15.446 20.8111 15.264 20.8866C15.082 20.9621 14.8867 21.0006 14.6897 21H4.5C4.10218 21 3.72064 20.842 3.43934 20.5607C3.15804 20.2794 3 19.8978 3 19.5V4.5C3 4.10218 3.15804 3.72064 3.43934 3.43934C3.72064 3.15804 4.10218 3 4.5 3H19.5C19.8978 3 20.2794 3.15804 20.5607 3.43934C20.842 3.72064 21 4.10218 21 4.5ZM4.5 19.5H14.25V15C14.25 14.8011 14.329 14.6103 14.4697 14.4697C14.6103 14.329 14.8011 14.25 15 14.25H19.5V4.5H4.5V19.5ZM15.75 15.75V18.4406L18.4397 15.75H15.75Z" fill="#2F2E2A"/>
-            </svg>
-          </button>
-        </div>
-        <div id="md-pipeline" class="flex items-center gap-1 w-full"></div>
-      </div>
+      <!-- Lower 2-col layout: phase profile + narrative on left, team on right -->
+      <div id="md-lower-grid" class="grid gap-8 mt-2" style="grid-template-columns: 1fr 280px;">
 
-      <!-- Narrative quality signal (full-width card with quote) -->
-      <div class="bg-white border border-[#d8d5cf] rounded-xl p-5 flex flex-col gap-3 shadow-[0px_1px_3px_rgba(47,46,42,0.05),0px_2px_6px_rgba(47,46,42,0.04)]">
-        <div class="flex items-center justify-between gap-4">
-          <h3 class="text-[#262421] text-[16px] font-bold leading-6">Narrative quality signal</h3>
-          <span id="md-narrative-badge" class="badge-rich shrink-0">Rich</span>
-        </div>
-        <p id="md-narrative-quote" class="text-[#262421] text-[14px] leading-6">
-          "Represented Aldernash Therapeutics in its $340M initial public offering on NASDAQ. Coordinated S-1 drafting and SEC review process across multiple amendment cycles, managed roadshow logistics with three lead underwriters, and negotiated lockup arrangements with founders and Series C investors. Pricing finalized at $18 per share, opening 22% above range."
-        </p>
-      </div>
+        <!-- LEFT — phase profile + narrative -->
+        <div class="flex flex-col gap-5 min-w-0">
 
-      <!-- Team & roles -->
-      <div class="flex flex-col gap-4">
-        <h3 class="font-serif text-[#2f2e2a] text-[20px] leading-8">Team &amp; roles</h3>
-        <div id="md-team-list" class="grid grid-cols-2 gap-4"></div>
+          <!-- Matter phase profile -->
+          <div class="flex flex-col gap-4">
+            <div class="flex items-center justify-between">
+              <h3 class="font-serif text-[#2f2e2a] text-[20px] leading-8">Matter phase profile</h3>
+              <button class="w-6 h-6 hover:opacity-70 transition-opacity">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M8.25 9C8.25 8.80109 8.32902 8.61032 8.46967 8.46967C8.61032 8.32902 8.80109 8.25 9 8.25H15C15.1989 8.25 15.3897 8.32902 15.5303 8.46967C15.671 8.61032 15.75 8.80109 15.75 9C15.75 9.19891 15.671 9.38968 15.5303 9.53033C15.3897 9.67098 15.1989 9.75 15 9.75H9C8.80109 9.75 8.61032 9.67098 8.46967 9.53033C8.32902 9.38968 8.25 9.19891 8.25 9ZM21 4.5V14.6897C21.0006 14.8867 20.9621 15.082 20.8866 15.264C20.8111 15.446 20.7002 15.6112 20.5603 15.75L15.75 20.5603C15.6112 20.7002 15.446 20.8111 15.264 20.8866C15.082 20.9621 14.8867 21.0006 14.6897 21H4.5C4.10218 21 3.72064 20.842 3.43934 20.5607C3.15804 20.2794 3 19.8978 3 19.5V4.5C3 4.10218 3.15804 3.72064 3.43934 3.43934C3.72064 3.15804 4.10218 3 4.5 3H19.5C19.8978 3 20.2794 3.15804 20.5607 3.43934C20.842 3.72064 21 4.10218 21 4.5ZM4.5 19.5H14.25V15C14.25 14.8011 14.329 14.6103 14.4697 14.4697C14.6103 14.329 14.8011 14.25 15 14.25H19.5V4.5H4.5V19.5ZM15.75 15.75V18.4406L18.4397 15.75H15.75Z" fill="#2F2E2A"/>
+                </svg>
+              </button>
+            </div>
+            <div id="md-pipeline" class="flex items-center gap-1 w-full"></div>
+          </div>
+
+          <!-- Narrative quality signal -->
+          <div class="bg-white border border-[#d8d5cf] rounded-xl p-5 flex flex-col gap-3 shadow-[0px_1px_3px_rgba(47,46,42,0.05),0px_2px_6px_rgba(47,46,42,0.04)]">
+            <div class="flex items-center justify-between gap-4">
+              <h3 class="text-[#262421] text-[16px] font-bold leading-6">Narrative quality signal</h3>
+              <span id="md-narrative-badge" class="badge-rich shrink-0">Rich</span>
+            </div>
+            <p id="md-narrative-quote" class="text-[#262421] text-[14px] leading-6">
+              "Represented Aldernash Therapeutics in its $340M initial public offering on NASDAQ. Coordinated S-1 drafting and SEC review process across multiple amendment cycles, managed roadshow logistics with three lead underwriters, and negotiated lockup arrangements with founders and Series C investors. Pricing finalized at $18 per share, opening 22% above range."
+            </p>
+          </div>
+
+        </div>
+
+        <!-- RIGHT — team & roles -->
+        <div id="md-team-section" class="flex flex-col gap-4">
+          <h3 class="font-serif text-[#2f2e2a] text-[20px] leading-8">Team &amp; roles</h3>
+          <div id="md-team-list" class="flex flex-col gap-3"></div>
+        </div>
+
       </div>
 
     </div><!-- /drawer-detail-view -->
@@ -2132,25 +2146,29 @@ function showMatterDetailDrawer(m, opts) {
   const team = m.teamMembers && m.teamMembers.length
     ? m.teamMembers
     : (m.lead ? [{ name: m.lead, role: `Lead partner · ${m.industry || currentEntity?.industry || 'Generalist'}` }] : []);
-  const teamSection = document.getElementById('md-team-list').parentElement;
+  const teamSection = document.getElementById('md-team-section');
+  const lowerGrid   = document.getElementById('md-lower-grid');
   if (team.length) {
     teamSection.style.display = '';
-    document.getElementById('md-team-list').innerHTML = team.map(t => `
-      <div class="bg-white border border-[#d8d5cf] rounded-xl p-4 flex items-center gap-4 shadow-[0px_1px_3px_rgba(47,46,42,0.05),0px_2px_6px_rgba(47,46,42,0.04)]">
-        <div class="w-10 h-10 rounded-full bg-[#262421] flex items-center justify-center shrink-0">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
-          </svg>
+    lowerGrid.style.gridTemplateColumns = '1fr 280px';
+    document.getElementById('md-team-list').innerHTML = team.map(t => {
+      const initials = t.name.split(' ').filter(Boolean).map(n => n[0]).slice(0, 2).join('').toUpperCase();
+      return `
+        <div class="bg-white border border-[#d8d5cf] rounded-xl p-4 flex items-center gap-3 shadow-[0px_1px_3px_rgba(47,46,42,0.05),0px_2px_6px_rgba(47,46,42,0.04)]">
+          <div class="w-10 h-10 rounded-full bg-[#878482] flex items-center justify-center shrink-0">
+            <span class="text-white text-[13px] font-bold leading-none tracking-wide">${initials}</span>
+          </div>
+          <div class="flex flex-col gap-0.5 flex-1 min-w-0">
+            <p class="text-[#262421] text-[14px] font-bold leading-5 truncate">${t.name}</p>
+            <p class="text-[#878482] text-[12px] leading-5 truncate">${t.role}</p>
+          </div>
         </div>
-        <div class="flex flex-col gap-0.5 flex-1 min-w-0">
-          <p class="text-[#262421] text-[14px] font-bold leading-6 truncate">${t.name}</p>
-          <p class="text-[#878482] text-[13px] leading-5 truncate">${t.role}</p>
-        </div>
-        <button class="off-view-details shrink-0">View Details</button>
-      </div>
-    `).join('');
+      `;
+    }).join('');
   } else {
+    // No team data — collapse the right column so phase profile + narrative span full width
     teamSection.style.display = 'none';
+    lowerGrid.style.gridTemplateColumns = '1fr';
   }
 
   // Switch to detail view
@@ -2159,29 +2177,26 @@ function showMatterDetailDrawer(m, opts) {
   document.getElementById('drawer-scroll').scrollTop = 0;
 }
 
-// Render the phase pipeline with arrowheads between circles
+// Render the phase pipeline with simple line connectors
 function renderPipeline(phases) {
   if (!phases || !phases.length) return '';
   return phases.map((p, i) => {
     const circle = `
-      <div class="flex flex-col items-center gap-2" style="flex:0 0 auto; width:80px;">
-        <div class="rounded-full flex items-center justify-center" style="width:44px; height:44px; background:${p.done ? '#262421' : '#e9e7e1'};">
+      <div class="flex flex-col items-center gap-2" style="flex:0 0 auto; width:72px;">
+        <div class="rounded-full flex items-center justify-center" style="width:40px; height:40px; background:${p.done ? '#262421' : '#e9e7e1'};">
           ${p.done
-            ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'
-            : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#878482" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/></svg>'}
+            ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="14" height="16" rx="2"/><line x1="8" y1="9" x2="14" y2="9"/><line x1="8" y1="13" x2="14" y2="13"/></svg>'
+            : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#878482" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/></svg>'}
         </div>
-        <p class="text-[#262421] text-[13px] font-bold leading-5 text-center">${p.name}</p>
+        <p class="text-[#262421] text-[12px] font-bold leading-5 text-center whitespace-nowrap">${p.name}</p>
       </div>`;
     if (i === phases.length - 1) return circle;
-    const arrowColor = p.done && phases[i+1].done ? '#262421' : '#b9b7b2';
-    const arrow = `
-      <div style="flex:1; display:flex; align-items:center; height:44px; min-width:24px;">
-        <div style="flex:1; height:1.5px; background:${arrowColor};"></div>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="${arrowColor}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-left:-2px;">
-          <polyline points="9 6 15 12 9 18"/>
-        </svg>
+    const lineColor = p.done && phases[i+1].done ? '#262421' : '#b9b7b2';
+    const connector = `
+      <div style="flex:1; min-width:16px; display:flex; align-items:center; justify-content:center; height:40px;">
+        <div style="flex:1; height:1.5px; background:${lineColor};"></div>
       </div>`;
-    return circle + arrow;
+    return circle + connector;
   }).join('');
 }
 
