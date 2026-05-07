@@ -1730,8 +1730,8 @@ function setExperienceState(state) {
   const search         = document.getElementById('exp-search');
 
   if (state === 'browse') {
-    layout.style.gridTemplateColumns = '1fr 280px';
-    sidebar.style.display        = 'flex';
+    layout.style.gridTemplateColumns = '1fr';
+    sidebar.style.display        = 'none';
     starter.style.display        = 'flex';
     interpretation.style.display = 'none';
     filtersApplied.style.display = 'none';
