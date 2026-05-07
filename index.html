@@ -379,11 +379,11 @@
 
       <!-- Top Nav (full width, on bg) -->
       <header class="h-16 shrink-0 flex items-center gap-4 px-4">
-        <!-- Brand -->
-        <div class="flex items-center gap-4">
-          <img src="assets/logo.png" alt="Powerloom" class="w-[38px] h-[38px] rounded-full object-cover shrink-0" />
+        <!-- Brand (clickable → home) -->
+        <button onclick="navigate('home')" class="flex items-center gap-3 hover:opacity-80 transition-opacity" aria-label="Go to home">
+          <img src="assets/logo.svg" alt="Powerloom" class="w-[40px] h-[38px] shrink-0" />
           <span class="font-serif text-[#2f2e2a] text-[20px] leading-8 capitalize">PowerLoom</span>
-        </div>
+        </button>
         <!-- Right cluster -->
         <div class="flex-1 flex items-center justify-end gap-6">
           <button class="hover:opacity-70 transition-opacity" aria-label="Help">
@@ -469,10 +469,10 @@
 
       <!-- Top Nav (same as home) -->
       <header class="h-16 shrink-0 flex items-center gap-4 px-4">
-        <div class="flex items-center gap-4">
-          <img src="assets/logo.png" alt="Powerloom" class="w-[38px] h-[38px] rounded-full object-cover shrink-0" />
+        <button onclick="navigate('home')" class="flex items-center gap-3 hover:opacity-80 transition-opacity" aria-label="Go to home">
+          <img src="assets/logo.svg" alt="Powerloom" class="w-[40px] h-[38px] shrink-0" />
           <span class="font-serif text-[#2f2e2a] text-[20px] leading-8 capitalize">PowerLoom</span>
-        </div>
+        </button>
         <div class="flex-1 flex items-center justify-end gap-6">
           <button class="hover:opacity-70 transition-opacity" aria-label="Help">
             <span class="icon icon-24 icon-help" style="background-color:#2f2e2a;"></span>
