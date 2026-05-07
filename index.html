@@ -250,7 +250,7 @@
     .drawer {
       position:fixed;
       top:0; right:0; bottom:0;
-      width:720px;
+      width:960px;
       max-width:92vw;
       background:#fff;
       box-shadow:-8px 0 32px rgba(47,46,42,0.15);
@@ -1942,9 +1942,9 @@ function mattersFor(offering) {
   // Per-offering matter lists win when defined
   if (offering.matterList && offering.matterList.length) {
     return offering.matterList.map(m => ({
+      // Pass through ALL fields so the detail drawer can use them
+      ...m,
       id: m.id || ('M-' + Math.random().toString(36).substr(2, 8)),
-      title: m.title,
-      meta: m.meta,
       detail: m.detail || `Lead: Marguerite Velasquez · Team: 4 partners, 7 associates · Phase: Diligence → Sign → Close`,
       quality: m.quality || 'Rich',
       status: m.status || 'Closed Q3 2024',
