@@ -524,7 +524,13 @@
 
               <!-- Title block -->
               <div class="flex flex-col gap-2">
-                <h1 id="ep-title" class="font-serif text-[#2f2e2a] text-[40px] leading-[48px] tracking-[-0.5px]">Aldernash Therapeutics, Inc.</h1>
+                <div class="flex items-start justify-between gap-4">
+                  <h1 id="ep-title" class="font-serif text-[#2f2e2a] text-[40px] leading-[48px] tracking-[-0.5px]">Aldernash Therapeutics, Inc.</h1>
+                  <button onclick="openCompanyDetailsModal()"
+                    class="h-10 px-5 bg-[#2f2e2a] text-white text-[14px] rounded-lg whitespace-nowrap shrink-0 hover:bg-[#3c3a37] transition-colors mt-1">
+                    Company details
+                  </button>
+                </div>
                 <p id="ep-subtitle" class="text-[#878482] text-[16px] leading-6">Late-stage biotech focused on oncology with Phase III pipeline.</p>
               </div>
 
@@ -548,25 +554,6 @@
                 <div class="metric-card">
                   <div class="metric-label text-[#545454]">HQ / Geography</div>
                   <div class="metric-value text-[#2f2e2a]" id="ep-hq">Cambridge, MA</div>
-                  <span class="icon icon-16 icon-info self-end" style="background-color:#8a8a8a;"></span>
-                </div>
-              </div>
-
-              <!-- Metrics row 2 (3 cards) -->
-              <div class="grid grid-cols-3 gap-4">
-                <div class="metric-card">
-                  <div class="metric-label text-[#545454]">Founded</div>
-                  <div class="metric-value text-[#2f2e2a]" id="ep-founded">2008</div>
-                  <span class="icon icon-16 icon-info self-end" style="background-color:#8a8a8a;"></span>
-                </div>
-                <div class="metric-card">
-                  <div class="metric-label text-[#545454]">Jurisdiction</div>
-                  <div class="metric-value text-[#2f2e2a]" id="ep-jurisdiction">Delaware</div>
-                  <span class="icon icon-16 icon-info self-end" style="background-color:#8a8a8a;"></span>
-                </div>
-                <div class="metric-card">
-                  <div class="metric-label text-[#545454]">Status</div>
-                  <div class="metric-value text-[#2f2e2a]" id="ep-status">Active client since 2014</div>
                   <span class="icon icon-16 icon-info self-end" style="background-color:#8a8a8a;"></span>
                 </div>
               </div>
@@ -758,6 +745,46 @@
     </div><!-- /page-entity -->
 
   </main>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     COMPANY DETAILS MODAL — opens from entity title's "Company details" button
+══════════════════════════════════════════ -->
+<div id="company-details-modal" class="modal-backdrop"
+     style="background:rgba(174,174,174,0.54); backdrop-filter:none; -webkit-backdrop-filter:none;"
+     onclick="if(event.target === this) closeCompanyDetailsModal()"
+     role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="modal" style="width:480px; border-radius:16px; box-shadow:0 8px 12px rgba(0,0,0,0.2);">
+
+    <!-- Header -->
+    <div class="relative" style="padding:24px 32px 8px;">
+      <h2 class="font-serif text-[#262421] text-[24px] leading-8">Company details</h2>
+      <button onclick="closeCompanyDetailsModal()" aria-label="Close"
+        class="absolute flex items-center justify-center rounded-lg hover:bg-[#f5f5f1] transition-colors p-2"
+        style="right:26px; top:20px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#262421" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Body: Founded / Jurisdiction / Status as metric cards -->
+    <div class="px-8 pb-8 pt-2 flex flex-col gap-3">
+      <div class="metric-card">
+        <div class="metric-label text-[#545454]">Founded</div>
+        <div class="metric-value text-[#2f2e2a]" id="cd-founded">2008</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label text-[#545454]">Jurisdiction</div>
+        <div class="metric-value text-[#2f2e2a]" id="cd-jurisdiction">Delaware</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label text-[#545454]">Status</div>
+        <div class="metric-value text-[#2f2e2a]" id="cd-status">Active client since 2014</div>
+      </div>
+    </div>
+
+  </div>
 </div>
 
 <!-- ═══════════════════════════════════════════
@@ -1154,8 +1181,8 @@ const ENTITIES = [
     inRecords: true,
     match: 94,
     offerings: [
-      // Existing (4 offerings · 20 matters)
-      { badge:'Existing', title:'IPO — Company Representation',  matters:'3 matters', quarter:'Q2 2024', team:'Lead: M. Velasquez',     partners:83, expertise:['IPO Counsel','Securities Disclosure'],
+      // Existing (4 offerings · 22 matters)
+      { badge:'Existing', title:'IPO — Company Representation',  matters:'5 matters', quarter:'Q2 2024', team:'Lead: M. Velasquez',     partners:83, expertise:['IPO Counsel','Securities Disclosure'],
         matterList: [
           {
             id:'M-2024-IPO-01',
@@ -1495,6 +1522,24 @@ function viewCloseMatch(name) {
   runSearch(name); // will likely show no-results again unless they happen to be in ENTITIES
 }
 
+// Company details modal (opened from entity title)
+function openCompanyDetailsModal() {
+  const m = document.getElementById('company-details-modal');
+  m.classList.add('open');
+  m.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+}
+function closeCompanyDetailsModal() {
+  const m = document.getElementById('company-details-modal');
+  m.classList.remove('open');
+  m.setAttribute('aria-hidden', 'true');
+  if (!document.getElementById('drawer').classList.contains('open') &&
+      !document.getElementById('feedback-modal').classList.contains('open') &&
+      !document.getElementById('request-modal').classList.contains('open')) {
+    document.body.style.overflow = '';
+  }
+}
+
 // Request-to-add modal
 function requestAddCompany(prefillName) {
   // Optional prefill from the search input
@@ -1578,14 +1623,15 @@ function renderResults(matches) {
   document.getElementById('ep-title').textContent = top.name;
   document.getElementById('ep-subtitle').textContent = top.subtitle || '';
 
-  // Metrics
+  // Metrics — main view (Industry / Size / Entity type / HQ)
   document.getElementById('ep-industry').textContent     = top.industry;
   document.getElementById('ep-size').textContent          = top.sizeDetail || top.size;
   document.getElementById('ep-entity-type').textContent   = top.entityType;
   document.getElementById('ep-hq').textContent            = top.hq;
-  document.getElementById('ep-founded').textContent       = top.founded;
-  document.getElementById('ep-jurisdiction').textContent  = top.jurisdiction;
-  document.getElementById('ep-status').textContent        = top.status;
+  // Metrics — Company details modal (Founded / Jurisdiction / Status)
+  document.getElementById('cd-founded').textContent       = top.founded;
+  document.getElementById('cd-jurisdiction').textContent  = top.jurisdiction;
+  document.getElementById('cd-status').textContent        = top.status;
 
   // Track current entity so the drawer can look up offerings
   currentEntity = top;
@@ -1610,7 +1656,7 @@ function renderExistingCard(o, idx) {
     <div class="off-card" onclick="openDrawer(${idx})">
       <div class="off-card-row">
         <span class="badge-existing">Existing</span>
-        <button class="off-view-details" onclick="event.stopPropagation(); openDrawer(${idx})">View Details</button>
+        <button class="off-view-details" onclick="event.stopPropagation(); openDrawer(${idx})">Matter Details</button>
       </div>
       <p class="off-matters">${o.matters}</p>
       <p class="off-title">${o.title}</p>
@@ -1623,15 +1669,14 @@ function renderProspectCard(o, idx) {
   return `
     <div class="off-card" onclick="openProspectExperience(${idx})">
       <div class="off-card-row">
-        <span class="badge-prospect">Prospect</span>
-        <button class="off-view-details" onclick="event.stopPropagation(); openProspectExperience(${idx})">View Details</button>
+        <span class="badge-prospect">Prediction</span>
+        <button class="off-view-details" onclick="event.stopPropagation(); openProspectExperience(${idx})">Experience Search</button>
       </div>
-      <p class="off-matters">${o.matters}</p>
       <p class="off-title">${o.title}</p>
       <p class="off-meta">${o.confidence || 'High confidence'}</p>
       ${o.why ? `
         <div class="off-why">
-          <p class="off-why-q">Why?</p>
+          <p class="off-why-q">Prediction Explanation</p>
           <p class="off-why-a">${o.why}</p>
         </div>
       ` : ''}
@@ -1982,6 +2027,8 @@ document.addEventListener('keydown', e => {
     closeFeedbackModal();
   } else if (document.getElementById('request-modal').classList.contains('open')) {
     closeRequestModal();
+  } else if (document.getElementById('company-details-modal').classList.contains('open')) {
+    closeCompanyDetailsModal();
   }
 });
 
