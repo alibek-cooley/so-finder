@@ -623,9 +623,17 @@
                     </div>
                     <div class="flex gap-3 items-center">
                       <input id="exp-search" type="text" placeholder="Cross-border Acquisition&hellip;"
-                        class="flex-1 h-11 bg-white border border-[#b9b7b2] rounded-lg px-4 text-[14px] text-[#262421] outline-none focus:border-[#262421] transition-colors" />
-                      <button class="h-11 px-5 bg-[#3c3a37] text-white text-[14px] rounded-lg whitespace-nowrap hover:bg-[#2f2e2a] transition-colors">Find Experience</button>
+                        class="flex-1 h-11 bg-white border border-[#b9b7b2] rounded-lg px-4 text-[14px] text-[#262421] outline-none focus:border-[#262421] transition-colors"
+                        onkeydown="if(event.key==='Enter') runFindExperience()" />
+                      <button onclick="runFindExperience()"
+                        class="h-11 px-5 bg-[#3c3a37] text-white text-[14px] rounded-lg whitespace-nowrap hover:bg-[#2f2e2a] transition-colors">Find Experience</button>
                     </div>
+                  </div>
+
+                  <!-- "How We Interpreted Your Search" (search-results only) -->
+                  <div id="exp-interpretation" class="bg-[#fff0c1] rounded-xl px-5 py-4 flex-col gap-2" style="display:none;">
+                    <p class="text-[#262421] text-[14px] font-bold leading-5">How We Interpreted Your Search:</p>
+                    <p id="exp-interpretation-text" class="text-[#262421] text-[14px] leading-5"></p>
                   </div>
 
                   <!-- Pre-Applied Filters (prospect state) -->
@@ -1707,6 +1715,7 @@ function setExperienceState(state) {
   const layout         = document.getElementById('exp-layout');
   const sidebar        = document.getElementById('exp-filters-sidebar');
   const starter        = document.getElementById('exp-starter-section');
+  const interpretation = document.getElementById('exp-interpretation');
   const filtersApplied = document.getElementById('exp-filters-applied');
   const mattersSection = document.getElementById('exp-matters-section');
   const search         = document.getElementById('exp-search');
@@ -1715,17 +1724,48 @@ function setExperienceState(state) {
     layout.style.gridTemplateColumns = '1fr 280px';
     sidebar.style.display        = 'flex';
     starter.style.display        = 'flex';
+    interpretation.style.display = 'none';
     filtersApplied.style.display = 'none';
     mattersSection.style.display = 'none';
     search.placeholder           = 'e.g. Cross-Border acquisition of a European competitor with patent portfolio carve-out and post-close indemnity consideration';
   } else {
-    // prospect
+    // 'prospect' or 'search' — both show pre-applied + matters; interpretation card is toggled by caller
     layout.style.gridTemplateColumns = '1fr';
     sidebar.style.display        = 'none';
     starter.style.display        = 'none';
     filtersApplied.style.display = 'flex';
     mattersSection.style.display = 'flex';
   }
+}
+
+// ── Find Experience button → search-results state ──
+function runFindExperience() {
+  const query = document.getElementById('exp-search').value.trim();
+  if (!query) {
+    document.getElementById('exp-search').focus();
+    return;
+  }
+
+  // Yellow interpretation card
+  document.getElementById('exp-interpretation-text').textContent =
+    'Read as a cross-border M&A transaction in the biotech sector involving a European target, with IP carve-out structuring and post-close indemnity as deal mechanics. Surfaced 4 Service Offerings that cover this combination, with the strongest fit on Cross-border M&A.';
+
+  // 5 derived filter chips
+  document.getElementById('exp-filters').innerHTML = `
+    <span class="filter-pill">Practice: M&amp;A <span class="x" onclick="event.stopPropagation(); this.parentElement.remove();">×</span></span>
+    <span class="filter-pill">Geography: Cross-border (US/EU) <span class="x" onclick="event.stopPropagation(); this.parentElement.remove();">×</span></span>
+    <span class="filter-pill">Industry: Biotech <span class="x" onclick="event.stopPropagation(); this.parentElement.remove();">×</span></span>
+    <span class="filter-pill">Structure: Patent carve-out <span class="x" onclick="event.stopPropagation(); this.parentElement.remove();">×</span></span>
+    <span class="filter-pill">Mechanic: Post-close indemnity <span class="x" onclick="event.stopPropagation(); this.parentElement.remove();">×</span></span>
+  `;
+
+  // Render matters with the search-style match values (out of 5)
+  renderComparableMatters('matchSearch');
+
+  // Show interpretation + switch state
+  document.getElementById('exp-interpretation').style.display = 'flex';
+  setExperienceState('search');
+  document.querySelector('#page-entity .bg-white.rounded-lg')?.scrollTo(0, 0);
 }
 
 // ── Home link "Find experience by description" → Experience tab in browse mode ──
@@ -1761,8 +1801,11 @@ function openProspectExperience(idx) {
     <span class="filter-pill">Industry: ${industry} <span class="x" onclick="event.stopPropagation(); this.parentElement.remove();">×</span></span>
   `;
 
-  // Render comparable matters
-  renderComparableMatters();
+  // Render comparable matters (prospect-style match values, e.g. "2 / 2")
+  renderComparableMatters('match');
+
+  // Hide the interpretation card — prospect state doesn't use it
+  document.getElementById('exp-interpretation').style.display = 'none';
 
   // Switch tab + state + scroll to top
   switchTab('experience');
@@ -1773,19 +1816,19 @@ function openProspectExperience(idx) {
 const COMPARABLE_MATTERS = [
   { id:1, matter:'Helix Oncology acquisition of Munich gene therapy biotech',
     predictionExplanation:'Both criteria match — cross-border M&amp;A in biotech sector.',
-    so:'Cross-border M&amp;A', client:'Helix Onc.',  geography:'US/UK ✓', industry:'Biotech', lead:'M. Velasquez',     year:'2024', match:'2 / 2' },
+    so:'Cross-border M&amp;A', client:'Helix Onc.',  geography:'US/UK ✓', industry:'Biotech', lead:'M. Velasquez',     year:'2024', match:'2 / 2', matchSearch:'5 / 5' },
   { id:2, matter:'Aurelia Bio cross-border acquisition with EU clearance',
     predictionExplanation:'Both criteria match — cross-border M&amp;A in biotech sector.',
-    so:'Cross-border M&amp;A', client:'Aurelia Bio', geography:'US/UK ✓', industry:'Biotech', lead:'R. Nakamura',      year:'2024', match:'2 / 2' },
+    so:'Cross-border M&amp;A', client:'Aurelia Bio', geography:'US/UK ✓', industry:'Biotech', lead:'R. Nakamura',      year:'2024', match:'2 / 2', matchSearch:'5 / 5' },
   { id:3, matter:'Northbeam acquisition of European competitor with patent carve-out',
     predictionExplanation:'Cross-border M&amp;A match — but industrials sector, not biotech.',
-    so:'Cross-border M&amp;A', client:'Northbeam',   geography:'US/UK ✓', industry:'Biotech', lead:'B. Anastopoulos', year:'2024', match:'1 / 2' },
+    so:'Cross-border M&amp;A', client:'Northbeam',   geography:'US/UK ✓', industry:'Biotech', lead:'B. Anastopoulos', year:'2024', match:'1 / 2', matchSearch:'4 / 5' },
   { id:4, matter:'Solstice Bio acquisition of UK pharma R&amp;D unit',
     predictionExplanation:'Cross-border M&amp;A match — but pharma sector, adjacent to biotech.',
-    so:'Cross-border M&amp;A', client:'Solstice Bio',geography:'US/UK ✓', industry:'Biotech', lead:'A. Petranova',     year:'2024', match:'1 / 2' },
+    so:'Cross-border M&amp;A', client:'Solstice Bio',geography:'US/UK ✓', industry:'Biotech', lead:'A. Petranova',     year:'2024', match:'1 / 2', matchSearch:'4 / 5' },
 ];
 
-function renderComparableMatters() {
+function renderComparableMatters(matchKey = 'match') {
   document.getElementById('exp-matters-tbody').innerHTML = COMPARABLE_MATTERS.map(m => `
     <tr>
       <td class="col-num">${m.id}</td>
@@ -1797,7 +1840,7 @@ function renderComparableMatters() {
       <td>${m.industry}</td>
       <td>${m.lead}</td>
       <td>${m.year}</td>
-      <td>${m.match}</td>
+      <td>${m[matchKey] || m.match}</td>
       <td><button class="h-8 px-3 border border-[#d8d5cf] rounded-lg text-[13px] text-[#262421] hover:bg-[#f5f5f1] transition-colors whitespace-nowrap">Matter Details</button></td>
     </tr>
   `).join('');
