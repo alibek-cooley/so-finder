@@ -591,6 +591,112 @@
 </div>
 
 <!-- ═══════════════════════════════════════════
+     REQUEST-TO-ADD MODAL — opens from "Request to add" links
+══════════════════════════════════════════ -->
+<div id="request-modal" class="modal-backdrop"
+     style="background:rgba(174,174,174,0.54); backdrop-filter:none; -webkit-backdrop-filter:none;"
+     onclick="if(event.target === this) closeRequestModal()"
+     role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="modal" style="width:528px; border-radius:16px; box-shadow:0 8px 12px rgba(0,0,0,0.2);">
+
+    <!-- ─── FORM VIEW ─── -->
+    <div id="request-form-view" class="flex flex-col">
+
+      <!-- Header -->
+      <div class="relative" style="padding:24px 32px 8px;">
+        <h2 class="font-serif text-[#262421] text-[24px] leading-8 capitalize pr-12">Add Company to Records</h2>
+        <button onclick="closeRequestModal()" aria-label="Close"
+          class="absolute flex items-center justify-center rounded-lg hover:bg-[#f5f5f1] transition-colors p-2"
+          style="right:26px; top:20px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#262421" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Body -->
+      <div class="flex flex-col gap-8 px-8 py-6">
+        <p class="text-[#262421] text-[16px] leading-6">
+          Routes to the firm data team for Salesforce enrollment. You'll be notified when it's added.
+        </p>
+
+        <!-- Company name -->
+        <div class="flex flex-col gap-2">
+          <label for="req-company" class="text-[#6c6c68] text-[14px] leading-5">Company name</label>
+          <input id="req-company" type="text" placeholder="Quantum Biotech Holdings"
+            class="h-10 border border-[#b9b7b2] rounded-lg px-4 text-[16px] text-[#262421] placeholder-[#b9b7b2] outline-none focus:border-[#262421] transition-colors" />
+        </div>
+
+        <!-- Website -->
+        <div class="flex flex-col gap-2">
+          <label for="req-website" class="text-[#6c6c68] text-[14px] leading-5">Website</label>
+          <input id="req-website" type="url" placeholder="https://example.com"
+            class="h-10 border border-[#b9b7b2] rounded-lg px-4 text-[16px] text-[#262421] placeholder-[#b9b7b2] outline-none focus:border-[#262421] transition-colors" />
+        </div>
+
+        <!-- Industry + Headquarters row -->
+        <div class="flex gap-4 items-start">
+          <div class="flex-1 min-w-0 flex flex-col gap-2">
+            <label for="req-industry" class="text-[#6c6c68] text-[14px] leading-5">Industry</label>
+            <input id="req-industry" type="text" placeholder="Biotechnology"
+              class="h-10 border border-[#b9b7b2] rounded-lg px-4 text-[16px] text-[#262421] placeholder-[#b9b7b2] outline-none focus:border-[#262421] transition-colors w-full" />
+          </div>
+          <div class="flex-1 min-w-0 flex flex-col gap-2">
+            <label for="req-hq" class="text-[#6c6c68] text-[14px] leading-5">Headquarters</label>
+            <input id="req-hq" type="text" placeholder="Cambridge, MA"
+              class="h-10 border border-[#b9b7b2] rounded-lg px-4 text-[16px] text-[#262421] placeholder-[#b9b7b2] outline-none focus:border-[#262421] transition-colors w-full" />
+          </div>
+        </div>
+
+        <!-- Reason for adding -->
+        <div class="flex flex-col gap-2">
+          <label for="req-reason" class="text-[#6c6c68] text-[14px] leading-5">Reason for adding</label>
+          <input id="req-reason" type="text" placeholder="Active deal opportunity in Q2"
+            class="h-10 border border-[#b9b7b2] rounded-lg px-4 text-[16px] text-[#262421] placeholder-[#b9b7b2] outline-none focus:border-[#262421] transition-colors" />
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="flex items-center justify-end gap-2 px-8 pb-8 pt-0">
+        <button onclick="closeRequestModal()"
+          class="h-10 px-4 border border-[#d8d5cf] rounded-lg text-[16px] text-[#262421] hover:bg-[#f5f5f1] transition-colors">
+          <span class="px-2">Cancel</span>
+        </button>
+        <button onclick="submitRequest()"
+          class="h-10 px-4 bg-[#3c3a37] text-white text-[16px] rounded-lg hover:bg-[#2f2e2a] transition-colors">
+          <span class="px-2">Submit Request</span>
+        </button>
+      </div>
+
+    </div><!-- /request-form-view -->
+
+    <!-- ─── THANKS VIEW ─── -->
+    <div id="request-thanks-view" class="flex-col" style="display:none;">
+      <div class="flex justify-end px-6 pt-6 pb-0">
+        <button onclick="closeRequestModal()" aria-label="Close" class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-[#f5f5f1] transition-colors">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#262421" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <div class="flex flex-col items-center text-center gap-4 px-8 pt-2 pb-10">
+        <div class="w-16 h-16 rounded-full bg-[#bdedde] flex items-center justify-center">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#00472e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        </div>
+        <h2 class="font-serif text-[#2f2e2a] text-[24px] leading-8">Request submitted</h2>
+        <p id="req-thanks-msg" class="text-[#878482] text-[15px] leading-6 max-w-[380px]">
+          The data team will review and add the company to Salesforce within 1–2 business days. You'll be notified when it's available.
+        </p>
+        <button onclick="closeRequestModal()" class="mt-4 h-10 px-6 bg-[#3c3a37] text-white text-[14px] rounded-lg hover:bg-[#2f2e2a] transition-colors">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
      FEEDBACK MODAL — opens from Service Offerings icon
 ══════════════════════════════════════════ -->
 <div id="feedback-modal" class="modal-backdrop" onclick="if(event.target === this) closeFeedbackModal()" role="dialog" aria-modal="true" aria-hidden="true">
@@ -1166,8 +1272,61 @@ function viewCloseMatch(name) {
   runSearch(name); // will likely show no-results again unless they happen to be in ENTITIES
 }
 
-function requestAddCompany() {
-  alert('Request submitted. The data team will review and add the company within 1–2 business days.');
+// Request-to-add modal
+function requestAddCompany(prefillName) {
+  // Optional prefill from the search input
+  const nameInput = document.getElementById('req-company');
+  if (nameInput) {
+    nameInput.value = (prefillName || document.getElementById('home-search')?.value || document.getElementById('entity-search')?.value || '').trim();
+  }
+  openRequestModal();
+}
+
+function openRequestModal() {
+  document.getElementById('request-form-view').style.display = 'flex';
+  document.getElementById('request-thanks-view').style.display = 'none';
+  const m = document.getElementById('request-modal');
+  m.classList.add('open');
+  m.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+  // Close any open dropdowns underneath
+  const dd = document.getElementById('home-search-dropdown');
+  if (dd) dd.style.display = 'none';
+}
+
+function closeRequestModal() {
+  const m = document.getElementById('request-modal');
+  m.classList.remove('open');
+  m.setAttribute('aria-hidden', 'true');
+  if (!document.getElementById('drawer').classList.contains('open') &&
+      !document.getElementById('feedback-modal').classList.contains('open')) {
+    document.body.style.overflow = '';
+  }
+  // Reset for next open
+  setTimeout(() => {
+    ['req-company','req-website','req-industry','req-hq','req-reason'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = '';
+    });
+    document.getElementById('request-form-view').style.display = 'flex';
+    document.getElementById('request-thanks-view').style.display = 'none';
+  }, 200);
+}
+
+function submitRequest() {
+  const company = document.getElementById('req-company').value.trim();
+  // Light validation: company name is the only required field
+  if (!company) {
+    document.getElementById('req-company').focus();
+    document.getElementById('req-company').style.borderColor = '#9b0000';
+    return;
+  }
+  // Personalize the thanks message
+  const msg = document.getElementById('req-thanks-msg');
+  msg.textContent = `We've routed "${company}" to the firm data team for Salesforce enrollment. You'll be notified within 1–2 business days.`;
+
+  document.getElementById('request-form-view').style.display = 'none';
+  document.getElementById('request-thanks-view').style.display = 'flex';
 }
 
 function searchExperiences() {
@@ -1452,10 +1611,13 @@ function submitFeedback() {
   document.getElementById('feedback-thanks-view').style.display = 'flex';
 }
 
-// Esc closes the modal too
+// Esc closes any open modal
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape' && document.getElementById('feedback-modal').classList.contains('open')) {
+  if (e.key !== 'Escape') return;
+  if (document.getElementById('feedback-modal').classList.contains('open')) {
     closeFeedbackModal();
+  } else if (document.getElementById('request-modal').classList.contains('open')) {
+    closeRequestModal();
   }
 });
 
