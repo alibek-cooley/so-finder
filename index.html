@@ -450,7 +450,7 @@
             <!-- Bottom helper link -->
             <div class="flex items-center gap-2 flex-wrap justify-center">
               <p class="text-[#8a8a8a] text-[16px] leading-6">Don't have a target entity?</p>
-              <a href="#" onclick="event.preventDefault(); alert('Find experience by description — coming soon.');"
+              <a href="#" onclick="event.preventDefault(); openExperienceBrowse();"
                  class="text-[#5a46ff] text-[16px] leading-6 underline hover:no-underline">
                 Find experience by description →
               </a>
@@ -607,53 +607,136 @@
 
             </div><!-- /tab-entity -->
 
-            <!-- ───────────── TAB: EXPERIENCE (Figma 109:3942) ───────────── -->
-            <div id="tab-experience" class="mt-6 flex flex-col gap-5" style="display:none;">
+            <!-- ───────────── TAB: EXPERIENCE ───────────── -->
+            <div id="tab-experience" class="mt-6" style="display:none;">
 
-              <!-- Describe The Work panel -->
-              <div class="bg-[#efefef] rounded-xl p-5 flex flex-col gap-4">
-                <div class="flex flex-col gap-1">
-                  <h3 class="font-serif text-[#2f2e2a] text-[20px] leading-7">Describe The Work</h3>
-                  <p class="text-[#8a8a8a] text-[14px] leading-5">Describe a fact pattern in plain language - the engine identifies relevant Service Offerings.</p>
-                </div>
-                <div class="flex gap-3 items-center">
-                  <input id="exp-search" type="text" placeholder="Cross-border Acquisition&hellip;"
-                    class="flex-1 h-11 bg-white border border-[#b9b7b2] rounded-lg px-4 text-[14px] text-[#262421] outline-none focus:border-[#262421] transition-colors" />
-                  <button class="h-11 px-5 bg-[#3c3a37] text-white text-[14px] rounded-lg whitespace-nowrap hover:bg-[#2f2e2a] transition-colors">Find Experience</button>
-                </div>
+              <div id="exp-layout" class="grid gap-6" style="grid-template-columns: 1fr;">
+
+                <!-- Main column -->
+                <div class="flex flex-col gap-5 min-w-0">
+
+                  <!-- Describe The Work panel (always shown) -->
+                  <div class="bg-[#efefef] rounded-xl p-5 flex flex-col gap-4">
+                    <div class="flex flex-col gap-1">
+                      <h3 class="font-serif text-[#2f2e2a] text-[20px] leading-7">Describe The Work</h3>
+                      <p class="text-[#8a8a8a] text-[14px] leading-5">Describe a fact pattern in plain language - the engine identifies relevant Service Offerings.</p>
+                    </div>
+                    <div class="flex gap-3 items-center">
+                      <input id="exp-search" type="text" placeholder="Cross-border Acquisition&hellip;"
+                        class="flex-1 h-11 bg-white border border-[#b9b7b2] rounded-lg px-4 text-[14px] text-[#262421] outline-none focus:border-[#262421] transition-colors" />
+                      <button class="h-11 px-5 bg-[#3c3a37] text-white text-[14px] rounded-lg whitespace-nowrap hover:bg-[#2f2e2a] transition-colors">Find Experience</button>
+                    </div>
+                  </div>
+
+                  <!-- Pre-Applied Filters (prospect state) -->
+                  <div id="exp-filters-applied" class="border border-[#e8e6e1] rounded-xl px-5 py-4 flex-col gap-3" style="display:none;">
+                    <p class="text-[#262421] text-[14px] font-bold">Pre-Applied Filters:</p>
+                    <div id="exp-filters" class="flex gap-2 flex-wrap"></div>
+                  </div>
+
+                  <!-- Try One Of These Starter Examples (browse state) -->
+                  <div id="exp-starter-section" class="flex-col gap-3 mt-2" style="display:none;">
+                    <h2 class="font-serif text-[#2f2e2a] text-[20px] leading-8">Try One Of These Starter Examples</h2>
+                    <div class="grid grid-cols-2 gap-4">
+                      <button onclick="useStarter('Cross-border M&amp;A', 'Acquisition of a European competitor with regulatory clearance and IP transfer.')"
+                        class="text-left border border-[#e8e6e1] rounded-xl p-4 flex flex-col gap-2 hover:border-[#b9b7b2] hover:shadow-[0_2px_8px_rgba(47,46,42,0.08)] transition-all bg-white">
+                        <p class="text-[#262421] text-[15px] font-bold">Cross-border M&amp;A</p>
+                        <p class="text-[#878482] text-[14px] leading-5">"Acquisition of a European competitor with regulatory clearance and IP transfer."</p>
+                      </button>
+                      <button onclick="useStarter('IPO representation', 'Company-side counsel for a NASDAQ IPO with three lead underwriters.')"
+                        class="text-left border border-[#e8e6e1] rounded-xl p-4 flex flex-col gap-2 hover:border-[#b9b7b2] hover:shadow-[0_2px_8px_rgba(47,46,42,0.08)] transition-all bg-white">
+                        <p class="text-[#262421] text-[15px] font-bold">IPO representation</p>
+                        <p class="text-[#878482] text-[14px] leading-5">"Company-side counsel for a NASDAQ IPO with three lead underwriters."</p>
+                      </button>
+                      <button onclick="useStarter('Patent portfolio dispute', 'Defending a life sciences company against patent infringement claims.')"
+                        class="text-left border border-[#e8e6e1] rounded-xl p-4 flex flex-col gap-2 hover:border-[#b9b7b2] hover:shadow-[0_2px_8px_rgba(47,46,42,0.08)] transition-all bg-white">
+                        <p class="text-[#262421] text-[15px] font-bold">Patent portfolio dispute</p>
+                        <p class="text-[#878482] text-[14px] leading-5">"Defending a life sciences company against patent infringement claims."</p>
+                      </button>
+                      <button onclick="useStarter('Pharma collaboration', 'Licensing and milestone structure for a drug development partnership.')"
+                        class="text-left border border-[#e8e6e1] rounded-xl p-4 flex flex-col gap-2 hover:border-[#b9b7b2] hover:shadow-[0_2px_8px_rgba(47,46,42,0.08)] transition-all bg-white">
+                        <p class="text-[#262421] text-[15px] font-bold">Pharma collaboration</p>
+                        <p class="text-[#878482] text-[14px] leading-5">"Licensing and milestone structure for a drug development partnership."</p>
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Comparable Matters table (prospect state) -->
+                  <div id="exp-matters-section" class="flex-col gap-2 mt-2" style="display:none;">
+                    <h2 class="font-serif text-[#2f2e2a] text-[20px] leading-8">Comparable Matters</h2>
+                    <div class="overflow-x-auto">
+                      <table class="matters-table">
+                        <thead>
+                          <tr>
+                            <th class="col-num">#</th>
+                            <th style="min-width:180px;">Matter ↓</th>
+                            <th style="min-width:160px;">Prediction Explanation</th>
+                            <th style="min-width:120px;">Service Offering</th>
+                            <th>Client</th>
+                            <th>Geography</th>
+                            <th>Industry</th>
+                            <th>Lead partner</th>
+                            <th>Year</th>
+                            <th>Match</th>
+                            <th>Action</th>
+                          </tr>
+                        </thead>
+                        <tbody id="exp-matters-tbody"></tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                </div><!-- /main column -->
+
+                <!-- Filters sidebar (browse state only) -->
+                <aside id="exp-filters-sidebar" class="bg-white border border-[#e8e6e1] rounded-xl p-5 flex-col gap-5 self-start" style="display:none;">
+                  <h3 class="font-serif text-[#2f2e2a] text-[20px] leading-8">Filters</h3>
+
+                  <div class="flex flex-col gap-2">
+                    <div class="flex items-center justify-between">
+                      <p class="text-[14px] text-[#262421] font-bold">Geography &amp; Jurisdiction</p>
+                      <span class="text-[12px] text-[#878482]">20</span>
+                    </div>
+                    <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" /><span class="text-[14px] text-[#262421]">Label</span></label>
+                    <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" /><span class="text-[14px] text-[#262421]">Label</span></label>
+                    <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" /><span class="text-[14px] text-[#262421]">Label</span></label>
+                    <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" /><span class="text-[14px] text-[#262421]">Label</span></label>
+                  </div>
+
+                  <div class="flex flex-col gap-2">
+                    <div class="flex items-center justify-between">
+                      <p class="text-[14px] text-[#262421] font-bold">Geography &amp; Jurisdiction</p>
+                      <span class="text-[12px] text-[#878482]">20</span>
+                    </div>
+                    <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" /><span class="text-[14px] text-[#262421]">US — federal</span></label>
+                    <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" /><span class="text-[14px] text-[#262421]">US — state</span></label>
+                    <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" /><span class="text-[14px] text-[#262421]">Label</span></label>
+                    <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" /><span class="text-[14px] text-[#262421]">Label</span></label>
+                  </div>
+
+                  <div class="flex flex-col gap-2">
+                    <div class="flex items-center justify-between">
+                      <p class="text-[14px] text-[#262421] font-bold">Deal Size</p>
+                      <span class="text-[12px] text-[#878482]">20</span>
+                    </div>
+                    <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" /><span class="text-[14px] text-[#262421]">Small (&lt;$100M)</span></label>
+                    <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" /><span class="text-[14px] text-[#262421]">Mid-market ($100M–$1B)</span></label>
+                    <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" /><span class="text-[14px] text-[#262421]">Large ($1B–$10B)</span></label>
+                    <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" /><span class="text-[14px] text-[#262421]">Mega (&gt;$10B)</span></label>
+                  </div>
+
+                  <div class="flex flex-col gap-2">
+                    <p class="text-[14px] text-[#262421] font-bold">Client Type</p>
+                    <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" /><span class="text-[14px] text-[#262421]">Existing client</span></label>
+                    <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" /><span class="text-[14px] text-[#262421]">Mid-market ($100M–$1B)</span></label>
+                    <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" /><span class="text-[14px] text-[#262421]">Prospect</span></label>
+                    <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" /><span class="text-[14px] text-[#262421]">Public</span></label>
+                  </div>
+
+                  <button class="h-10 mt-1 border border-[#d8d5cf] rounded-lg text-[14px] text-[#262421] hover:bg-[#f5f5f1] transition-colors">Show All Filters</button>
+                </aside>
+
               </div>
-
-              <!-- Pre-Applied Filters -->
-              <div class="border border-[#e8e6e1] rounded-xl px-5 py-4 flex flex-col gap-3">
-                <p class="text-[#262421] text-[14px] font-bold">Pre-Applied Filters:</p>
-                <div id="exp-filters" class="flex gap-2 flex-wrap"></div>
-              </div>
-
-              <!-- Comparable Matters table -->
-              <div class="flex flex-col gap-2 mt-2">
-                <h2 class="font-serif text-[#2f2e2a] text-[20px] leading-8">Comparable Matters</h2>
-                <div class="overflow-x-auto">
-                  <table class="matters-table">
-                    <thead>
-                      <tr>
-                        <th class="col-num">#</th>
-                        <th style="min-width:180px;">Matter ↓</th>
-                        <th style="min-width:160px;">Prediction Explanation</th>
-                        <th style="min-width:120px;">Service Offering</th>
-                        <th>Client</th>
-                        <th>Geography</th>
-                        <th>Industry</th>
-                        <th>Lead partner</th>
-                        <th>Year</th>
-                        <th>Match</th>
-                        <th>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody id="exp-matters-tbody"></tbody>
-                  </table>
-                </div>
-              </div>
-
             </div><!-- /tab-experience -->
 
             <!-- Floating feedback button (bottom corner of entity page) -->
@@ -1619,6 +1702,50 @@ function switchTab(tab) {
   document.getElementById('tab-experience').style.display = tab === 'experience' ? 'block' : 'none';
 }
 
+// ── Experience tab state: 'browse' (starter examples) vs 'prospect' (pre-applied + matters) ──
+function setExperienceState(state) {
+  const layout         = document.getElementById('exp-layout');
+  const sidebar        = document.getElementById('exp-filters-sidebar');
+  const starter        = document.getElementById('exp-starter-section');
+  const filtersApplied = document.getElementById('exp-filters-applied');
+  const mattersSection = document.getElementById('exp-matters-section');
+  const search         = document.getElementById('exp-search');
+
+  if (state === 'browse') {
+    layout.style.gridTemplateColumns = '1fr 280px';
+    sidebar.style.display        = 'flex';
+    starter.style.display        = 'flex';
+    filtersApplied.style.display = 'none';
+    mattersSection.style.display = 'none';
+    search.placeholder           = 'e.g. Cross-Border acquisition of a European competitor with patent portfolio carve-out and post-close indemnity consideration';
+  } else {
+    // prospect
+    layout.style.gridTemplateColumns = '1fr';
+    sidebar.style.display        = 'none';
+    starter.style.display        = 'none';
+    filtersApplied.style.display = 'flex';
+    mattersSection.style.display = 'flex';
+  }
+}
+
+// ── Home link "Find experience by description" → Experience tab in browse mode ──
+function openExperienceBrowse() {
+  navigate('entity');
+  // Switch to Experience tab and set browse state
+  switchTab('experience');
+  setExperienceState('browse');
+  // Clear any prior prospect query
+  document.getElementById('exp-search').value = '';
+  document.querySelector('#page-entity .bg-white.rounded-lg')?.scrollTo(0, 0);
+}
+
+// ── Starter example clicked → fill the search box ──
+function useStarter(title, description) {
+  const search = document.getElementById('exp-search');
+  search.value = description;
+  search.focus();
+}
+
 // ── Prospect card → Experience tab with prefilled context ──
 function openProspectExperience(idx) {
   const o = currentEntity?.offerings?.[idx];
@@ -1637,8 +1764,9 @@ function openProspectExperience(idx) {
   // Render comparable matters
   renderComparableMatters();
 
-  // Switch tab + scroll to top
+  // Switch tab + state + scroll to top
   switchTab('experience');
+  setExperienceState('prospect');
   document.querySelector('#page-entity .bg-white.rounded-lg').scrollTop = 0;
 }
 
