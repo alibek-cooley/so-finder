@@ -68,6 +68,54 @@
     body.home-active #topnav-default { display:none !important; }
     body.home-active main { padding:0 !important; }
 
+    /* ── Home autocomplete dropdown ── */
+    .home-dropdown {
+      position:absolute;
+      top:calc(100% + 4px);
+      left:0;
+      right:0;
+      background:#fff;
+      border-radius:8px;
+      box-shadow:0 4px 12px rgba(0,0,0,0.2);
+      z-index:50;
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+    }
+    .hd-header {
+      padding:8px 16px;
+      font-size:16px;
+      line-height:24px;
+      color:#000;
+    }
+    .hd-item {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:16px;
+      border-top:1px solid #dcdcdc;
+      cursor:pointer;
+      transition:background 0.1s;
+      min-height:68px;
+    }
+    .hd-item:hover { background:#fafaf7; }
+    .hd-item-info { display:flex; flex-direction:column; gap:4px; min-width:0; flex:1; }
+    .hd-item-name { font-size:16px; line-height:24px; font-weight:700; color:#151617; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .hd-item-meta { font-size:16px; line-height:24px; color:#3e3f41; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .hd-footer {
+      padding:8px 16px;
+      border-top:1px solid #dcdcdc;
+      font-size:16px;
+      line-height:24px;
+      color:#3e3f41;
+      white-space:nowrap;
+    }
+    .hd-footer a { color:#000; text-decoration:underline; cursor:pointer; }
+
+    .badge-in-records      { background:#bdedde; color:#00472e; font-size:14px; line-height:20px; padding:4px 12px; border-radius:6px; white-space:nowrap; }
+    .badge-not-in-records  { background:#fff0c1; color:#9b5d00; font-size:14px; line-height:20px; padding:4px 12px; border-radius:6px; white-space:nowrap; }
+
     /* ── Search dropdown ── */
     #search-dropdown {
       position:absolute;
@@ -318,12 +366,14 @@
               </div>
 
               <!-- Search + Find -->
-              <div class="flex gap-4 items-center">
+              <div id="home-filters-row" class="flex gap-4 items-center relative">
                 <div class="flex-1 min-w-0">
                   <div class="flex items-center gap-1 bg-[#f4f4f4] rounded-lg px-4 h-12 overflow-hidden">
                     <span class="icon icon-16 icon-search" style="background-color:#8a8a8a;"></span>
                     <input id="home-search" type="text" placeholder="e.g. Aldernash" autocomplete="off"
                       class="flex-1 bg-transparent text-[16px] text-[#262421] leading-6 outline-none border-none placeholder-[#8a8a8a] ml-1"
+                      oninput="onHomeSearchInput(this.value)"
+                      onfocus="onHomeSearchInput(this.value)"
                       onkeydown="if(event.key==='Enter') runHomeSearch(this.value)" />
                   </div>
                 </div>
@@ -331,6 +381,9 @@
                   class="h-12 px-6 bg-[#3c3a37] text-white text-[16px] leading-6 rounded-lg whitespace-nowrap hover:bg-[#2f2e2a] transition-colors shrink-0">
                   Find
                 </button>
+
+                <!-- Autocomplete dropdown -->
+                <div id="home-search-dropdown" class="home-dropdown" style="display:none;"></div>
               </div>
 
             </div>
@@ -804,8 +857,14 @@
 <!-- ═══════ Click-outside to close dropdown ═══════ -->
 <script>
 document.addEventListener('click', e => {
-  if (!document.getElementById('search-wrapper').contains(e.target)) {
+  const entityWrap = document.getElementById('search-wrapper');
+  if (entityWrap && !entityWrap.contains(e.target)) {
     document.getElementById('search-dropdown').style.display = 'none';
+  }
+  const homeWrap = document.getElementById('home-filters-row');
+  if (homeWrap && !homeWrap.contains(e.target)) {
+    const dd = document.getElementById('home-search-dropdown');
+    if (dd) dd.style.display = 'none';
   }
 });
 
@@ -822,7 +881,7 @@ document.addEventListener('keydown', e => {
 const ENTITIES = [
   {
     id: 1,
-    name: 'Aldernash Capital',
+    name: 'Aldernash Therapeutics, Inc.',
     industry: 'Biotechnology',
     size: 'Mid-market',
     entityType: 'Public (NASDAQ)',
@@ -830,6 +889,7 @@ const ENTITIES = [
     founded: '2008',
     jurisdiction: 'Delaware',
     status: 'Active client since 2014',
+    inRecords: true,
     match: 94,
     soTitle: 'IPO &amp; Capital Markets',
     soDesc: 'Transaction support for divestitures and carve-out acquisitions in healthcare and life sciences, including TSAs, regulatory transitions, and Day 1 readiness.',
@@ -852,6 +912,7 @@ const ENTITIES = [
     founded: '2015',
     jurisdiction: 'Cayman Islands',
     status: 'Prospect since 2023',
+    inRecords: true,
     match: 81,
     soTitle: 'Fund Formation',
     soDesc: 'Early-stage venture fund formation and portfolio company support, with a focus on life sciences and deep technology sectors.',
@@ -870,6 +931,7 @@ const ENTITIES = [
     founded: '2001',
     jurisdiction: 'Delaware',
     status: 'Active client since 2009',
+    inRecords: true,
     match: 77,
     soTitle: 'M&amp;A — Acquisition',
     soDesc: 'Buy-side and sell-side M&A advisory with deep experience in healthcare, industrials, and consumer sectors.',
@@ -889,6 +951,7 @@ const ENTITIES = [
     founded: '2010',
     jurisdiction: 'Singapore',
     status: 'Active client since 2018',
+    inRecords: true,
     match: 68,
     soTitle: 'Real Estate Finance',
     soDesc: 'Cross-border real estate investment and development financing, with expertise in APAC markets and sustainability-linked structures.',
@@ -897,6 +960,32 @@ const ENTITIES = [
       { badge:'Prospect', title:'REIT Formation', matters:'0 matters', quarter:'—', partners:12, expertise:['REIT Structuring','Tax Optimization'] },
     ]
   },
+  {
+    id: 5,
+    name: 'Alderwood Capital Partners',
+    industry: 'Private Equity',
+    size: 'Large',
+    entityType: 'Limited Partnership',
+    hq: 'New York, NY',
+    founded: '2005',
+    jurisdiction: 'Delaware',
+    status: 'Active client since 2012',
+    inRecords: true,
+    match: 72,
+    soTitle: 'Fund Formation',
+    soDesc: 'Institutional fund formation and ongoing portfolio support across buyout and growth strategies.',
+    offerings: [
+      { badge:'Existing', title:'Fund Formation — GP Counsel',  matters:'6 matters', quarter:'Q3 2024', partners:38, expertise:['LPA Drafting','Side Letters'] },
+      { badge:'Prospect', title:'Continuation Fund Transaction', matters:'1 matter',  quarter:'Q1 2025', partners:14, expertise:['GP-Led Secondaries'] },
+    ]
+  },
+];
+
+// Suggestions only — we don't have a profile for these (Salesforce knows them
+// only by name, e.g. discovered via news/CapIQ). They appear in the dropdown
+// with a "Not In Records" badge.
+const SUGGESTIONS_NOT_IN_RECORDS = [
+  { name: 'Alderway Systems Group', industry: 'Technology', hq: 'Austin, TX' },
 ];
 
 // ═══════════════════════════════════════════════════
@@ -915,12 +1004,58 @@ function navigate(page) {
 // Find button on the homepage hands off to the entity page's search
 function runHomeSearch(val) {
   const q = (val || '').trim();
+  document.getElementById('home-search-dropdown').style.display = 'none';
   navigate('entity');
   if (q) {
     const input = document.getElementById('entity-search');
     if (input) input.value = q;
     runSearch(q);
   }
+}
+
+// Homepage autocomplete dropdown
+function onHomeSearchInput(val) {
+  const dd = document.getElementById('home-search-dropdown');
+  const q = (val || '').trim().toLowerCase();
+  if (!q) { dd.style.display = 'none'; return; }
+
+  const inRec  = ENTITIES.filter(e => e.name.toLowerCase().includes(q))
+                         .map(e => ({ name:e.name, industry:e.industry, hq:e.hq, inRecords:true, id:e.id }));
+  const notRec = SUGGESTIONS_NOT_IN_RECORDS.filter(e => e.name.toLowerCase().includes(q))
+                         .map(e => ({ name:e.name, industry:e.industry, hq:e.hq, inRecords:false }));
+  const matches = [...inRec, ...notRec];
+
+  if (!matches.length) {
+    dd.innerHTML = `
+      <div class="hd-header" style="border:none;">No matches in Salesforce</div>
+      <div class="hd-footer">Don't see your company? <a onclick="event.preventDefault(); requestAddCompany();">Request to add</a></div>
+    `;
+    dd.style.display = 'flex';
+    return;
+  }
+
+  const visible = matches.slice(0, 5);
+  dd.innerHTML = `
+    <div class="hd-header">${matches.length} matches in Salesforce</div>
+    ${visible.map(m => `
+      <a class="hd-item" onclick="selectHomeSuggestion('${m.name.replace(/'/g, "\\'")}', ${m.inRecords ? m.id : 'null'})">
+        <div class="hd-item-info">
+          <p class="hd-item-name">${m.name}</p>
+          <p class="hd-item-meta">${m.industry} · ${m.hq}</p>
+        </div>
+        <span class="${m.inRecords ? 'badge-in-records' : 'badge-not-in-records'}">${m.inRecords ? 'In Records' : 'Not In Records'}</span>
+      </a>
+    `).join('')}
+    <div class="hd-footer">Don't see your company? <a onclick="event.preventDefault(); requestAddCompany();">Request to add</a></div>
+  `;
+  dd.style.display = 'flex';
+}
+
+function selectHomeSuggestion(name, id) {
+  document.getElementById('home-search').value = name;
+  document.getElementById('home-search-dropdown').style.display = 'none';
+  // Hand off to entity page search (in-records → profile, not-in-records → no-results state)
+  runHomeSearch(name);
 }
 
 // ═══════════════════════════════════════════════════
