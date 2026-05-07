@@ -67,6 +67,27 @@
     #sidebar, #topnav-default { display:none !important; }
     main { padding:0 !important; }
 
+    /* ── Filter pills (Pre-Applied Filters) ── */
+    .filter-pill {
+      display:inline-flex; align-items:center; gap:8px;
+      padding:6px 12px;
+      border:1px solid #d8d5cf;
+      border-radius:999px;
+      font-size:14px; color:#262421;
+      background:#fff;
+      white-space:nowrap;
+    }
+    .filter-pill .x { color:#878482; cursor:pointer; user-select:none; font-size:14px; line-height:1; }
+    .filter-pill .x:hover { color:#262421; }
+
+    /* ── Comparable Matters table ── */
+    .matters-table { width:100%; border-collapse:collapse; font-size:13px; }
+    .matters-table th { text-align:left; font-weight:400; color:#878482; padding:12px 8px; border-bottom:1px solid #e8e6e1; vertical-align:top; }
+    .matters-table td { padding:14px 8px; border-bottom:1px solid #f0eee9; color:#262421; vertical-align:top; }
+    .matters-table tr:hover td { background:#fafaf7; }
+    .matters-table .col-num { color:#878482; width:24px; }
+    .matters-table .matter-title { font-weight:400; line-height:18px; }
+
     /* ── Entity tabs ── */
     .ent-tabs { display:flex; gap:8px; border-bottom:1px solid #e8e6e1; }
     .ent-tab {
@@ -483,9 +504,12 @@
 
             <!-- Tabs -->
             <div class="ent-tabs">
-              <button class="ent-tab active">Entity</button>
-              <button class="ent-tab" onclick="alert('Experience tab — coming soon.')">Experience</button>
+              <button class="ent-tab active" data-tab="entity"     onclick="switchTab('entity')">Entity</button>
+              <button class="ent-tab"        data-tab="experience" onclick="switchTab('experience')">Experience</button>
             </div>
+
+            <!-- ───────────── TAB: ENTITY ───────────── -->
+            <div id="tab-entity">
 
             <!-- Back link -->
             <button onclick="navigate('home')" class="flex items-center gap-2 mt-6 text-[#262421] hover:opacity-70 transition-opacity">
@@ -601,6 +625,123 @@
               </div>
 
             </div>
+
+            </div><!-- /tab-entity -->
+
+            <!-- ───────────── TAB: EXPERIENCE (Figma 109:3941) ───────────── -->
+            <div id="tab-experience" class="mt-6" style="display:none;">
+              <div class="grid gap-6" style="grid-template-columns: 1fr 280px;">
+
+                <!-- Main column -->
+                <div class="flex flex-col gap-5 min-w-0">
+
+                  <!-- Describe The Work panel -->
+                  <div class="bg-[#efefef] rounded-xl p-5 flex flex-col gap-4">
+                    <div class="flex flex-col gap-1">
+                      <h3 class="font-serif text-[#2f2e2a] text-[20px] leading-7">Describe The Work</h3>
+                      <p class="text-[#8a8a8a] text-[14px] leading-5">Describe a fact pattern in plain language - the engine identifies relevant Service Offerings.</p>
+                    </div>
+                    <div class="flex gap-3 items-center">
+                      <input id="exp-search" type="text" placeholder="Cross-border Acquisition&hellip;"
+                        class="flex-1 h-11 bg-white border border-[#b9b7b2] rounded-lg px-4 text-[14px] text-[#262421] outline-none focus:border-[#262421] transition-colors" />
+                      <button class="h-11 px-5 bg-[#3c3a37] text-white text-[14px] rounded-lg whitespace-nowrap hover:bg-[#2f2e2a] transition-colors">Find Experience</button>
+                    </div>
+                  </div>
+
+                  <!-- Why? card -->
+                  <div id="exp-why" class="bg-[#fff0c1] rounded-xl px-5 py-4 flex-col gap-1" style="display:none;">
+                    <p class="text-[#262421] text-[14px] font-bold leading-5">Why?</p>
+                    <p id="exp-why-text" class="text-[#262421] text-[14px] leading-5"></p>
+                  </div>
+
+                  <!-- Pre-Applied Filters -->
+                  <div class="border border-[#e8e6e1] rounded-xl px-5 py-4 flex flex-col gap-3">
+                    <p class="text-[#262421] text-[14px] font-bold">Pre-Applied Filters:</p>
+                    <div id="exp-filters" class="flex gap-2 flex-wrap"></div>
+                  </div>
+
+                  <!-- Comparable Matters table -->
+                  <div class="flex flex-col gap-2 mt-2">
+                    <h2 class="font-serif text-[#2f2e2a] text-[20px] leading-8">Comparable Matters</h2>
+                    <div class="overflow-x-auto">
+                      <table class="matters-table">
+                        <thead>
+                          <tr>
+                            <th class="col-num">#</th>
+                            <th>Matter ↓</th>
+                            <th>Service Offering</th>
+                            <th>Client</th>
+                            <th>Geography</th>
+                            <th>Industry</th>
+                            <th>Lead partner</th>
+                            <th>Year</th>
+                            <th>Match</th>
+                            <th>Action</th>
+                          </tr>
+                        </thead>
+                        <tbody id="exp-matters-tbody"></tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                </div><!-- /main column -->
+
+                <!-- Filters sidebar -->
+                <aside class="bg-white border border-[#e8e6e1] rounded-xl p-5 flex flex-col gap-5 self-start">
+                  <h3 class="font-serif text-[#2f2e2a] text-[20px] leading-8">Filters</h3>
+
+                  <!-- Geography & Jurisdiction (1) -->
+                  <div class="flex flex-col gap-2">
+                    <div class="flex items-center justify-between">
+                      <p class="text-[14px] text-[#262421] font-bold">Geography &amp; Jurisdiction</p>
+                      <span class="text-[12px] text-[#878482]">20</span>
+                    </div>
+                    <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" /><span class="text-[14px] text-[#262421]">Label</span></label>
+                    <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" /><span class="text-[14px] text-[#262421]">Label</span></label>
+                    <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" /><span class="text-[14px] text-[#262421]">Label</span></label>
+                    <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" /><span class="text-[14px] text-[#262421]">Label</span></label>
+                  </div>
+
+                  <!-- Geography & Jurisdiction (2 — US specific) -->
+                  <div class="flex flex-col gap-2">
+                    <div class="flex items-center justify-between">
+                      <p class="text-[14px] text-[#262421] font-bold">Geography &amp; Jurisdiction</p>
+                      <span class="text-[12px] text-[#878482]">20</span>
+                    </div>
+                    <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" /><span class="text-[14px] text-[#262421]">US — federal</span></label>
+                    <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" /><span class="text-[14px] text-[#262421]">US — state</span></label>
+                    <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" /><span class="text-[14px] text-[#262421]">Label</span></label>
+                    <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" /><span class="text-[14px] text-[#262421]">Label</span></label>
+                  </div>
+
+                  <!-- Deal Size -->
+                  <div class="flex flex-col gap-2">
+                    <div class="flex items-center justify-between">
+                      <p class="text-[14px] text-[#262421] font-bold">Deal Size</p>
+                      <span class="text-[12px] text-[#878482]">20</span>
+                    </div>
+                    <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" /><span class="text-[14px] text-[#262421]">Small (&lt;$100M)</span></label>
+                    <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" /><span class="text-[14px] text-[#262421]">Mid-market ($100M–$1B)</span></label>
+                    <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" /><span class="text-[14px] text-[#262421]">Large ($1B–$10B)</span></label>
+                    <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" /><span class="text-[14px] text-[#262421]">Mega (&gt;$10B)</span></label>
+                  </div>
+
+                  <!-- Client Type -->
+                  <div class="flex flex-col gap-2">
+                    <div class="flex items-center justify-between">
+                      <p class="text-[14px] text-[#262421] font-bold">Client Type</p>
+                    </div>
+                    <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" /><span class="text-[14px] text-[#262421]">Existing client</span></label>
+                    <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" /><span class="text-[14px] text-[#262421]">Mid-market ($100M–$1B)</span></label>
+                    <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" /><span class="text-[14px] text-[#262421]">Prospect</span></label>
+                    <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" /><span class="text-[14px] text-[#262421]">Public</span></label>
+                  </div>
+
+                  <button class="h-10 mt-1 border border-[#d8d5cf] rounded-lg text-[14px] text-[#262421] hover:bg-[#f5f5f1] transition-colors">Show All Filters</button>
+                </aside>
+
+              </div>
+            </div><!-- /tab-experience -->
 
             <!-- Floating feedback button (bottom corner of entity page) -->
             <button onclick="openFeedbackModal()" aria-label="Share feedback" title="Share feedback"
@@ -1187,6 +1328,8 @@ function navigate(page) {
     item.classList.toggle('active', item.dataset.nav === page);
   });
   // Each page in the new design has its own top nav (shell is hidden globally)
+  // When (re)entering the entity page, default to the Entity tab.
+  if (page === 'entity' && typeof switchTab === 'function') switchTab('entity');
   window.scrollTo(0, 0);
 }
 
@@ -1478,10 +1621,10 @@ function renderExistingCard(o, idx) {
 
 function renderProspectCard(o, idx) {
   return `
-    <div class="off-card" onclick="openDrawer(${idx})">
+    <div class="off-card" onclick="openProspectExperience(${idx})">
       <div class="off-card-row">
         <span class="badge-prospect">Prospect</span>
-        <button class="off-view-details" onclick="event.stopPropagation(); openDrawer(${idx})">View Details</button>
+        <button class="off-view-details" onclick="event.stopPropagation(); openProspectExperience(${idx})">View Details</button>
       </div>
       <p class="off-matters">${o.matters}</p>
       <p class="off-title">${o.title}</p>
@@ -1494,6 +1637,71 @@ function renderProspectCard(o, idx) {
       ` : ''}
     </div>
   `;
+}
+
+// ── Entity / Experience tab switching ──
+function switchTab(tab) {
+  document.querySelectorAll('.ent-tab').forEach(t => t.classList.remove('active'));
+  const btn = document.querySelector(`.ent-tab[data-tab="${tab}"]`);
+  if (btn) btn.classList.add('active');
+  document.getElementById('tab-entity').style.display     = tab === 'entity'     ? 'block' : 'none';
+  document.getElementById('tab-experience').style.display = tab === 'experience' ? 'block' : 'none';
+}
+
+// ── Prospect card → Experience tab with prefilled context ──
+function openProspectExperience(idx) {
+  const o = currentEntity?.offerings?.[idx];
+  if (!o) return;
+
+  // Prefill the search box
+  document.getElementById('exp-search').value = o.title;
+
+  // Populate Why? card
+  const whyEl = document.getElementById('exp-why');
+  if (o.why) {
+    whyEl.style.display = 'flex';
+    document.getElementById('exp-why-text').innerHTML = o.why;
+  } else {
+    whyEl.style.display = 'none';
+  }
+
+  // Pre-applied filter pills (SO + Industry)
+  const industry = currentEntity?.industry || 'Biotech';
+  document.getElementById('exp-filters').innerHTML = `
+    <span class="filter-pill">SO: ${o.title} <span class="x" onclick="event.stopPropagation(); this.parentElement.remove();">×</span></span>
+    <span class="filter-pill">Industry: ${industry} <span class="x" onclick="event.stopPropagation(); this.parentElement.remove();">×</span></span>
+  `;
+
+  // Render comparable matters
+  renderComparableMatters();
+
+  // Switch tab + scroll to top
+  switchTab('experience');
+  document.querySelector('#page-entity .bg-white.rounded-lg').scrollTop = 0;
+}
+
+const COMPARABLE_MATTERS = [
+  { id:1, matter:'Helix Oncology acquisition of Munich gene therapy biotech',           so:'Cross-border M&amp;A', client:'Helix Onc.',  geography:'US/UK ✓', industry:'Biotech', lead:'M. Velasquez',     year:'2024', match:'2 / 2' },
+  { id:2, matter:'Aurelia Bio cross-border acquisition with EU clearance',              so:'Cross-border M&amp;A', client:'Aurelia Bio', geography:'US/UK ✓', industry:'Biotech', lead:'R. Nakamura',      year:'2024', match:'2 / 2' },
+  { id:3, matter:'Northbeam acquisition of European competitor with patent carve-out', so:'Cross-border M&amp;A', client:'Northbeam',   geography:'US/UK ✓', industry:'Biotech', lead:'B. Anastopoulos', year:'2024', match:'1 / 2' },
+  { id:4, matter:'Solstice Bio acquisition of UK pharma R&amp;D unit',                  so:'Cross-border M&amp;A', client:'Solstice Bio',geography:'US/UK ✓', industry:'Biotech', lead:'A. Petranova',     year:'2024', match:'1 / 2' },
+];
+
+function renderComparableMatters() {
+  document.getElementById('exp-matters-tbody').innerHTML = COMPARABLE_MATTERS.map(m => `
+    <tr>
+      <td class="col-num">${m.id}</td>
+      <td class="matter-title">${m.matter}</td>
+      <td>${m.so}</td>
+      <td>${m.client}</td>
+      <td>${m.geography}</td>
+      <td>${m.industry}</td>
+      <td>${m.lead}</td>
+      <td>${m.year}</td>
+      <td>${m.match}</td>
+      <td><button class="h-8 px-3 border border-[#d8d5cf] rounded-lg text-[13px] text-[#262421] hover:bg-[#f5f5f1] transition-colors">View</button></td>
+    </tr>
+  `).join('');
 }
 
 // ═══════════════════════════════════════════════════
