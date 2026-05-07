@@ -1091,7 +1091,7 @@
       </div>
 
       <!-- Back row -->
-      <button onclick="backToList()" class="flex items-center gap-2 text-left hover:opacity-70 transition-opacity self-start">
+      <button id="md-back-btn" onclick="backToList()" class="flex items-center gap-2 text-left hover:opacity-70 transition-opacity self-start">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#262421" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <polyline points="15 18 9 12 15 6"/>
         </svg>
@@ -1100,7 +1100,10 @@
 
       <!-- Title block -->
       <div class="flex flex-col gap-4">
-        <span id="md-quality" class="badge-rich self-start" style="font-size:14px; padding:4px 12px;">Rich</span>
+        <div class="flex items-center gap-2 flex-wrap">
+          <span id="md-quality"   class="badge-rich" style="font-size:14px; padding:4px 12px;">Rich</span>
+          <span id="md-quality-2" class="badge-rich" style="font-size:12px; padding:4px 12px; display:none; text-transform:uppercase; letter-spacing:0.5px;">Rich Narrative</span>
+        </div>
         <h2 id="md-title" class="font-serif text-[#2f2e2a] text-[32px] leading-[40px] tracking-[-0.24px]">
           Aldernash Therapeutics IPO — Initial Public Offering On NASDAQ
         </h2>
@@ -1125,6 +1128,12 @@
           <p class="text-[#545454] text-[14px]">Listing exchange</p>
           <p id="md-listing" class="font-serif text-[#2f2e2a] text-[24px] leading-8">NASDAQ: ALDR</p>
         </div>
+      </div>
+
+      <!-- Match summary (only shown when opened from Experience table) -->
+      <div id="md-match-summary" class="flex-col gap-3" style="display:none;">
+        <h3 class="font-serif text-[#2f2e2a] text-[20px] leading-8">Match summary</h3>
+        <div id="md-match-list" class="border border-[#e8e6e1] rounded-xl p-5 flex flex-col gap-4"></div>
       </div>
 
       <!-- Matter phase profile -->
@@ -1816,20 +1825,84 @@ function openProspectExperience(idx) {
 const COMPARABLE_MATTERS = [
   { id:1, matter:'Helix Oncology acquisition of Munich gene therapy biotech',
     predictionExplanation:'Both criteria match — cross-border M&amp;A in biotech sector.',
-    so:'Cross-border M&amp;A', client:'Helix Onc.',  geography:'US/UK ✓', industry:'Biotech', lead:'M. Velasquez',     year:'2024', match:'2 / 2', matchSearch:'5 / 5' },
+    so:'Cross-border M&amp;A', client:'Helix Onc.',  geography:'US/UK ✓', industry:'Biotech', lead:'M. Velasquez',     year:'2024', match:'2 / 2', matchSearch:'5 / 5',
+    // Detail-drawer fields (from Figma 88:4084)
+    detailTitle:'Helix Oncology Acquisition Of Munich Gene Therapy Biotech',
+    detailSubtitle:'Helix Oncology · $1.2B all-cash · M. Velasquez Lead',
+    detailMatch:'5 / 5 MATCH',
+    detailNarrative:'RICH NARRATIVE',
+    serviceOffering:'IPO — Company Representation',
+    phase:'Closed', dealValue:'$340M', listingExchange:'NASDAQ: ALDR',
+    matchSummary:[
+      { label:'Geography: US/Germany',                 desc:"Cross-border deal between US acquirer and European target — matches Aldernash's stated EU expansion interest." },
+      { label:'Industry: Biotech (gene therapy)',      desc:"Same industry as Aldernash. Gene therapy specialty closely aligned with Aldernash's oncology pipeline." },
+      { label:'Deal size: $1.2B (mid-market)',         desc:"Within the size range typical for Aldernash's likely acquisition targets ($500M–$2B)." },
+      { label:'Structure: Patent portfolio carve-out', desc:"Required complex IP structuring — Aldernash's 38 issued patents will likely need similar treatment." },
+      { label:'Lead partner: M. Velasquez',            desc:"Already Aldernash's account owner — natural continuity if pursuit advances." },
+    ],
+    phases:[{name:'Diligence',done:true},{name:'Negotiation',done:true},{name:'Sign',done:true},{name:'Regulatory',done:true},{name:'Close',done:true}],
+    quality:'Rich',
+    narrativeQuote:"Represented Helix Oncology in its $1.2B all-cash acquisition of Munich-based gene therapy biotech. Coordinated cross-border due diligence, EU regulatory clearance, and patent portfolio carve-out across multiple workstreams.",
+    teamMembers:[
+      { name:'M. Velasquez', role:'Lead partner · Capital Markets · NYC' },
+      { name:'L. Bauer',     role:'Partner · EU Regulatory · Munich' },
+    ],
+  },
   { id:2, matter:'Aurelia Bio cross-border acquisition with EU clearance',
     predictionExplanation:'Both criteria match — cross-border M&amp;A in biotech sector.',
-    so:'Cross-border M&amp;A', client:'Aurelia Bio', geography:'US/UK ✓', industry:'Biotech', lead:'R. Nakamura',      year:'2024', match:'2 / 2', matchSearch:'5 / 5' },
+    so:'Cross-border M&amp;A', client:'Aurelia Bio', geography:'US/UK ✓', industry:'Biotech', lead:'R. Nakamura',      year:'2024', match:'2 / 2', matchSearch:'5 / 5',
+    detailTitle:'Aurelia Bio Cross-Border Acquisition With EU Clearance',
+    detailSubtitle:'Aurelia Bio · $890M cash + stock · R. Nakamura Lead',
+    detailMatch:'5 / 5 MATCH', detailNarrative:'RICH NARRATIVE',
+    serviceOffering:'IPO — Company Representation', phase:'Closed', dealValue:'$890M', listingExchange:'NASDAQ: AURB',
+    matchSummary:[
+      { label:'Geography: US/UK',                desc:'Cross-border deal between US acquirer and UK target — matches the requested geography.' },
+      { label:'Industry: Biotech',               desc:'Direct biotech sector match.' },
+      { label:'Deal size: $890M (mid-market)',   desc:'Within the requested deal-size range.' },
+      { label:'Structure: Cash + stock',         desc:'Mixed-consideration structure consistent with described scenario.' },
+      { label:'Lead partner: R. Nakamura',       desc:'Tax-structuring lead with prior EU clearance experience.' },
+    ],
+    phases:[{name:'Diligence',done:true},{name:'Negotiation',done:true},{name:'Sign',done:true},{name:'Regulatory',done:true},{name:'Close',done:true}],
+    quality:'Rich',
+  },
   { id:3, matter:'Northbeam acquisition of European competitor with patent carve-out',
     predictionExplanation:'Cross-border M&amp;A match — but industrials sector, not biotech.',
-    so:'Cross-border M&amp;A', client:'Northbeam',   geography:'US/UK ✓', industry:'Biotech', lead:'B. Anastopoulos', year:'2024', match:'1 / 2', matchSearch:'4 / 5' },
+    so:'Cross-border M&amp;A', client:'Northbeam',   geography:'US/UK ✓', industry:'Biotech', lead:'B. Anastopoulos', year:'2024', match:'1 / 2', matchSearch:'4 / 5',
+    detailTitle:'Northbeam Acquisition Of European Competitor With Patent Carve-Out',
+    detailSubtitle:'Northbeam · $640M · B. Anastopoulos Lead',
+    detailMatch:'4 / 5 MATCH', detailNarrative:'RICH NARRATIVE',
+    serviceOffering:'M&amp;A — Buy-side Representation', phase:'Closed', dealValue:'$640M', listingExchange:'—',
+    matchSummary:[
+      { label:'Geography: US/UK',                desc:'Cross-border match.' },
+      { label:'Industry: Industrials',           desc:"Not biotech — industrials sector. Adjacent learnings only." },
+      { label:'Deal size: $640M (mid-market)',   desc:'Within the requested deal-size range.' },
+      { label:'Structure: Patent portfolio carve-out', desc:'Direct structural match.' },
+      { label:'Lead partner: B. Anastopoulos',   desc:'Cross-border M&amp;A specialist.' },
+    ],
+    phases:[{name:'Diligence',done:true},{name:'Negotiation',done:true},{name:'Sign',done:true},{name:'Regulatory',done:true},{name:'Close',done:true}],
+    quality:'Partial',
+  },
   { id:4, matter:'Solstice Bio acquisition of UK pharma R&amp;D unit',
     predictionExplanation:'Cross-border M&amp;A match — but pharma sector, adjacent to biotech.',
-    so:'Cross-border M&amp;A', client:'Solstice Bio',geography:'US/UK ✓', industry:'Biotech', lead:'A. Petranova',     year:'2024', match:'1 / 2', matchSearch:'4 / 5' },
+    so:'Cross-border M&amp;A', client:'Solstice Bio',geography:'US/UK ✓', industry:'Biotech', lead:'A. Petranova',     year:'2024', match:'1 / 2', matchSearch:'4 / 5',
+    detailTitle:'Solstice Bio Acquisition Of UK Pharma R&amp;D Unit',
+    detailSubtitle:'Solstice Bio · $410M · A. Petranova Lead',
+    detailMatch:'4 / 5 MATCH', detailNarrative:'RICH NARRATIVE',
+    serviceOffering:'M&amp;A — Buy-side Representation', phase:'Closed', dealValue:'$410M', listingExchange:'—',
+    matchSummary:[
+      { label:'Geography: US/UK',                desc:'Cross-border match.' },
+      { label:'Industry: Pharma (adjacent)',     desc:'Pharma adjacent to biotech — partial industry overlap.' },
+      { label:'Deal size: $410M',                desc:'Within the requested deal-size range.' },
+      { label:'Structure: R&amp;D carve-out',    desc:'Carve-out structure aligned.' },
+      { label:'Lead partner: A. Petranova',      desc:'Pharma-licensing-focused partner.' },
+    ],
+    phases:[{name:'Diligence',done:true},{name:'Negotiation',done:true},{name:'Sign',done:true},{name:'Regulatory',done:true},{name:'Close',done:true}],
+    quality:'Partial',
+  },
 ];
 
 function renderComparableMatters(matchKey = 'match') {
-  document.getElementById('exp-matters-tbody').innerHTML = COMPARABLE_MATTERS.map(m => `
+  document.getElementById('exp-matters-tbody').innerHTML = COMPARABLE_MATTERS.map((m, idx) => `
     <tr>
       <td class="col-num">${m.id}</td>
       <td class="matter-title">${m.matter}</td>
@@ -1841,7 +1914,7 @@ function renderComparableMatters(matchKey = 'match') {
       <td>${m.lead}</td>
       <td>${m.year}</td>
       <td>${m[matchKey] || m.match}</td>
-      <td><button class="h-8 px-3 border border-[#d8d5cf] rounded-lg text-[13px] text-[#262421] hover:bg-[#f5f5f1] transition-colors whitespace-nowrap">Matter Details</button></td>
+      <td><button onclick="openExperienceMatterDetail(${idx})" class="h-8 px-3 border border-[#d8d5cf] rounded-lg text-[13px] text-[#262421] hover:bg-[#f5f5f1] transition-colors whitespace-nowrap">Matter Details</button></td>
     </tr>
   `).join('');
 }
@@ -1967,54 +2040,120 @@ function openDrawer(offeringIdx) {
 function openMatterDetail(idx) {
   const m = currentMatters[idx];
   if (!m) return;
+  showMatterDetailDrawer(m, { showBack: true, showMatchSummary: false });
+}
 
-  // Title block
-  const qBadge = document.getElementById('md-quality');
-  qBadge.textContent = m.quality;
-  qBadge.className = 'badge-' + m.quality.toLowerCase() + ' self-start';
-  qBadge.style.fontSize = '14px';
-  qBadge.style.padding = '4px 12px';
+// Opened from Comparable Matters table on the Experience tab
+function openExperienceMatterDetail(idx) {
+  const m = COMPARABLE_MATTERS[idx];
+  if (!m) return;
 
-  document.getElementById('md-title').textContent = m.title;
+  // Make sure the drawer is open (it isn't, since we open straight to the detail)
+  const drawer   = document.getElementById('drawer');
+  const backdrop = document.getElementById('drawer-backdrop');
+  drawer.classList.add('open');
+  backdrop.classList.add('open');
+  drawer.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+
+  showMatterDetailDrawer(m, { showBack: false, showMatchSummary: true });
+}
+
+// Unified renderer for the matter detail drawer
+function showMatterDetailDrawer(m, opts) {
+  const showBack         = opts.showBack !== false;
+  const showMatchSummary = !!opts.showMatchSummary && Array.isArray(m.matchSummary) && m.matchSummary.length;
+
+  // Back button
+  document.getElementById('md-back-btn').style.display = showBack ? 'flex' : 'none';
+
+  // Badges (one or two)
+  const q1 = document.getElementById('md-quality');
+  const q2 = document.getElementById('md-quality-2');
+  if (m.detailMatch) {
+    // Two-badge mode (Experience flow): "5/5 MATCH" + "RICH NARRATIVE"
+    q1.textContent = m.detailMatch;
+    q1.className = 'badge-rich';
+    q1.style.cssText = 'font-size:12px; padding:4px 12px; text-transform:uppercase; letter-spacing:0.5px;';
+    q2.style.display = 'inline-block';
+    q2.textContent = m.detailNarrative || ((m.quality || 'Rich').toUpperCase() + ' NARRATIVE');
+    q2.className = 'badge-' + (m.quality || 'rich').toLowerCase();
+    q2.style.cssText = 'font-size:12px; padding:4px 12px; text-transform:uppercase; letter-spacing:0.5px;';
+  } else {
+    // Single-badge mode (offering flow)
+    q1.textContent = m.quality || 'Rich';
+    q1.className = 'badge-' + (m.quality || 'rich').toLowerCase() + ' self-start';
+    q1.style.cssText = 'font-size:14px; padding:4px 12px;';
+    q2.style.display = 'none';
+  }
+
+  // Title + subtitle
+  document.getElementById('md-title').textContent =
+    m.detailTitle || m.title || m.matter || '';
   document.getElementById('md-subtitle').textContent =
-    m.subtitle || `${m.id} · ${m.quality} narrative`;
+    m.detailSubtitle || m.subtitle || (m.id ? `${m.id} · ${m.quality} narrative` : '');
 
-  // Key facts (with sensible fallbacks for matters that don't have these fields)
+  // Key facts
   document.getElementById('md-service').textContent    = m.serviceOffering || (currentEntity?.offerings?.find(o => (o.matterList || []).some(mm => mm.id === m.id))?.title) || '—';
   document.getElementById('md-phase').textContent      = m.phase || (m.phases?.every(p => p.done) ? 'Closed' : 'In progress');
   document.getElementById('md-deal-value').textContent = m.dealValue || '—';
   document.getElementById('md-listing').textContent    = m.listingExchange || m.geography || '—';
 
-  // Phase pipeline (now with arrows)
+  // Match summary checklist
+  const matchSummaryEl = document.getElementById('md-match-summary');
+  if (showMatchSummary) {
+    matchSummaryEl.style.display = 'flex';
+    document.getElementById('md-match-list').innerHTML = m.matchSummary.map(s => `
+      <div class="flex items-start gap-3">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#262421" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-top:2px; flex-shrink:0;">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+        <div class="flex flex-col gap-1">
+          <p class="text-[#262421] text-[15px] font-bold leading-6">${s.label}</p>
+          <p class="text-[#878482] text-[14px] leading-5">${s.desc}</p>
+        </div>
+      </div>
+    `).join('');
+  } else {
+    matchSummaryEl.style.display = 'none';
+  }
+
+  // Pipeline
   document.getElementById('md-pipeline').innerHTML = renderPipeline(m.phases || []);
 
   // Narrative quality signal
   const nBadge = document.getElementById('md-narrative-badge');
-  nBadge.textContent = m.quality;
-  nBadge.className = 'badge-' + m.quality.toLowerCase() + ' shrink-0';
+  nBadge.textContent = m.quality || 'Rich';
+  nBadge.className = 'badge-' + (m.quality || 'rich').toLowerCase() + ' shrink-0';
   document.getElementById('md-narrative-quote').textContent =
     m.narrativeQuote ? `"${m.narrativeQuote}"` : (m.narrative || '');
 
-  // Team & roles
+  // Team & roles (use member list if present, else synthesize from `lead`)
   const team = m.teamMembers && m.teamMembers.length
     ? m.teamMembers
-    : [{ name: m.lead, role: `Lead partner · ${currentEntity?.industry || 'Generalist'}` }];
-  document.getElementById('md-team-list').innerHTML = team.map(t => `
-    <div class="bg-white border border-[#d8d5cf] rounded-xl p-4 flex items-center gap-4 shadow-[0px_1px_3px_rgba(47,46,42,0.05),0px_2px_6px_rgba(47,46,42,0.04)]">
-      <div class="w-10 h-10 rounded-full bg-[#262421] flex items-center justify-center shrink-0">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
-        </svg>
+    : (m.lead ? [{ name: m.lead, role: `Lead partner · ${m.industry || currentEntity?.industry || 'Generalist'}` }] : []);
+  const teamSection = document.getElementById('md-team-list').parentElement;
+  if (team.length) {
+    teamSection.style.display = '';
+    document.getElementById('md-team-list').innerHTML = team.map(t => `
+      <div class="bg-white border border-[#d8d5cf] rounded-xl p-4 flex items-center gap-4 shadow-[0px_1px_3px_rgba(47,46,42,0.05),0px_2px_6px_rgba(47,46,42,0.04)]">
+        <div class="w-10 h-10 rounded-full bg-[#262421] flex items-center justify-center shrink-0">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+          </svg>
+        </div>
+        <div class="flex flex-col gap-0.5 flex-1 min-w-0">
+          <p class="text-[#262421] text-[14px] font-bold leading-6 truncate">${t.name}</p>
+          <p class="text-[#878482] text-[13px] leading-5 truncate">${t.role}</p>
+        </div>
+        <button class="off-view-details shrink-0">View Details</button>
       </div>
-      <div class="flex flex-col gap-0.5 flex-1 min-w-0">
-        <p class="text-[#262421] text-[14px] font-bold leading-6 truncate">${t.name}</p>
-        <p class="text-[#878482] text-[13px] leading-5 truncate">${t.role}</p>
-      </div>
-      <button class="off-view-details shrink-0">View Details</button>
-    </div>
-  `).join('');
+    `).join('');
+  } else {
+    teamSection.style.display = 'none';
+  }
 
-  // Switch views
+  // Switch to detail view
   document.getElementById('drawer-list-view').style.display = 'none';
   document.getElementById('drawer-detail-view').style.display = 'flex';
   document.getElementById('drawer-scroll').scrollTop = 0;
